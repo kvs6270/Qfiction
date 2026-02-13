@@ -1,8 +1,8 @@
-import { movieDB } from "./mock_movie_db_500.js";
+import { movieDB } from "./Mock_Movie_DB.js";
 
 
 
-function MovieOrganizer (inputDB, outputDB){
+export function movieOrganizer (inputDB, outputDB){
 
 
 let genreReccStrength = {}
@@ -104,7 +104,7 @@ outputDB.forEach((item, index) => {
 
     })
 
-    return {finalReccList, genreReccStrength};
+    return {finalReccList, genreReccStrength, castReccStrength, directorReccStrength};
 
 
 }
@@ -114,17 +114,8 @@ outputDB.forEach((item, index) => {
 
 
 
-let currData = MovieOrganizer(movieDB, movieDB).finalReccList;
-let genreReccStrength = MovieOrganizer(movieDB, movieDB).genreReccStrength;
-
-let bifurcatedData = {};
-
-console.log(genreReccStrength)
 
 
-genreReccStrength.forEach(item => {
-
-})
 
 
 
