@@ -97,10 +97,7 @@ outputDB.forEach((item, index) => {
         // result.id = index;
         // result.title = `Mock Movie ${index}`;
 
-        return {...result,
-            id: index,
-            title: `Mock Movie ${index}`
-        };
+        return {result};
 
     })
 
@@ -108,6 +105,8 @@ outputDB.forEach((item, index) => {
 
 
 }
+
+console.log(movieOrganizer(movieDB, movieDB).finalReccList)
 
 
 
