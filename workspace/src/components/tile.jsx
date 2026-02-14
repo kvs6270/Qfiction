@@ -1,0 +1,11 @@
+function Tile({movie}) {
+
+    
+
+
+
+    return (
+        <>
+        </>
+    )
+}
