@@ -1,19 +1,24 @@
 import { useState } from 'react'
-import Tile from "./components/tile"
-import Watched from "./components/watched"
-import WatchList from "./components/watchlist"
+import {Slider} from "./components/slider.jsx"
+import { WatchedList } from "./components/watched.jsx"
+import { WatchList } from "./components/watchlist.jsx"
+import { movieDB } from "./logic/Mock_Movie_DB.js";
+import {movieOrganizer} from "./logic/ReccomendationAlgorithm.js"
+
 
 import { createContext } from "react";
 
 import './App.css'
 
 
-const WatchContext = createContext({
-      moviesToWatch: [],
-      moviesWatched: [],
-      addTowatch: () => {},
-      addTowatched: () => {},
-    });
+export const WatchContext = createContext({
+  moviesToWatch: [],
+  moviesWatched: [],
+  addToWatch: () => { },
+  removeFromWatch: () => { },
+  addToWatched: () => { },
+  removeFromWatched: () => { },
+});
 
 function App() {
 
@@ -24,26 +29,45 @@ function App() {
   const moviesWatched = watchedMovies;
 
 
-  function addTowatch(obj) {
+  function addToWatch(obj) {
     setWatchMovies(watchMovies.concat(obj))
   }
+
+  function removeFromWatch(obj) {
+    let newWatchMovies = watchMovies.filter((item) => {
+      return item.id != obj.id;
+    })
+
+    setWatchMovies(newWatchMovies);
+  }
+
 
   function addToWatched(obj) {
     setWatchedMovies(watchedMovies.concat(obj))
   }
-  
-  <WatchContext value={{moviesToWatch, moviesWatched, addTowatch, addToWatched}}>
 
-      <Tile addTowatch = {addTowatch} addToWatched = {addToWatched}></Tile>
-      <Watched movieArray = {moviesWatched}></Watched>
-      <WatchList movieArray = {moviesToWatch}></WatchList>
-    
+  function removeFromWatched(obj) {
+    let newWatchedMovies = watchedMovies.filter((item) => {
+      return item.id != obj.id;
+    })
 
-  </WatchContext>
+    setWatchedMovies(newWatchedMovies);
+  }
+
+
 
 
   return (
-    <span></span>
+    <WatchContext value={{ moviesToWatch, moviesWatched, addToWatch, addToWatched, removeFromWatch, removeFromWatched }}>
+
+      <Slider movieArray = {movieDB}></Slider>
+
+      <WatchedList ></WatchedList>
+
+      <WatchList ></WatchList>
+
+
+    </WatchContext>
   )
 }
 
