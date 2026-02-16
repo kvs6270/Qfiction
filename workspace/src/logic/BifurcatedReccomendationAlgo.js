@@ -12,9 +12,9 @@ function moviesForYou (topGenreNum,topCastNum,topDirectorNum,) {
     const genreBasedObj = {};
 
 
-    const genreReccStrength = movieOrganizer(movieDB, movieDB).genreReccStrength;
+    const genreReccStrength = movieOrganizer(movieDB).genreReccStrength;
 
-    console.log(genreReccStrength)
+    
 
     const genreReccStrengthArray = [];
 
@@ -37,7 +37,7 @@ function moviesForYou (topGenreNum,topCastNum,topDirectorNum,) {
 
     const directorBasedObj = {};
 
-    const directorReccStrength = movieOrganizer(movieDB, movieDB).directorReccStrength;
+    const directorReccStrength = movieOrganizer(movieDB).directorReccStrength;
 
     const directorReccStrengthArray = [];
 
@@ -68,7 +68,7 @@ function moviesForYou (topGenreNum,topCastNum,topDirectorNum,) {
     
     const castBasedObj = {};
 
-    const castReccStrength = movieOrganizer(movieDB, movieDB).castReccStrength;
+    const castReccStrength = movieOrganizer(movieDB).castReccStrength;
 
     const castReccStrengthArray = [];
 
