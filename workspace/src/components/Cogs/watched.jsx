@@ -1,12 +1,11 @@
 import { useContext } from "react";
-import { WatchContext } from "../App";
+import { WatchContext } from "../../App";
 
-export function WatchList() {
+export function WatchedList () {
 
-    const {moviesToWatch} = useContext(WatchContext)
-    console.log(moviesToWatch)
+    const {moviesWatched} = useContext(WatchContext)
 
-    let movieElementArray = moviesToWatch.map(element => {
+    let movieElementArray = moviesWatched.map(element => {
         return (<div key={element.id}>
             <div>{element.title}</div>
             
@@ -14,7 +13,6 @@ export function WatchList() {
     });
         
    
-
     return (
 
         movieElementArray

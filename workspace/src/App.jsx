@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import {Slider} from "./components/slider.jsx"
-import { WatchedList } from "./components/watched.jsx"
-import { WatchList } from "./components/watchlist.jsx"
+import {Slider} from "./components/Cogs/slider.jsx"
+import { WatchedList } from "./components/Cogs/watched.jsx"
+import { WatchList } from "./components/Cogs/watchlist.jsx"
 import { movieDB } from "./logic/Mock_Movie_DB.js";
 import {movieOrganizer} from "./logic/ReccomendationAlgorithm.js"
 

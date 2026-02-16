@@ -1,5 +1,5 @@
 import { useContext, useState } from "react"
-import { WatchContext } from "../App";
+import { WatchContext } from "../../App";
 
 export function Tile({movieObj}) {
 
