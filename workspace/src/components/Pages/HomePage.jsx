@@ -13,6 +13,8 @@ function useSingleFetch (fetchUrl)  {
 
     useEffect(() => {
 
+        const isMounted = true;
+
         setError(false);
         setLoading(true);
 
@@ -31,6 +33,11 @@ function useSingleFetch (fetchUrl)  {
         }
 
         dataFetching();
+
+
+        return () => {
+            isMounted = false
+        }
     }, [fetchUrl])
 
     const topRatedMovieObj = useMemo(() => {
@@ -50,6 +57,8 @@ function useMultiFetch (genres)  {
 
     useEffect(() => {
 
+        let isMounted = true;
+
         setError(false);
         setLoading(true);
 
@@ -57,8 +66,8 @@ function useMultiFetch (genres)  {
 
             try {
                 const genreBasedFetchPromises = genres.map(genre =>
-                    fetchFunc(/* Fetch movie of genre based on fetchURL*/)
-                    /* Inlclude error handling in fetchFunc */
+                    fetchFunc(baseUrl + genre)
+                    
                 );
 
                 const genreBasedMovieArrays = await Promise.all(genreBasedFetchPromises);
@@ -83,6 +92,10 @@ function useMultiFetch (genres)  {
         }
 
         dataFetching();
+
+        return () => {
+            isMounted = false
+        }
 
     }, [genres])
 

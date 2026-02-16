@@ -60,7 +60,7 @@ function App() {
   return (
     <WatchContext value={{ moviesToWatch, moviesWatched, addToWatch, addToWatched, removeFromWatch, removeFromWatched }}>
 
-      <Slider movieArray = {movieDB}></Slider>
+      
 
       <WatchedList ></WatchedList>
 
