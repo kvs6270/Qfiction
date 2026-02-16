@@ -1,8 +1,7 @@
 import { Slider } from "../Cogs/slider";
-import { Tile } from "../Cogs/tile";
-import { WatchContext } from "../../App";
 import { topRated } from "../../logic/TopRated";
 import { useEffect, useMemo, useState } from "react";
+import { fetchFunc } from "../../logic/fetchFunc";
 
 const genres = [/*An array of genres*/]
 
