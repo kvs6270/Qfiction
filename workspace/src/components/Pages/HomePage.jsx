@@ -1,128 +1,36 @@
 import { Slider } from "../Cogs/slider";
 import { topRated } from "../../logic/TopRated";
-import { useEffect, useMemo, useState } from "react";
-import { fetchFunc } from "../../logic/fetchFunc";
-
-const genres = [/*An array of genres*/]
-
-function useSingleFetch (fetchUrl)  {
-
-    const [movieObj, setMovieObj] = useState([]);
-    const [error, setError] = useState(false);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-
-        const isMounted = true;
-
-        setError(false);
-        setLoading(true);
-
-        async function dataFetching() {
-
-            try {
-                const movieObjArray = await fetchFunc(fetchUrl);
-                setMovieObj(movieObjArray);
-            } catch (error) {
-                setError(true)
-                console.log(error)
-
-            } finally {
-                setLoading(false)
-            }
-        }
-
-        dataFetching();
+import {useMemo} from "react";
+import { useOutletContext } from "react-router";
 
 
-        return () => {
-            isMounted = false
-        }
-    }, [fetchUrl])
+
+
+
+
+
+export function HomePage() {
+
+    // const {topRatedMovieObj, error, loading} = useSingleFetch(/* Insert URL */);
+    // const {genreBasedTopRatedMoviesObj, error: error2, loading: loading2} = useMultiFetch(/* genres array*/);
+
+    const {movieObj, error, loading, genreBasedMovies, error2, loading2} = useOutletContext();
 
     const topRatedMovieObj = useMemo(() => {
         return topRated(movieObj, 1000);
     }, [movieObj])
 
-    return { topRatedMovieObj, error, loading }
-}
-
-function useMultiFetch (genres)  {
-    const [genreBasedMovies, setGenreBasedMovies] = useState({});
-    const [error, setError] = useState(false);
-    const [loading, setLoading] = useState(true);
-
-
-
-
-    useEffect(() => {
-
-        let isMounted = true;
-
-        setError(false);
-        setLoading(true);
-
-        async function dataFetching() {
-
-            try {
-                const genreBasedFetchPromises = genres.map(genre =>
-                    fetchFunc(baseUrl + genre)
-                    
-                );
-
-                const genreBasedMovieArrays = await Promise.all(genreBasedFetchPromises);
-
-
-                const genreBasedMovieObj = {};
-
-                genreBasedMovieArrays.forEach((movies, index) => {
-                    genreBasedMovieObj[genres[index]] = movies;
-                });
-
-                setGenreBasedMovies(genreBasedMovieObj);
-
-            } catch (error) {
-                setError(true);
-                console.log(error);
-
-            } finally {
-                setLoading(false)
-            }
-
-        }
-
-        dataFetching();
-
-        return () => {
-            isMounted = false
-        }
-
-    }, [genres])
-
-
-
     const genreBasedTopRatedMoviesObj = useMemo(() => {
-
-        const genreBasedTopRatedMoviesObjProto = {};
-
-        for (const genre in genreBasedMovies) {
-
-            genreBasedTopRatedMoviesObjProto[genre] = topRated(genreBasedMovies[genre], 1000);
-        }
-
-        return genreBasedTopRatedMoviesObjProto;
-    }, [genreBasedMovies])
-
-    return {genreBasedTopRatedMoviesObj, error, loading}
-}
-
-
-
-
-function HomePage() {
-
-    const {topRatedMovieObj, error, loading} = useSingleFetch(/* Insert URL */);
-    const {genreBasedTopRatedMoviesObj, error: error2, loading: loading2} = useMultiFetch(/* genres array*/);
+    
+            const genreBasedTopRatedMoviesObjProto = {};
+    
+            for (const genre in genreBasedMovies) {
+    
+                genreBasedTopRatedMoviesObjProto[genre] = topRated(genreBasedMovies[genre], 1000);
+            }
+    
+            return genreBasedTopRatedMoviesObjProto;
+        }, [genreBasedMovies])
 
 
     return (
