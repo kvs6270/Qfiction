@@ -1,13 +1,14 @@
 import { Outlet } from "react-router";
 import { useEffect, useMemo, useState } from "react";
 import { fetchFunc } from "../../logic/fetchFunc";
-import { topRated } from "../../logic/TopRated";
-
-
 
 const genres = [/*An array of genres*/]
 
-function useSingleFetch (fetchUrl)  {
+
+
+
+
+function useSingleFetch(fetchUrl) {
 
     const [movieObj, setMovieObj] = useState([]);
     const [error, setError] = useState(false);
@@ -46,7 +47,7 @@ function useSingleFetch (fetchUrl)  {
     return { movieObj, error, loading }
 }
 
-function useMultiFetch (genres)  {
+function useMultiFetch(genres) {
     const [genreBasedMovies, setGenreBasedMovies] = useState({});
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -66,7 +67,7 @@ function useMultiFetch (genres)  {
             try {
                 const genreBasedFetchPromises = genres.map(genre =>
                     fetchFunc(baseUrl + genre)
-                    
+
                 );
 
                 const genreBasedMovieArrays = await Promise.all(genreBasedFetchPromises);
@@ -100,20 +101,27 @@ function useMultiFetch (genres)  {
 
 
 
-    
 
-    return {genreBasedMovies, error, loading}
+
+    return { genreBasedMovies, error, loading }
 
 }
 
+export const HomeContext = createContext({
+    parentUrl: ""
+});
+
 
 function HomeLayout() {
-    const {movieObj, error, loading} = useSingleFetch(/* Insert URL */);
-    const {genreBasedMovies, error: error2, loading: loading2} = useMultiFetch(/* genres array*/);
+    const { movieObj, error, loading } = useSingleFetch(/* Insert URL */);
+    const { genreBasedMovies, error: error2, loading: loading2 } = useMultiFetch(/* genres array*/);
 
-    <Outlet context = {
-        {movieObj, error, loading, genreBasedMovies, error2, loading2}
-    }/>
+    <HomeContext value={"Home"}>
+        <Outlet context={
+            { movieObj, error, loading, genreBasedMovies, error2, loading2 }
+        } />
+    </HomeContext>
+
 
 }
 

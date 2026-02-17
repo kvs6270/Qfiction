@@ -1,8 +1,12 @@
 import { useContext, useState } from "react"
-import { WatchContext } from "../../App";
-import {useNavigate} from 'react-router'
 
-export function Tile({movieObj, parentRoute}) {
+import {useNavigate} from 'react-router'
+import { HomeContext } from "../Pages/HomeLayout";
+
+export function Tile({movieObj}) {
+
+    const {parentRoute} = useContext(HomeContext)
+
     const navigate = useNavigate();
 
 
