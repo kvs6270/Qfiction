@@ -5,7 +5,7 @@ import { HomeContext } from "../Pages/HomeLayout";
 
 export function Tile({movieObj}) {
 
-    const {parentRoute} = useContext(HomeContext)
+    
 
     const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ export function Tile({movieObj}) {
     return (
 
         
-        <div onClick={() => {navigate(`/${parentRoute}/movie/${movieObj.id}`)}}>
+        <div onClick={() => {navigate(`/movie/${movieObj.id}`)}}>
             {movieObj.title}
         </div>
     )

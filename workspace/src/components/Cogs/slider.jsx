@@ -1,6 +1,8 @@
 import {Tile} from "./tile.jsx"
+import {useNavigate} from 'react-router'
 
-export function Slider({movieArray}) {
+export function Slider({movieArray, identifier, identifierType}) {
+    const navigate = useNavigate();
 
     let slideShow = movieArray.map(item => {
 
@@ -10,6 +12,16 @@ export function Slider({movieArray}) {
     })
 
     return (
-        slideShow
+
+        <div>
+        <div onClick={() => {
+            
+
+            navigate(`TopRated/${identifier}`);
+        }}>
+            
+        View All</div>
+        {slideShow}
+        </div>
     )
 }

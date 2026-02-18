@@ -117,9 +117,11 @@ function HomeLayout() {
     const { genreBasedMovies, error: error2, loading: loading2 } = useMultiFetch(/* genres array*/);
 
     <HomeContext value={"Home"}>
+
         <Outlet context={
             { movieObj, error, loading, genreBasedMovies, error2, loading2 }
         } />
+        
     </HomeContext>
 
 

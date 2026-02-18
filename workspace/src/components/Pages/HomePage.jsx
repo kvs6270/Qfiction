@@ -56,7 +56,7 @@ function MainSlider({topRatedMoviesOf2026, error, loading}) {
 
     }
     else {
-        return <Slider movieArray={topRatedMoviesOf2026}></Slider>
+        return <Slider movieArray={topRatedMoviesOf2026} identifierType = {"Year"} identifier = {2026}></Slider>
     }
 
 }
@@ -76,7 +76,7 @@ function MegaSlider({genreBasedTopRatedMoviesObj, error, loading}) {
         let arrayOfSLiders = []
         for (const genre in genreBasedTopRatedMoviesObj) {
 
-            arrayOfSLiders.push(<Slider movieArray={genreBasedTopRatedMoviesObj[genre]} key={genre}></Slider>)
+            arrayOfSLiders.push(<Slider movieArray={genreBasedTopRatedMoviesObj[genre]} key={genre} identifierType = {"genre"} identifier = {{genre}}></Slider>)
         }
 
         return arrayOfSLiders;
