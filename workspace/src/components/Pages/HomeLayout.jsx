@@ -1,6 +1,7 @@
 import { Outlet } from "react-router";
 import { useEffect, useMemo, useState } from "react";
 import { fetchFunc } from "../../logic/fetchFunc";
+import { createContext } from "react";
 
 const genres = [/*An array of genres*/]
 
@@ -112,7 +113,7 @@ export const HomeContext = createContext({
 });
 
 
-function HomeLayout() {
+export function HomeLayout() {
     const { movieObj, error, loading } = useSingleFetch(/* Insert URL */);
     const { genreBasedMovies, error: error2, loading: loading2 } = useMultiFetch(/* genres array*/);
 

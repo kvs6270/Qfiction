@@ -1,14 +1,15 @@
 import { Children, StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { HomePage } from "./components/Pages/HomePage.jsx";
+import { HomeLayout } from "./components/Pages/HomeLayout.jsx";
 import { HomePageMovieView } from "./components/Pages/HomePageMovieView.jsx";
 import App from './App.jsx'
 
 const router = createBrowserRouter([
   {
     path: "/",
-     element: <IntroPage />,
+     element: <div>Welcome</div>,
     
   },
     {
