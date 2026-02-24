@@ -1,7 +1,7 @@
-import {Tile} from "./tile.jsx"
-import {useNavigate} from 'react-router'
+import { Tile } from "./tile.jsx"
+import { useNavigate } from 'react-router'
 
-export function Slider({movieArray, identifier, identifierType}) {
+export function Slider({ movieArray, identifier, identifierType }) {
     const navigate = useNavigate();
 
     let slideShow = movieArray.map(item => {
@@ -13,15 +13,17 @@ export function Slider({movieArray, identifier, identifierType}) {
 
     return (
 
-        <div>
-        <div onClick={() => {
-            
+        <div className="SliderContainer">
+            <div className = "ViewAll" onClick={() => {
 
-            navigate(`TopRated/${identifier}`);
-        }}>
-            
-        View All</div>
-        {slideShow}
+
+                navigate(`TopRated/${identifier}`);
+            }}>
+
+                View All</div>
+
+            <div className="ScrollerContainer">{slideShow}</div>
+
         </div>
     )
 }

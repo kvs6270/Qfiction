@@ -1,0 +1,30 @@
+.sliderContainer {
+    display: grid;
+    grid-template-rows: 1fr 8fr;
+}
+
+.viewAll {
+    border: 2px solid blue;
+}
+
+.tileContainer {
+
+    display: flex;
+    gap: 16px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scroll-behavior: smooth;
+
+    
+    scrollbar-width: none;
+ 
+    -ms-overflow-style: none;
+
+}
+
+.container::-webkit-scrollbar {
+    display: none;
+    
+}

@@ -1,0 +1,23 @@
+.pageContainer{
+    border: 2px solid black;
+}
+
+.tileheader{
+    border: 2px solid red;
+    
+}
+
+.RemoveFromWatchButton{
+    border: 2px solid blue;
+}
+
+.addToWatchButton{
+    border: 2px solid blue;
+}
+.RemoveFromWatchedButton{
+    border: 2px solid green;
+}
+
+.addToWatchedButton{
+    border: 2px solid green;
+}

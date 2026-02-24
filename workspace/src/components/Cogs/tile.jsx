@@ -3,6 +3,8 @@ import { useContext, useState } from "react"
 import {useNavigate} from 'react-router'
 import { HomeContext } from "../Pages/HomeLayout";
 
+import style from "../CogCSS/tile.module.css"
+
 export function Tile({movieObj}) {
 
     
@@ -18,7 +20,7 @@ export function Tile({movieObj}) {
     return (
 
         
-        <div onClick={() => {navigate(`/movie/${movieObj.id}`)}}>
+        <div className= {style.tile} onClick={() => {navigate(`/movie/${movieObj.id}`)}}>
             {movieObj.title}
         </div>
     )

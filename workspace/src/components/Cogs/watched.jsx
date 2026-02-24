@@ -6,16 +6,21 @@ export function WatchedList () {
     const {moviesWatched} = useContext(WatchContext)
 
     let movieElementArray = moviesWatched.map(element => {
-        return (<div key={element.id}>
-            <div>{element.title}</div>
-            
-        </div>)
+
+        return (
+        
+        <div className="WatchedMovie" key={element.id}>
+            {element.title}            
+        </div>
+        )
     });
         
    
     return (
 
-        movieElementArray
+        <div className="WatchedContainer">
+            {movieElementArray}
+        </div>
        
     )
 }

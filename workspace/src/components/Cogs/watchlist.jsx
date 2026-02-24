@@ -7,9 +7,10 @@ export function WatchList() {
     console.log(moviesToWatch)
 
     let movieElementArray = moviesToWatch.map(element => {
-        return (<div key={element.id}>
-            <div>{element.title}</div>
-            
+        return (
+        
+        <div className="MovieToWatch" key={element.id}>
+            {element.title}            
         </div>)
     });
         
@@ -17,7 +18,9 @@ export function WatchList() {
 
     return (
 
-        movieElementArray
+        <div className="ToWatchContainer">
+            {movieElementArray}
+        </div>
        
     )
 }

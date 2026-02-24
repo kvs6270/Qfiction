@@ -1,0 +1,5 @@
+.tile{
+    border: 2px solid red;
+    flex: 0 0 auto;
+    width: 200px;
+}
