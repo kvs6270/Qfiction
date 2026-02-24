@@ -1,7 +1,9 @@
 import { Outlet } from "react-router";
 import { useEffect, useMemo, useState } from "react";
-import { fetchFunc } from "../../logic/fetchFunc";
+import { fetchFunc } from "../../logic/fetchFunc.js";
 import { createContext } from "react";
+import { genreFilms } from "../../logic/genreBasedMovies.js";
+import { films2026 } from "../../logic/movies2026.js";
 
 const genres = [/*An array of genres*/]
 
@@ -114,8 +116,16 @@ export const HomeContext = createContext({
 
 
 export function HomeLayout() {
-    const { movieObj, error, loading } = useSingleFetch(/* Insert URL */);
-    const { genreBasedMovies, error: error2, loading: loading2 } = useMultiFetch(/* genres array*/);
+    // const { movieObj, error, loading } = useSingleFetch(/* Insert URL */);
+
+    // const { genreBasedMovies, error: error2, loading: loading2 } = useMultiFetch(/* genres array*/);
+
+    const movieObj = [...films2026];
+    const genreBasedMovies = {...genreFilms};
+    const error = false
+    const loading = false
+    const error2 = false;
+    const loading2 = false;
 
     <HomeContext value={"Home"}>
 
