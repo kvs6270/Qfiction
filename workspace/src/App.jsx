@@ -58,6 +58,7 @@ function App({children}) {
 
 
   return (
+    
     <WatchContext value={{ moviesToWatch, moviesWatched, addToWatch, addToWatched, removeFromWatch, removeFromWatched }}>
 
     {children}
