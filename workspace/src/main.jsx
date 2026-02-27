@@ -17,7 +17,7 @@ const router = createBrowserRouter([
     element: <HomeLayout />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: ":type:identifier", element: <HomePageMovieView /> }
+      { path: ":type/:identifier", element: <HomePageMovieView /> }
     ],
   },
 ]);

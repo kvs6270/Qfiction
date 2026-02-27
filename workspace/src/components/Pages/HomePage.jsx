@@ -76,10 +76,14 @@ function MegaSlider({genreBasedTopRatedMoviesObj, error, loading}) {
         let arrayOfSLiders = []
         for (const genre in genreBasedTopRatedMoviesObj) {
 
-            arrayOfSLiders.push(<Slider movieArray={genreBasedTopRatedMoviesObj[genre]} key={genre} identifierType = {"genre"} identifier = {{genre}}></Slider>)
+            arrayOfSLiders.push(<Slider movieArray={genreBasedTopRatedMoviesObj[genre]} key={genre} identifierType = {"genre"} identifier = {genre}></Slider>)
         }
 
-        return arrayOfSLiders;
+        return (
+            <div className="SliderContainer">
+                {arrayOfSLiders}
+            </div>
+        );
     }
 
 }

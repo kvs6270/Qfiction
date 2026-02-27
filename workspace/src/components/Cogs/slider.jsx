@@ -1,5 +1,6 @@
 import { Tile } from "./tile.jsx"
 import { useNavigate } from 'react-router'
+import style from "../CogCSS/slider.module.css"
 
 export function Slider({ movieArray, identifier, identifierType }) {
     const navigate = useNavigate();
@@ -13,8 +14,8 @@ export function Slider({ movieArray, identifier, identifierType }) {
 
     return (
 
-        <div className="SliderContainer">
-            <div className = "ViewAll" onClick={() => {
+        <div className={style.sliderContainer}>
+            <div className = {style.viewAll} onClick={() => {
 
 
                 navigate(`TopRated/${identifier}`);
@@ -22,7 +23,7 @@ export function Slider({ movieArray, identifier, identifierType }) {
 
                 View All</div>
 
-            <div className="ScrollerContainer">{slideShow}</div>
+            <div className={style.tileContainer}>{slideShow}</div>
 
         </div>
     )

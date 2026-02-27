@@ -20,7 +20,7 @@ export function Tile({movieObj}) {
     return (
 
         
-        <div className= {style.tile} onClick={() => {navigate(`/movie/${movieObj.id}`)}}>
+        <div className= {style.tile} onClick={() => {navigate(`Movie/${movieObj.id}`)}}>
             {movieObj.title}
         </div>
     )

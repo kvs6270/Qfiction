@@ -1,6 +1,7 @@
 import { useOutletContext } from "react-router";
 import { MoviePage } from "../Cogs/MoviePage";
 import { MovieGrid } from "../Cogs/MovieGrid";
+import { useParams } from "react-router";
 
 
 export function HomePageMovieView() {
@@ -10,15 +11,20 @@ export function HomePageMovieView() {
 
     if (type == "Movie") {
 
-        const myObj = movieObj.find((item) => {
+        let myObj = movieObj.find((item) => {
             return item.id == identifier;
         })
 
         if (!myObj) {
-            for (genre in genreBasedMovies) {
-                const myObj = genreBasedMovies[genre].find(item => item.id == identifier)
+            for (let genre in genreBasedMovies) {
+                myObj = genreBasedMovies[genre].find(item => item.id == identifier)
+                if(myObj) {
+                    break;
+                }
             }
         }
+
+        
 
 
 
@@ -33,17 +39,20 @@ export function HomePageMovieView() {
         )
     }
 
-    else if (type = "TopRated") {
-        const movieArray = [];
-
+    else if (type == "TopRated") {
+        
+        
         if (identifier in genreBasedMovies) {
-            
-            movieArray = genreBasedMovies[identifier];
-                
 
+            
             return (
-                <MovieGrid movieArray={movieArray}></MovieGrid>
+                
+                <MovieGrid movieArray={genreBasedMovies[identifier]}></MovieGrid>
             )
+        }
+
+        else {
+            return <MovieGrid movieArray = {movieObj}></MovieGrid>
         }
 
 

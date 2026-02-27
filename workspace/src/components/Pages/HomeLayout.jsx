@@ -127,13 +127,15 @@ export function HomeLayout() {
     const error2 = false;
     const loading2 = false;
 
-    <HomeContext value={"Home"}>
+    
 
-        <Outlet context={
+        return (
+            <Outlet context={
             { movieObj, error, loading, genreBasedMovies, error2, loading2 }
         } />
         
-    </HomeContext>
+        )
+   
 
 
 }
