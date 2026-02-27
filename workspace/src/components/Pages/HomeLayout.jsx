@@ -1,7 +1,7 @@
 import { Outlet } from "react-router";
 import { useEffect, useMemo, useState } from "react";
 import { fetchFunc } from "../../logic/fetchFunc.js";
-import { createContext } from "react";
+
 import { genreFilms } from "../../logic/genreBasedMovies.js";
 import { films2026 } from "../../logic/movies2026.js";
 
@@ -19,7 +19,7 @@ function useSingleFetch(fetchUrl) {
 
     useEffect(() => {
 
-        const isMounted = true;
+        let isMounted = true;
 
         setError(false);
         setLoading(true);
@@ -28,13 +28,13 @@ function useSingleFetch(fetchUrl) {
 
             try {
                 const movieObjArray = await fetchFunc(fetchUrl);
-                setMovieObj(movieObjArray);
+                if (isMounted) setMovieObj(movieObjArray);
             } catch (error) {
-                setError(true)
+                if (isMounted) setError(true)
                 console.log(error)
 
             } finally {
-                setLoading(false)
+                if (isMounted) setLoading(false)
             }
         }
 
@@ -50,7 +50,7 @@ function useSingleFetch(fetchUrl) {
     return { movieObj, error, loading }
 }
 
-function useMultiFetch(genres) {
+function useMultiFetch(baseUrl, genres) {
     const [genreBasedMovies, setGenreBasedMovies] = useState({});
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -82,14 +82,14 @@ function useMultiFetch(genres) {
                     genreBasedMovieObj[genres[index]] = movies;
                 });
 
-                setGenreBasedMovies(genreBasedMovieObj);
+                if (isMounted) setGenreBasedMovies(genreBasedMovieObj);
 
             } catch (error) {
-                setError(true);
+                if (isMounted) setError(true);
                 console.log(error);
 
             } finally {
-                setLoading(false)
+                if (isMounted) setLoading(false)
             }
 
         }
@@ -100,7 +100,7 @@ function useMultiFetch(genres) {
             isMounted = false
         }
 
-    }, [genres])
+    }, [genres, baseUrl])
 
 
 
@@ -110,9 +110,7 @@ function useMultiFetch(genres) {
 
 }
 
-export const HomeContext = createContext({
-    parentUrl: ""
-});
+
 
 
 export function HomeLayout() {
