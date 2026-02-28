@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { WatchContext } from "../../App";
+import { Navbar } from "../Cogs/Navbar";
 
 export function WatchList() {
 
@@ -19,6 +20,7 @@ export function WatchList() {
     return (
 
         <div className="ToWatchContainer">
+            <Navbar/>
             {movieElementArray}
         </div>
        
