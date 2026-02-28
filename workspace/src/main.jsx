@@ -5,6 +5,8 @@ import { HomePage } from "./components/Pages/HomePage.jsx";
 import { HomeLayout } from "./components/Pages/HomeLayout.jsx";
 import { HomeGridView } from "./components/Pages/HomeGridView.jsx";
 import { MovieView } from "./components/Pages/MovieView.jsx";
+import { WatchList } from "./components/Cogs/watchlist.jsx";
+import { WatchedList } from "./components/Cogs/watched.jsx";
 // import {};
 import App from './App.jsx'
 
@@ -26,6 +28,16 @@ const router = createBrowserRouter([
   {
     path: "Movie/:id",
     element: <MovieView/>
+
+  },
+  {
+    path: "Watched",
+    element: <WatchedList/>
+
+  },
+  {
+    path: "ToWatch",
+    element: <WatchList/>
 
   }
 
