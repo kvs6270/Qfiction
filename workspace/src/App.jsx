@@ -1,9 +1,6 @@
 import { useState } from 'react'
-import {Slider} from "./components/Cogs/slider.jsx"
-import { WatchedList } from "./components/Cogs/watched.jsx"
-import { WatchList } from "./components/Cogs/watchlist.jsx"
-import { movieDB } from "./logic/Mock_Movie_DB.js";
-import {movieOrganizer} from "./logic/ReccomendationAlgorithm.js"
+import { Navbar } from './components/Cogs/Navbar.jsx'
+
 
 
 import { createContext } from "react";

@@ -2,6 +2,7 @@ import { useOutletContext } from "react-router";
 
 import { MovieGrid } from "../Cogs/MovieGrid";
 import { useParams } from "react-router";
+import { Navbar } from "../Cogs/Navbar";
 
 
 export function HomeGridView() {
@@ -14,13 +15,19 @@ export function HomeGridView() {
 
             
             return (
-                
-                <MovieGrid movieArray={genreBasedMovies[identifier]}></MovieGrid>
+                <div>
+                    <Navbar />
+                    
+                    <MovieGrid movieArray={genreBasedMovies[identifier]}></MovieGrid>
+                </div>
             )
         }
 
         else {
-            return <MovieGrid movieArray = {movieObj}></MovieGrid>
+            return (<div>
+                <Navbar />
+                <MovieGrid movieArray = {movieObj}></MovieGrid>
+            </div>)
         }
 
 

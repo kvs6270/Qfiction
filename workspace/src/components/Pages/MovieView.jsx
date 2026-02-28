@@ -5,6 +5,7 @@ import { fetchMovie } from "../../logic/fetchMovie";
 
 import { genreFilms } from "../../logic/genreBasedMovies.js";
 import { films2026 } from "../../logic/movies2026.js";
+import { Navbar } from "../Cogs/Navbar.jsx";
 
 function temporaryIterator(id) {
     for (let movie of films2026) {
@@ -93,7 +94,10 @@ export function MovieView() {
 
     else {
         return (
-    <MoviePage movieObj={movieObj} />
+            <div>
+                <Navbar />
+                <MoviePage movieObj={movieObj} />
+            </div>
 
     
 )

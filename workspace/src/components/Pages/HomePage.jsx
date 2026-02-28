@@ -2,6 +2,7 @@ import { Slider } from "../Cogs/slider";
 import { topRated } from "../../logic/TopRated";
 import {useMemo} from "react";
 import { useOutletContext } from "react-router";
+import { Navbar } from "../Cogs/Navbar";
 
 
 
@@ -36,6 +37,7 @@ export function HomePage() {
     return (
 
         <div>
+            <Navbar></Navbar>
             <MainSlider topRatedMoviesOf2026 = {topRatedMovieObj} error = {error} loading = {loading}></MainSlider>
             <MegaSlider genreBasedTopRatedMoviesObj = {genreBasedTopRatedMoviesObj} error = {error2} loading = {loading2} ></MegaSlider>
         </div>
