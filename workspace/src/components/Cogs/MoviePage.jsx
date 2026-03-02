@@ -4,29 +4,35 @@ import { useState } from "react";
 import { useContext } from "react";
 
 export function MoviePage({movieObj}) {
-    const [toWatch , setToWatch] = useState(false)
-    const [watched , setWatched] = useState(false)
 
-    const {addToWatch, addToWatched, removeFromWatch, removeFromWatched} = useContext(WatchContext)
+
+    const {moviesToWatch, moviesWatched, addToWatch, addToWatched, removeFromWatch, removeFromWatched} = useContext(WatchContext)
+
+    // const [toWatch , setToWatch] = useState(moviesToWatch.some(movie => movie.id == movieObj.id))
+    // const [watched , setWatched] = useState(moviesWatched.some(movie => movie.id == movieObj.id))
+
+    let toWatch = moviesToWatch.some(movie => movie.id === movieObj.id)
+    let watched = moviesWatched.some(movie => movie.id === movieObj.id)
+
 
     function setMovieAsWatched() {
         addToWatched(movieObj)
-        setWatched(!watched)
+        watched = true;
     }
 
     function removeMovieFromWatched() {
         removeFromWatched(movieObj)
-        setWatched(!watched)
+        watched = false;
     }
 
     function setMovieToWatch() {
         addToWatch(movieObj)
-        setToWatch(!toWatch)
+        toWatch = true;
     }
 
     function removeMovieFromWatch() {
         removeFromWatch(movieObj)
-        setToWatch(!toWatch)
+        watched = false;
     }
 
     return (
