@@ -2,7 +2,7 @@ import { Tile } from "./tile.jsx"
 import { useNavigate } from 'react-router'
 import style from "../CogCSS/slider.module.css"
 
-export function Slider({ movieArray, identifier, identifierType }) {
+export function Slider({suggestionType, movieArray, identifier, identifierType }) {
     const navigate = useNavigate();
 
     let slideShow = movieArray.map(item => {
@@ -18,7 +18,7 @@ export function Slider({ movieArray, identifier, identifierType }) {
             <div className = {style.viewAll} onClick={() => {
 
 
-                navigate(`TopRated/${identifier}`);
+                navigate(`${suggestionType}/${identifier}`);
             }}>
 
                 View All</div>
