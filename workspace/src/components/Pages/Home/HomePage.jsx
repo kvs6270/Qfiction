@@ -1,8 +1,8 @@
-import { Slider } from "../Cogs/slider";
-import { topRated } from "../../logic/TopRated";
+import { Slider } from "../../Cogs/slider";
+import { topRated } from "../../../logic/TopRated";
 import {useMemo} from "react";
 import { useOutletContext } from "react-router";
-import { Navbar } from "../Cogs/Navbar";
+import { Navbar } from "../../Cogs/Navbar";
 
 
 

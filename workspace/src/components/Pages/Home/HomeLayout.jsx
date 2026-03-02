@@ -1,9 +1,9 @@
 import { Outlet } from "react-router";
 import { useEffect, useMemo, useState } from "react";
-import { fetchFunc } from "../../logic/fetchFunc.js";
+import { fetchFunc } from "../../../logic/fetchFunc.js";
 
-import { genreFilms } from "../../logic/genreBasedMovies.js";
-import { films2026 } from "../../logic/movies2026.js";
+import { genreFilms } from "../../../logic/genreBasedMovies.js";
+import { films2026 } from "../../../logic/movies2026.js";
 
 const genres = [/*An array of genres*/]
 

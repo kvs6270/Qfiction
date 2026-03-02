@@ -1,12 +1,12 @@
 import { useOutletContext } from "react-router";
 import { useState, useEffect } from "react";
 
-import { MovieGrid } from "../Cogs/MovieGrid";
+import { MovieGrid } from "../../Cogs/MovieGrid";
 import { useParams } from "react-router";
-import { Navbar } from "../Cogs/Navbar";
-import { films2026} from "../../logic/movies2026";
-import { genreFilms } from "../../logic/genreBasedMovies";
-import { topRated } from "../../logic/TopRated";
+import { Navbar } from "../../Cogs/Navbar";
+import { films2026} from "../../../logic/movies2026";
+import { genreFilms } from "../../../logic/genreBasedMovies";
+import { topRated } from "../../../logic/TopRated";
 // It's own fetching logic.
 
 

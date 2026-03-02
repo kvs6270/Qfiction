@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { WatchContext } from "../../App";
-import { Navbar } from "../Cogs/Navbar";
+import { WatchContext } from "../../../App";
+import { Navbar } from "../../Cogs/Navbar";
 
 export function WatchedList () {
 

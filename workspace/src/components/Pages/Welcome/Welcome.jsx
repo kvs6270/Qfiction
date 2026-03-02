@@ -1,4 +1,4 @@
-import { Navbar } from "../Cogs/Navbar"
+import { Navbar } from "../../Cogs/Navbar"
 
 export function Welcome() {
     return (
