@@ -79,8 +79,7 @@ export function MovieView() {
     let error = false
     let loading = false
 
-    console.log(id);
-    console.log(movieObj);
+    
 
 
     if(error) {
