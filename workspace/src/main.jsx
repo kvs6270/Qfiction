@@ -8,7 +8,9 @@ import { MovieView } from "./components/Pages/MovieView.jsx";
 import { WatchList } from "./components/Pages/Library/watchlist.jsx";
 import { WatchedList } from "./components/Pages/Library/watched.jsx";
 import { Welcome } from "./components/Pages/Welcome/Welcome.jsx";
-// import {};
+import { RecommendationGridView } from "./components/Pages/Recommendation/RecommendationGridView.jsx";
+import { RecommendationLayout } from "./components/Pages/Recommendation/RecommendationLayout.jsx";
+import { RecommendationPage } from "./components/Pages/Recommendation/RecommendationPage.jsx";
 import App from './App.jsx'
 
 const router = createBrowserRouter([
@@ -41,6 +43,19 @@ const router = createBrowserRouter([
     element: <WatchList/>
 
   }
+
+  ,
+  {
+    path: "Recommendation",
+    element: <RecommendationLayout />,
+    children: [
+      { index: true, element: <RecommendationPage /> },
+      {path: "Recommended/:identifier", element: <RecommendationGridView />}
+      
+    ],
+  }
+
+
 
 ]);
 
