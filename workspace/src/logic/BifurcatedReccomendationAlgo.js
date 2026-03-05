@@ -2,9 +2,12 @@ import { movieDB } from "./Mock_Movie_DB.js";
 import {movieOrganizer} from "./ReccomendationAlgorithm.js"
 
 
-function moviesForYou (topGenreNum,topCastNum,topDirectorNum,) {
+function moviesForYou (inputDB, outputDB, topGenreNum, topCastNum, topDirectorNum,) {
 
-    const finalReccList = movieOrganizer(movieDB, movieDB).finalReccList
+    const finalReccList = movieOrganizer(inputDB, outputDB).finalReccList
+
+
+   
 
     
 
@@ -12,7 +15,7 @@ function moviesForYou (topGenreNum,topCastNum,topDirectorNum,) {
     const genreBasedObj = {};
 
 
-    const genreReccStrength = movieOrganizer(movieDB).genreReccStrength;
+    const genreReccStrength = movieOrganizer(inputDB).genreReccStrength;
 
     
 
@@ -28,6 +31,7 @@ function moviesForYou (topGenreNum,topCastNum,topDirectorNum,) {
 
     genreReccStrengthArray.forEach(item => {
         genreBasedObj[item.genre] = finalReccList.filter((movie) => {
+           
             return movie.genres.includes(item.genre);
         })
     })
@@ -37,7 +41,7 @@ function moviesForYou (topGenreNum,topCastNum,topDirectorNum,) {
 
     const directorBasedObj = {};
 
-    const directorReccStrength = movieOrganizer(movieDB).directorReccStrength;
+    const directorReccStrength = movieOrganizer(inputDB).directorReccStrength;
 
     const directorReccStrengthArray = [];
 
@@ -68,7 +72,7 @@ function moviesForYou (topGenreNum,topCastNum,topDirectorNum,) {
     
     const castBasedObj = {};
 
-    const castReccStrength = movieOrganizer(movieDB).castReccStrength;
+    const castReccStrength = movieOrganizer(inputDB).castReccStrength;
 
     const castReccStrengthArray = [];
 
@@ -87,13 +91,14 @@ function moviesForYou (topGenreNum,topCastNum,topDirectorNum,) {
     })
 
     
-    return {genreBasedObj, castBasedObj, directorBasedObj}
+    return {genreBasedObj, castBasedObj, directorBasedObj, genreReccStrengthArray, castReccStrengthArray, directorReccStrengthArray}
 
     
 
     
 }
 
+console.log(moviesForYou(movieDB, movieDB, 10, 10, 10).genreBasedObj)
 
 
 

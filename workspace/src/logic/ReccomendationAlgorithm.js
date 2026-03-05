@@ -1,8 +1,64 @@
 import { movieDB } from "./Mock_Movie_DB.js";
+import { films2026 } from "./movies2026.js";
+
+
+const sampleMovies = [
+    {
+        id: "movie-1",
+        title: "Crimson Pursuit",
+        genre: "action",
+        director: "Christopher Nolan",
+        cast: ["Leonardo DiCaprio", "Cillian Murphy", "Emily Blunt"],
+        imdbRating: 8.1,
+        votes: 45231
+    },
+    {
+        id: "movie-2",
+        title: "Iron Protocol",
+        genre: "action",
+        director: "Kathryn Bigelow",
+        cast: ["Michael B. Jordan", "Scarlett Johansson", "Oscar Isaac"],
+        imdbRating: 7.6,
+        votes: 18344
+    },
+    {
+        id: "movie-3",
+        title: "Shadow Extraction",
+        genre: "action",
+        director: "Christopher Nolan",
+        cast: ["Ryan Gosling", "Emily Blunt", "Margot Robbie"],
+        imdbRating: 7.9,
+        votes: 22104
+    },
+    {
+        id: "movie-4",
+        title: "Steel Horizon",
+        genre: "action",
+        director: "Denis Villeneuve",
+        cast: ["Timothee Chalamet", "Zendaya", "Oscar Isaac"],
+        imdbRating: 8.3,
+        votes: 50912
+    },
+    {
+        id: "movie-5",
+        title: "Nebula Rising",
+        genre: "scifi",
+        director: "Denis Villeneuve",
+        cast: ["Zendaya", "Timothee Chalamet", "Florence Pugh"],
+        imdbRating: 8.4,
+        votes: 61255
+    }
+];
 
 
 
-export function movieOrganizer(inputDB, outputDB = []) {
+
+export function movieOrganizer(inputDB, outputDB = [], topGenreNum = 5, topDirectorNum = 5, topCastNum = 5) {
+
+    if (inputDB.length == 0) {
+        console.log("Watch something Nigger!!");
+        return;
+    }
 
 
     let genreReccStrength = {}
@@ -18,18 +74,29 @@ export function movieOrganizer(inputDB, outputDB = []) {
 
 
     inputDB.forEach(item => {
-        item.genres.forEach(genre => {
-            if (genre in genreReccStrength) {
-                ++genreReccStrength[genre];
-            }
 
-            else {
-                genreReccStrength[genre] = 1;
-            }
-        })
+        if (item.genre in genreReccStrength) {
+            ++genreReccStrength[item.genre];
+        }
+
+        else {
+            genreReccStrength[item.genre] = 1;
+        }
+
 
 
     })
+
+    const genreReccStrengthArray = [];
+
+    for (let genre in genreReccStrength) {
+        genreReccStrengthArray.push({ "genre": genre, "score": genreReccStrength[genre] });
+    }
+
+    genreReccStrengthArray.sort((a, b) => {
+        return -(a.score - b.score);
+    }).slice(0, topGenreNum)
+
 
 
 
@@ -48,6 +115,20 @@ export function movieOrganizer(inputDB, outputDB = []) {
 
     })
 
+    const directorReccStrengthArray = [];
+
+    for (let director in directorReccStrength) {
+        directorReccStrengthArray.push({ "director": director, "score": directorReccStrength[director] });
+    }
+
+    directorReccStrengthArray.sort((a, b) => {
+        return -(a.score - b.score);
+    }).slice(0, topDirectorNum)
+
+
+
+
+
     inputDB.forEach(item => {
         item.cast.forEach(actor => {
             if (actor in castReccStrength) {
@@ -60,49 +141,62 @@ export function movieOrganizer(inputDB, outputDB = []) {
         })
     })
 
+    const castReccStrengthArray = [];
+
+    for (let cast in castReccStrength) {
+        castReccStrengthArray.push({ "cast": cast, "score": castReccStrength[cast] });
+    }
+
+    castReccStrengthArray.sort((a, b) => {
+        return -(a.score - b.score);
+    }).slice(0, topCastNum)
+
+
+
+
+
 
     outputDB.forEach((item, index) => {
 
         reccList.push({
-            "Name": item.title,
-            "Score": 0
+            movie: item,
+            Score: 0
         })
 
-        item.genres.forEach(genre => {
-            reccList[index].Score = reccList[index].Score + 1 * genreReccStrength[genre]
-        })
 
-        reccList[index].Score = reccList[index].Score + 1 * directorReccStrength[item.director]
+        reccList[index].Score += 1 * (genreReccStrength[item.genre] || 0)
+        reccList[index].Score += 5 * (directorReccStrength[item.director] || 0)
 
-        item.cast.forEach(cast => {
-            reccList[index].Score = reccList[index].Score + 1 * castReccStrength[cast]
+        item.cast.forEach(actor => {
+            reccList[index].Score += 3 * (castReccStrength[actor] || 0)
         })
 
     })
 
 
     reccList.sort((a, b) => {
-        return (-(a.Score - b.Score));
+        return b.Score - a.Score;
     })
 
 
 
 
-    let finalReccList = reccList.map((item, index) => {
-
-        let result = outputDB.find((item2) => {
-            return (item.Name == item2.title);
-        })
+    let finalReccList = reccList.map(item => item.movie);
 
 
-        return { result };
-
-    })
-
-    return { finalReccList, genreReccStrength, castReccStrength, directorReccStrength };
+    return { finalReccList, genreReccStrengthArray, castReccStrengthArray, directorReccStrengthArray };
 
 
 }
+
+
+// console.log(movieOrganizer(sampleMovies, films2026).genreReccStrengthArray)
+// console.log(movieOrganizer(sampleMovies, films2026).castReccStrengthArray)
+// console.log(movieOrganizer(sampleMovies, films2026).directorReccStrengthArray)
+console.log(movieOrganizer(sampleMovies, films2026).finalReccList)
+
+
+
 
 
 
