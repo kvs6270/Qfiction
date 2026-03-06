@@ -5,7 +5,14 @@ import { fetchFunc } from "../../../logic/fetchFunc.js";
 import { genreFilms } from "../../../logic/genreBasedMovies.js";
 import { films2026 } from "../../../logic/movies2026.js";
 
-const genres = [/*An array of genres*/]
+import { castFilms } from "../../../logic/castBasedMovies.js";
+import { directorFilms } from "../../../logic/directorBasedMovies.js";
+
+
+
+const genre = [/*An array of genres*/]
+const casts = [/*An array of castes*/]
+const directors = [/*An array of directors*/]
 
 
 
@@ -50,8 +57,8 @@ function useSingleFetch(fetchUrl) {
     return { movieObj, error, loading }
 }
 
-function useMultiFetch(baseUrl, genres) {
-    const [genreBasedMovies, setGenreBasedMovies] = useState({});
+function useMultiFetch(baseUrl, params) {
+    const [paramBasedMovies, setParamBasedMovies] = useState({});
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
 
@@ -68,21 +75,21 @@ function useMultiFetch(baseUrl, genres) {
         async function dataFetching() {
 
             try {
-                const genreBasedFetchPromises = genres.map(genre =>
-                    fetchFunc(baseUrl + genre)
+                const paramBasedFetchPromises = params.map(param =>
+                    fetchFunc(baseUrl + param)
 
                 );
 
-                const genreBasedMovieArrays = await Promise.all(genreBasedFetchPromises);
+                const paramBasedMovieArrays = await Promise.all(paramBasedFetchPromises);
 
 
-                const genreBasedMovieObj = {};
+                const paramBasedMovieObj = {};
 
-                genreBasedMovieArrays.forEach((movies, index) => {
-                    genreBasedMovieObj[genres[index]] = movies;
+                paramBasedMovieArrays.forEach((movies, index) => {
+                    paramBasedMovieObj[params[index]] = movies;
                 });
 
-                if (isMounted) setGenreBasedMovies(genreBasedMovieObj);
+                if (isMounted) setParamBasedMovies(paramBasedMovieObj);
 
             } catch (error) {
                 if (isMounted) setError(true);
@@ -100,13 +107,13 @@ function useMultiFetch(baseUrl, genres) {
             isMounted = false
         }
 
-    }, [genres, baseUrl])
+    }, [params, baseUrl])
 
 
 
 
 
-    return { genreBasedMovies, error, loading }
+    return { paramBasedMovies, error, loading }
 
 }
 
@@ -117,21 +124,35 @@ export function RecommendationLayout() {
     // const { movieObj, error, loading } = useSingleFetch(/* Insert URL */);
 
     // const { genreBasedMovies, error: error2, loading: loading2 } = useMultiFetch(/* genres array*/);
+    // const { castBasedMovies, error: error3, loading: loading3 } = useMultiFetch(/* casts  array*/);
+    // const { directorBasedMovies, error: error4, loading: loading4 } = useMultiFetch(/* drector array*/);
 
     const movieObj = [...films2026];
- 
-    const genreBasedMovies = {...genreFilms};
-
-    const error = false
+    const error = false;
     const loading = false
+
+    const genreBasedMovies = {...genreFilms};
     const error2 = false;
     const loading2 = false;
+
+    const castBasedMovies = {...castFilms};
+    const error3 = false;
+    const loading3 = false;
+
+    const directorBasedMovies = {...directorFilms};
+    const error4 = false;
+    const loading4 = false;
+
+
+        
+    
+    
 
     
 
         return (
             <Outlet context={
-            { movieObj, error, loading, genreBasedMovies, error2, loading2 }
+            { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3,directorBasedMovies, error4, loading4}
         } />
         
         )
