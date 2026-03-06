@@ -2,7 +2,8 @@ import { Tile } from "./tile.jsx"
 import { useNavigate } from 'react-router'
 import style from "../CogCSS/slider.module.css"
 
-export function Slider({suggestionType, movieArray, identifier, identifierType }) {
+export function Slider({suggestionType, movieArray, identifier}) {
+
     const navigate = useNavigate();
 
     let slideShow = movieArray.map(item => {

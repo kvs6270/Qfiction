@@ -3,8 +3,7 @@ import style from "../CogCSS/MoviePage.module.css"
 import { useState } from "react";
 import { useContext } from "react";
 
-export function MoviePage({movieObj}) {
-
+export function MoviePage({movieObj}) {    
 
     const {moviesToWatch, moviesWatched, addToWatch, addToWatched, removeFromWatch, removeFromWatched} = useContext(WatchContext)
 
