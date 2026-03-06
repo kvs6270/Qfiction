@@ -28,7 +28,7 @@ const actors = [
   
 ];
 
-const genres = ["action", "scifi", "drama"];
+const genres = ["action", "sci-fi", "thriller", "drama", "fantasy"];
 
 export const films2026 = Array.from({ length: 50 }, (_, i) => ({
   id: `movie-${i + 1}`,

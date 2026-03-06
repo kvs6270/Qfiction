@@ -41,6 +41,8 @@ function generateMovies(genre, count) {
 export const genreFilms = {
   action: generateMovies("action", 500),
   scifi: generateMovies("scifi", 500),
-  drama: generateMovies("drama", 500)
+  drama: generateMovies("drama", 500),
+  thriller: generateMovies("thriller", 500),
+  fantasy: generateMovies("fantasy", 500)
 };
 
