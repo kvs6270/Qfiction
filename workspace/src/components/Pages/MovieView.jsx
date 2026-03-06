@@ -6,7 +6,9 @@ import { fetchMovie } from "../../logic/fetchMovie";
 import { genreFilms } from "../../logic/genreBasedMovies.js";
 import { films2026 } from "../../logic/movies2026.js";
 import { Navbar } from "../Cogs/Navbar.jsx";
+import { castFilms } from "../../logic/castBasedMovies.js";
 
+import { directorFilms } from "../../logic/directorBasedMovies.js";
 function temporaryIterator(id) {
     for (let movie of films2026) {
         if(movie.id == id) {
@@ -16,6 +18,20 @@ function temporaryIterator(id) {
 
     for(let genre in genreFilms) {
         for (let movie of genreFilms[genre]) {
+        if(movie.id == id) {
+            return movie;
+        }
+    }
+    }
+    for(let cast in castFilms) {
+        for (let movie of castFilms[cast]) {
+        if(movie.id == id) {
+            return movie;
+        }
+    }
+    }
+    for(let director in directorFilms) {
+        for (let movie of directorFilms[director]) {
         if(movie.id == id) {
             return movie;
         }
