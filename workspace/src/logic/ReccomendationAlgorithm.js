@@ -1,59 +1,11 @@
-import { movieDB } from "./Mock_Movie_DB.js";
-import { films2026 } from "./movies2026.js";
-
-
-const sampleMovies = [
-    {
-        id: "movie-1",
-        title: "Crimson Pursuit",
-        genre: "action",
-        director: "Christopher Nolan",
-        cast: ["Leonardo DiCaprio", "Cillian Murphy", "Emily Blunt"],
-        imdbRating: 8.1,
-        votes: 45231
-    },
-    {
-        id: "movie-2",
-        title: "Iron Protocol",
-        genre: "action",
-        director: "Kathryn Bigelow",
-        cast: ["Michael B. Jordan", "Scarlett Johansson", "Oscar Isaac"],
-        imdbRating: 7.6,
-        votes: 18344
-    },
-    {
-        id: "movie-3",
-        title: "Shadow Extraction",
-        genre: "action",
-        director: "Christopher Nolan",
-        cast: ["Ryan Gosling", "Emily Blunt", "Margot Robbie"],
-        imdbRating: 7.9,
-        votes: 22104
-    },
-    {
-        id: "movie-4",
-        title: "Steel Horizon",
-        genre: "action",
-        director: "Denis Villeneuve",
-        cast: ["Timothee Chalamet", "Zendaya", "Oscar Isaac"],
-        imdbRating: 8.3,
-        votes: 50912
-    },
-    {
-        id: "movie-5",
-        title: "Nebula Rising",
-        genre: "scifi",
-        director: "Denis Villeneuve",
-        cast: ["Zendaya", "Timothee Chalamet", "Florence Pugh"],
-        imdbRating: 8.4,
-        votes: 61255
-    }
-];
 
 
 
 
-export function movieOrganizer(inputDB, outputDB = [], topGenreNum = 5, topDirectorNum = 5, topCastNum = 5) {
+
+export function movieOrganizer(inputDB, outputDB = [], topGenreNum = 3, topDirectorNum = 3, topCastNum = 3) {
+
+    console.log(inputDB)
 
     if (inputDB.length == 0) {
         console.log("Watch something Nigger!!");
@@ -87,13 +39,13 @@ export function movieOrganizer(inputDB, outputDB = [], topGenreNum = 5, topDirec
 
     })
 
-    const genreReccStrengthArray = [];
+    let genreReccStrengthArray = [];
 
     for (let genre in genreReccStrength) {
         genreReccStrengthArray.push({ "genre": genre, "score": genreReccStrength[genre] });
     }
 
-    genreReccStrengthArray.sort((a, b) => {
+    genreReccStrengthArray = genreReccStrengthArray.sort((a, b) => {
         return -(a.score - b.score);
     }).slice(0, topGenreNum)
 
@@ -115,13 +67,13 @@ export function movieOrganizer(inputDB, outputDB = [], topGenreNum = 5, topDirec
 
     })
 
-    const directorReccStrengthArray = [];
+    let directorReccStrengthArray = [];
 
     for (let director in directorReccStrength) {
         directorReccStrengthArray.push({ "director": director, "score": directorReccStrength[director] });
     }
 
-    directorReccStrengthArray.sort((a, b) => {
+    directorReccStrengthArray =directorReccStrengthArray.sort((a, b) => {
         return -(a.score - b.score);
     }).slice(0, topDirectorNum)
 
@@ -141,13 +93,13 @@ export function movieOrganizer(inputDB, outputDB = [], topGenreNum = 5, topDirec
         })
     })
 
-    const castReccStrengthArray = [];
+    let castReccStrengthArray = [];
 
     for (let cast in castReccStrength) {
         castReccStrengthArray.push({ "cast": cast, "score": castReccStrength[cast] });
     }
 
-    castReccStrengthArray.sort((a, b) => {
+    castReccStrengthArray = castReccStrengthArray.sort((a, b) => {
         return -(a.score - b.score);
     }).slice(0, topCastNum)
 
@@ -190,10 +142,7 @@ export function movieOrganizer(inputDB, outputDB = [], topGenreNum = 5, topDirec
 }
 
 
-// console.log(movieOrganizer(sampleMovies, films2026).genreReccStrengthArray)
-// console.log(movieOrganizer(sampleMovies, films2026).castReccStrengthArray)
-// console.log(movieOrganizer(sampleMovies, films2026).directorReccStrengthArray)
-console.log(movieOrganizer(sampleMovies, films2026).finalReccList)
+
 
 
 
