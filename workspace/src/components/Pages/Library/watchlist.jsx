@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import { WatchContext } from "../../../App";
 import { Navbar } from "../../Cogs/Navbar";
+import { LibraryTile } from "../../Cogs/libraryTile";
+import style from "../../CogCSS/Watchlist.module.css"
 
 export function WatchList() {
 
@@ -10,16 +12,15 @@ export function WatchList() {
     let movieElementArray = moviesToWatch.map(element => {
         return (
         
-        <div className="MovieToWatch" key={element.id}>
-            {element.title}            
-        </div>)
+        <LibraryTile movieObj={element} />
+    )
     });
         
    
 
     return (
 
-        <div className="ToWatchContainer">
+        <div className= {style.ToWatchContainer}>
             <Navbar/>
             {movieElementArray}
         </div>
