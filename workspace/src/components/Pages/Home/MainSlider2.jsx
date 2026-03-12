@@ -21,12 +21,24 @@ function useInterval(callback, delay, reset) {
       return () => clearInterval(id);
     }
   }, [delay, reset]);
+
+
+}
+
+function SliderTile({movieObj}) {
+  return (
+    <div className={style.Tile}>
+      <h1>{movieObj.title}</h1>
+    </div>
+  )
 }
 
 
 
 export function MainSlider2({topRatedMoviesOf2026, error, loading}) {
     let iteratorArray = [...topRatedMoviesOf2026];
+
+    let slider = [];
 
 
     let [counter, setCounter] = useState(0)
@@ -35,19 +47,22 @@ export function MainSlider2({topRatedMoviesOf2026, error, loading}) {
 
     let [resetTick, setResetTick] = useState(0)
 
-    const header = iteratorArray[counter];
+   
+    for (const movieObj of iteratorArray) {
+      slider.push(<SliderTile movieObj={movieObj} key={movieObj.title}/>);
+    }
 
 
     
 
     function MoveFurther() {
-        setCounter(counter+1)
+        setCounter(c=> (c+1)%slider.length)
         setResetTick(resetTick+1)
 
     }
 
     function MoveBack() {
-        setCounter(counter-1)
+        setCounter(c=> (c-1)%slider.length)
         setResetTick(resetTick-1)
     }
 
@@ -63,11 +78,15 @@ export function MainSlider2({topRatedMoviesOf2026, error, loading}) {
 
     else {
 
-        return <div className={style.TileContainer}>
-            <h1>{header.title}</h1>
-            <button onClick={MoveFurther}> Next Movie</button>
-            <button onClick={MoveBack}> Prev Movie</button>
-        </div>
+        return <div  className={style.SliderContainer}>
+                  <button className={style.Button} onClick={MoveBack} > &lt; </button>
+
+                  <div style={{transform: `translateX(-${counter*100}%)`}} className={style.TileContainer}>
+                    {slider}
+                  </div>
+
+                  <button className={style.Button} onClick={MoveFurther} > &gt; </button>
+                </div>
 
     }
 }
