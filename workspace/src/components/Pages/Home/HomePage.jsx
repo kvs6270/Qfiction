@@ -4,6 +4,8 @@ import { useMemo } from "react";
 import { useOutletContext } from "react-router";
 import { Navbar } from "../../Cogs/Navbar";
 
+import { MainSlider2 } from "./MainSlider2";
+
 
 
 
@@ -66,35 +68,42 @@ export function HomePage() {
 
         <div>
             <Navbar></Navbar>
-            <MainSlider topRatedMoviesOf2026={topRatedMovieObj} error={error} loading={loading}></MainSlider>
-            <MegaSlider paramBasedTopRatedMoviesObj={genreBasedTopRatedMoviesObj} error={error2} loading={loading2} ></MegaSlider>
-            <MegaSlider paramBasedTopRatedMoviesObj={castBasedTopRatedMoviesObj} error={error3} loading={loading3} ></MegaSlider>
-            <MegaSlider paramBasedTopRatedMoviesObj={directorBasedTopRatedMoviesObj} error={error4} loading={loading4} ></MegaSlider>
+            <MainSlider2 topRatedMoviesOf2026={topRatedMovieObj} error={error} loading={loading}></MainSlider2>
+            
+
+            <MegaSlider mainParam = "genre" paramBasedTopRatedMoviesObj={genreBasedTopRatedMoviesObj} error={error2} loading={loading2} ></MegaSlider>
+            <MegaSlider mainParam="cast" paramBasedTopRatedMoviesObj={castBasedTopRatedMoviesObj} error={error3} loading={loading3} ></MegaSlider>
+            <MegaSlider mainParam="director" paramBasedTopRatedMoviesObj={directorBasedTopRatedMoviesObj} error={error4} loading={loading4} ></MegaSlider>
         </div>
 
     )
 
 }
 
-function MainSlider({ topRatedMoviesOf2026, error, loading }) {
 
 
 
-    if (error) {
-        return <Error></Error>
+function MegaSlider({mainParam, paramBasedTopRatedMoviesObj, error, loading }) {
+
+     function sliderTitle(paramValue) {
+    let heading;
+     if (mainParam == "genre" ) {
+        heading = `Top Rated ${paramValue} movies`
     }
-    else if (loading) {
-        return <Loading></Loading>
 
-    }
+    else if(mainParam == "cast") {
+
+        heading = `Top Rated movies with ${paramValue}`
+    } 
+
     else {
-        return <Slider suggestionType={"TopRated"} movieArray={topRatedMoviesOf2026} identifierType={"Year"} identifier={2026}></Slider>
+
+        heading = `More of ${paramValue}`
+
     }
 
-}
-
-
-function MegaSlider({ paramBasedTopRatedMoviesObj, error, loading }) {
+    return heading;
+   }
 
 
 
@@ -108,7 +117,14 @@ function MegaSlider({ paramBasedTopRatedMoviesObj, error, loading }) {
         let arrayOfSLiders = []
         for (const param in paramBasedTopRatedMoviesObj) {
 
-            arrayOfSLiders.push(<Slider suggestionType={"TopRated"} movieArray={paramBasedTopRatedMoviesObj[param]} key={param} identifier={param}></Slider>)
+            let text = sliderTitle(param);
+            arrayOfSLiders.push(
+            <>
+            <h3 key={text}>{text}</h3>
+            <Slider suggestionType={"TopRated"} movieArray={paramBasedTopRatedMoviesObj[param]} key={param} identifier={param}></Slider>
+            </>
+        
+        )
         }
 
         return (

@@ -2,7 +2,7 @@ import { Tile } from "./tile.jsx"
 import { useNavigate } from 'react-router'
 import style from "../CogCSS/slider.module.css"
 
-export function Slider({suggestionType, movieArray, identifier}) {
+export function Slider({sliderTitle, suggestionType, movieArray, identifier}) {
 
     const navigate = useNavigate();
 
@@ -16,6 +16,8 @@ export function Slider({suggestionType, movieArray, identifier}) {
     return (
 
         <div className={style.sliderContainer}>
+
+            {/* <div className={style.sliderTitle}>{sliderTitle}</div> */}
             <div className = {style.viewAll} onClick={() => {
 
 
