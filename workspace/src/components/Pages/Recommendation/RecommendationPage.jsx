@@ -84,7 +84,12 @@ export function RecommendationPage() {
 
         <div>
             <Navbar></Navbar>
+
+            <>
+            <h3>Top Movies of 2026</h3>
             <MainSlider2 recommendedMoviesOf2026 = {recommendedMovieObj} error = {error} loading = {loading}></MainSlider2>
+            </>
+            
             <MegaSlider param = {"genre"} paramReccStrengthArray = {movieOrgainzer.genreReccStrengthArray} paramBasedRecommendedMoviesObj = {genreBasedRecommendedMoviesObj} error = {error2} loading = {loading2} ></MegaSlider>
             <MegaSlider param = {"cast"} paramReccStrengthArray = {movieOrgainzer.castReccStrengthArray} paramBasedRecommendedMoviesObj = {castBasedRecommendedMoviesObj} error = {error2} loading = {loading2} ></MegaSlider>
             <MegaSlider param = {"director"} paramReccStrengthArray = {movieOrgainzer.directorReccStrengthArray} paramBasedRecommendedMoviesObj = {directorBasedRecommendedMoviesObj} error = {error2} loading = {loading2} ></MegaSlider>

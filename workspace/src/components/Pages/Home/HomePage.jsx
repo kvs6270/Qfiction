@@ -68,8 +68,11 @@ export function HomePage() {
 
         <div>
             <Navbar></Navbar>
+
+            <>
+            <h3>Top Movies of 2026</h3>
             <MainSlider2 topRatedMoviesOf2026={topRatedMovieObj} error={error} loading={loading}></MainSlider2>
-            
+            </>
 
             <MegaSlider mainParam = "genre" paramBasedTopRatedMoviesObj={genreBasedTopRatedMoviesObj} error={error2} loading={loading2} ></MegaSlider>
             <MegaSlider mainParam="cast" paramBasedTopRatedMoviesObj={castBasedTopRatedMoviesObj} error={error3} loading={loading3} ></MegaSlider>
