@@ -14,6 +14,7 @@
 }
 
 .Button{
+    width: 2.5%;
     z-index: 2;
 }
 
@@ -22,7 +23,7 @@
 
 .TileContainer{
    
-    min-width: 80%;
+    width: 95%;
     aspect-ratio: 24/9;
     
     display: flex;

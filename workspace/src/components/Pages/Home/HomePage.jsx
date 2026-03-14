@@ -73,15 +73,20 @@ export function HomePage() {
 
 
 
-            <>
-                <h3>Top Movies of 2026</h3>
-                <MainSlider2 topRatedMoviesOf2026={topRatedMovieObj} error={error} loading={loading}></MainSlider2>
-            </>
+            <div className={style.HomePage}>
 
-            <MegaSlider mainParam="genre" paramBasedTopRatedMoviesObj={genreBasedTopRatedMoviesObj} error={error2} loading={loading2} ></MegaSlider>
-            <MegaSlider mainParam="cast" paramBasedTopRatedMoviesObj={castBasedTopRatedMoviesObj} error={error3} loading={loading3} ></MegaSlider>
-            <MegaSlider mainParam="director" paramBasedTopRatedMoviesObj={directorBasedTopRatedMoviesObj} error={error4} loading={loading4} ></MegaSlider>
-            <Loading></Loading>
+
+                < >
+                    <h3>Top Movies of 2026</h3>
+                    <MainSlider2 topRatedMoviesOf2026={topRatedMovieObj} error={error} loading={loading}></MainSlider2>
+                </>
+
+                <MegaSlider mainParam="genre" paramBasedTopRatedMoviesObj={genreBasedTopRatedMoviesObj} error={error2} loading={loading2} ></MegaSlider>
+                <MegaSlider mainParam="cast" paramBasedTopRatedMoviesObj={castBasedTopRatedMoviesObj} error={error3} loading={loading3} ></MegaSlider>
+                <MegaSlider mainParam="director" paramBasedTopRatedMoviesObj={directorBasedTopRatedMoviesObj} error={error4} loading={loading4} ></MegaSlider>
+                <Loading></Loading>
+
+            </div>
         </div>
 
         
@@ -224,25 +229,9 @@ function MegaSlider({ mainParam, paramBasedTopRatedMoviesObj, error, loading }) 
 
 
 
-    if (error) {
-
-        return (
-
-            <Error></Error>
-
-
-        )
-    }
-    else if (loading) {
-
-        return (
-            <div className={style.SliderContainer}>
-                <Loading></Loading>
-            </div>
-
-        )
-    }
-    else {
+    
+    
+    
         let arrayOfSLiders = []
         for (const param in paramBasedTopRatedMoviesObj) {
 
@@ -250,7 +239,7 @@ function MegaSlider({ mainParam, paramBasedTopRatedMoviesObj, error, loading }) 
             arrayOfSLiders.push(
                 <>
                     <h3 key={text}>{text}</h3>
-                    <Slider suggestionType={"TopRated"} movieArray={paramBasedTopRatedMoviesObj[param]} key={param} identifier={param}></Slider>
+                    <Slider suggestionType={"TopRated"} movieArray={paramBasedTopRatedMoviesObj[param]} key={param} identifier={param} error={error} loading = {loading}></Slider>
                 </>
 
             )
@@ -263,7 +252,7 @@ function MegaSlider({ mainParam, paramBasedTopRatedMoviesObj, error, loading }) 
         );
     }
 
-}
+
 
 function Error() {
 

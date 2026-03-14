@@ -1,0 +1,10 @@
+.SliderContainer{
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+}
+
+.HomePage{
+    margin-top: 60px;
+}
+

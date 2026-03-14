@@ -7,6 +7,7 @@ import { Navbar } from "../../Cogs/Navbar";
 import { films2026} from "../../../logic/movies2026";
 import { genreFilms } from "../../../logic/genreBasedMovies";
 import { topRated } from "../../../logic/TopRated";
+import style from "./HomeGridView.module.css"
 // It's own fetching logic.
 
 
@@ -89,7 +90,9 @@ export function HomeGridView() {
             <div>
                 <Navbar />
 
-                <MovieGrid movieArray={movieArray}></MovieGrid>
+                <div className={style.GridContainer}>
+                    <MovieGrid movieArray={movieArray}></MovieGrid>
+                </div>
             </div>
         )
     }

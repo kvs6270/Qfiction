@@ -1,5 +1,5 @@
 
-import style from "./MainSlider2.module.css"
+import style2 from "./MainSlider2.module.css"
 
 import { useState, useEffect, useRef } from 'react';
  
@@ -27,7 +27,7 @@ function useInterval(callback, delay, reset) {
 
 function SliderTile({movieObj}) {
   return (
-    <div className={style.Tile}>
+    <div className={style2.Tile}>
       <h1>{movieObj.title}</h1>
     </div>
   )
@@ -78,15 +78,16 @@ export function MainSlider2({topRatedMoviesOf2026, error, loading}) {
 
     else {
 
-        return <div  className={style.SliderContainer}>
-                  <button className={style.Button} onClick={MoveBack} > &lt; </button>
+        return <div  className={style2.SliderContainer}>
+                  <button className={style2.Button} onClick={MoveBack} > &lt; </button>
 
-                  <div style={{transform: `translateX(-${counter*100}%)`}} className={style.TileContainer}>
+                  <div style2={{transform: `translateX(-${counter*100}%)`}} className={style2.TileContainer}>
                     {slider}
                   </div>
 
-                  <button className={style.Button} onClick={MoveFurther} > &gt; </button>
+                  <button className={style2.Button} onClick={MoveFurther} > &gt; </button>
                 </div>
 
     }
 }
+
