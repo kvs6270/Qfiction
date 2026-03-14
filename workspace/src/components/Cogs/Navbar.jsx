@@ -4,7 +4,7 @@ export function Navbar() {
     return(
         <div className={style.navbar}>
             <ul>
-                <li><Link to="/Back">Back</Link></li>
+                <li><Link to="/">Back</Link></li>
                 <li><Link to="/Home">Home</Link></li>
                 <li><Link to="/Recommendation">Recommendation</Link></li>
                 <li><Link to="/Watched">Watched</Link></li>
