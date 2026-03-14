@@ -22,7 +22,7 @@ export function WatchList() {
 
         <div className= {style.ToWatchContainer}>
             <Navbar/>
-            {movieElementArray}
+            <div className = {style.MovieElementArray}>{movieElementArray}</div>
         </div>
        
     )
