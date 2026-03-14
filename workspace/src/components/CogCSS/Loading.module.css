@@ -1,0 +1,17 @@
+.Loader{
+     min-width: 100%; 
+    
+    min-height: 100%;
+    
+    animation: bgTransit 0.8s ease-in-out alternate infinite;
+}
+
+@keyframes bgTransit {
+    0%{
+        background-color: rgb(117, 115, 115);
+    }
+
+    100% {
+        background-color: rgb(177, 177, 177);
+    }
+}

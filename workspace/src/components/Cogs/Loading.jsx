@@ -1,11 +1,8 @@
-export function Loading({sliderQty}) {
-    
-}
+import style from "../CogCSS/Loading.module.css"
 
-function SliderSkeleton () {
+export function Loading() {
 
-}
+    return(<div className={style.Loader}>
 
-function tileSkeleton () {
-    
+    </div>)
 }
