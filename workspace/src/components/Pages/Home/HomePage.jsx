@@ -1,10 +1,12 @@
 import { Slider } from "../../Cogs/slider";
 import { topRated } from "../../../logic/TopRated";
-import { useMemo } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useOutletContext } from "react-router";
 import { Navbar } from "../../Cogs/Navbar";
+import { Loading } from "../../Cogs/Loading";
+import style from "./HomePage.module.css"
 
-import { MainSlider2 } from "./MainSlider2";
+import style2 from "./MainSlider2.module.css"
 
 
 
@@ -69,15 +71,20 @@ export function HomePage() {
         <div>
             <Navbar></Navbar>
 
+
+
             <>
-            <h3>Top Movies of 2026</h3>
-            <MainSlider2 topRatedMoviesOf2026={topRatedMovieObj} error={error} loading={loading}></MainSlider2>
+                <h3>Top Movies of 2026</h3>
+                <MainSlider2 topRatedMoviesOf2026={topRatedMovieObj} error={error} loading={loading}></MainSlider2>
             </>
 
-            <MegaSlider mainParam = "genre" paramBasedTopRatedMoviesObj={genreBasedTopRatedMoviesObj} error={error2} loading={loading2} ></MegaSlider>
+            <MegaSlider mainParam="genre" paramBasedTopRatedMoviesObj={genreBasedTopRatedMoviesObj} error={error2} loading={loading2} ></MegaSlider>
             <MegaSlider mainParam="cast" paramBasedTopRatedMoviesObj={castBasedTopRatedMoviesObj} error={error3} loading={loading3} ></MegaSlider>
             <MegaSlider mainParam="director" paramBasedTopRatedMoviesObj={directorBasedTopRatedMoviesObj} error={error4} loading={loading4} ></MegaSlider>
+            <Loading></Loading>
         </div>
+
+        
 
     )
 
@@ -86,35 +93,154 @@ export function HomePage() {
 
 
 
-function MegaSlider({mainParam, paramBasedTopRatedMoviesObj, error, loading }) {
+function useInterval(callback, delay, reset) {
+    const savedCallback = useRef();
 
-     function sliderTitle(paramValue) {
-    let heading;
-     if (mainParam == "genre" ) {
-        heading = `Top Rated ${paramValue} movies`
+    // Remember the latest callback.
+    useEffect(() => {
+        savedCallback.current = callback;
+    }, [callback]);
+
+    // Set up the interval.
+    useEffect(() => {
+        function tick() {
+            savedCallback.current();
+        }
+        if (delay !== null) {
+            let id = setInterval(tick, delay);
+            return () => clearInterval(id);
+        }
+    }, [delay, reset]);
+
+
+}
+
+function SliderTile({ movieObj }) {
+    return (
+        <div className={style2.Tile}>
+            <h1>{movieObj.title}</h1>
+        </div>
+    )
+}
+
+
+
+function MainSlider2({ topRatedMoviesOf2026, error, loading }) {
+    let iteratorArray = [...topRatedMoviesOf2026];
+
+    let slider = [];
+
+
+    let [counter, setCounter] = useState(0)
+
+    let [delay, setDelay] = useState(4000)
+
+    let [resetTick, setResetTick] = useState(0)
+
+
+    for (const movieObj of iteratorArray) {
+        slider.push(<SliderTile movieObj={movieObj} key={movieObj.title} />);
     }
 
-    else if(mainParam == "cast") {
 
-        heading = `Top Rated movies with ${paramValue}`
-    } 
+
+
+    function MoveFurther() {
+        setCounter(c => (c + 1) % slider.length)
+        setResetTick(resetTick + 1)
+
+    }
+
+    function MoveBack() {
+        setCounter(c => (c - 1) % slider.length)
+        setResetTick(resetTick - 1)
+    }
+
+    useInterval(MoveFurther, delay, resetTick)
+
+    if (error) {
+        return (
+
+            <Error></Error>
+
+        )
+    }
+
+    else if (loading) {
+        return (
+            <div className={style2.SliderContainer}>
+                <button className={style2.Button} disabled>&lt;</button>
+
+                <div className={style2.TileContainer}>
+                    <Loading />
+                </div>
+
+                <button className={style2.Button} disabled>&gt;</button>
+            </div>
+        )
+    }
 
     else {
 
-        heading = `More of ${paramValue}`
+        return <div className={style2.SliderContainer}>
+            <button className={style2.Button} onClick={MoveBack} > &lt; </button>
+
+            <div style={{ transform: `translateX(-${counter * 100}%)` }} className={style2.TileContainer}>
+                {slider}
+            </div>
+
+            <button className={style2.Button} onClick={MoveFurther} > &gt; </button>
+        </div>
 
     }
+}
 
-    return heading;
-   }
+
+
+
+
+
+function MegaSlider({ mainParam, paramBasedTopRatedMoviesObj, error, loading }) {
+
+    function sliderTitle(paramValue) {
+        let heading;
+        if (mainParam == "genre") {
+            heading = `Top Rated ${paramValue} movies`
+        }
+
+        else if (mainParam == "cast") {
+
+            heading = `Top Rated movies with ${paramValue}`
+        }
+
+        else {
+
+            heading = `More of ${paramValue}`
+
+        }
+
+        return heading;
+    }
 
 
 
     if (error) {
-        return <Error></Error>
+
+        return (
+
+            <Error></Error>
+
+
+        )
     }
     else if (loading) {
-        return <Loading></Loading>
+
+        return (
+            <div className={style.SliderContainer}>
+                <Loading></Loading>
+            </div>
+
+        )
     }
     else {
         let arrayOfSLiders = []
@@ -122,16 +248,16 @@ function MegaSlider({mainParam, paramBasedTopRatedMoviesObj, error, loading }) {
 
             let text = sliderTitle(param);
             arrayOfSLiders.push(
-            <>
-            <h3 key={text}>{text}</h3>
-            <Slider suggestionType={"TopRated"} movieArray={paramBasedTopRatedMoviesObj[param]} key={param} identifier={param}></Slider>
-            </>
-        
-        )
+                <>
+                    <h3 key={text}>{text}</h3>
+                    <Slider suggestionType={"TopRated"} movieArray={paramBasedTopRatedMoviesObj[param]} key={param} identifier={param}></Slider>
+                </>
+
+            )
         }
 
         return (
-            <div className="SliderContainer">
+            <div className={style.SliderContainer}>
                 {arrayOfSLiders}
             </div>
         );
@@ -140,9 +266,8 @@ function MegaSlider({mainParam, paramBasedTopRatedMoviesObj, error, loading }) {
 }
 
 function Error() {
-    /* blah blah blah */
+
+
 }
 
-function Loading() {
-    /* Blah Blah Blah */
-}
+
