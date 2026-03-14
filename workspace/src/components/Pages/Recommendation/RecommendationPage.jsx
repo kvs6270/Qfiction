@@ -11,7 +11,7 @@ import { WatchContext } from "../../../App";
 import { directorBasedRecommender } from "../../../logic/directorBasedRecommender";
 import { castbasedRecommender } from "../../../logic/castBasedRecommender";
 import { MainSlider2 } from "./MainSlider2";
-
+import style from "./RecommendationPage.module.css"
 
 
 
@@ -85,14 +85,18 @@ export function RecommendationPage() {
         <div>
             <Navbar></Navbar>
 
-            <>
-            <h3>Top Movies of 2026</h3>
-            <MainSlider2 recommendedMoviesOf2026 = {recommendedMovieObj} error = {error} loading = {loading}></MainSlider2>
-            </>
-            
-            <MegaSlider param = {"genre"} paramReccStrengthArray = {movieOrgainzer.genreReccStrengthArray} paramBasedRecommendedMoviesObj = {genreBasedRecommendedMoviesObj} error = {error2} loading = {loading2} ></MegaSlider>
-            <MegaSlider param = {"cast"} paramReccStrengthArray = {movieOrgainzer.castReccStrengthArray} paramBasedRecommendedMoviesObj = {castBasedRecommendedMoviesObj} error = {error2} loading = {loading2} ></MegaSlider>
-            <MegaSlider param = {"director"} paramReccStrengthArray = {movieOrgainzer.directorReccStrengthArray} paramBasedRecommendedMoviesObj = {directorBasedRecommendedMoviesObj} error = {error2} loading = {loading2} ></MegaSlider>
+            <div className={style.ReccPage}>
+                <>
+                <h3>Top Movies of 2026</h3>
+                <MainSlider2 recommendedMoviesOf2026 = {recommendedMovieObj} error = {error} loading = {loading}></MainSlider2>
+                </>
+                
+                <MegaSlider param = {"genre"} paramReccStrengthArray = {movieOrgainzer.genreReccStrengthArray} paramBasedRecommendedMoviesObj = {genreBasedRecommendedMoviesObj} error = {error2} loading = {loading2} ></MegaSlider>
+                <MegaSlider param = {"cast"} paramReccStrengthArray = {movieOrgainzer.castReccStrengthArray} paramBasedRecommendedMoviesObj = {castBasedRecommendedMoviesObj} error = {error2} loading = {loading2} ></MegaSlider>
+                <MegaSlider param = {"director"} paramReccStrengthArray = {movieOrgainzer.directorReccStrengthArray} paramBasedRecommendedMoviesObj = {directorBasedRecommendedMoviesObj} error = {error2} loading = {loading2} ></MegaSlider>
+            </div>
+
+
         </div>
 
     )
@@ -143,13 +147,6 @@ function MegaSlider({param, paramReccStrengthArray, paramBasedRecommendedMoviesO
 
               
 
-    if (error) {
-        return <Error></Error>
-    }
-    else if (loading) {
-        return <Loading></Loading>
-    }
-    else {
         let arrayOfSLiders = []
 
         
@@ -169,7 +166,7 @@ function MegaSlider({param, paramReccStrengthArray, paramBasedRecommendedMoviesO
 
                 <>
                 <h3 key={text}>{text}</h3>
-            <Slider suggestionType={"Recommended"} movieArray={paramBasedRecommendedMoviesObj[obj[param]]} key={obj[param]} identifierType = {"param"} identifier = {obj[param]}></Slider>
+            <Slider suggestionType={"Recommended"} movieArray={paramBasedRecommendedMoviesObj[obj[param]]} key={obj[param]} identifierType = {"param"} identifier = {obj[param]} error={error} loading={loading}></Slider>
                 </>
         
         )
@@ -183,7 +180,7 @@ function MegaSlider({param, paramReccStrengthArray, paramBasedRecommendedMoviesO
         );
     }
 
-}
+
 
 function Error() {
     /* blah blah blah */

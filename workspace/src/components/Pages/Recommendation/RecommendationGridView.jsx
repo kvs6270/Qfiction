@@ -10,6 +10,7 @@ import { genreFilms } from "../../../logic/genreBasedMovies";
 import { WatchContext } from "../../../App";
 import { yearBasedRecommender } from "../../../logic/yearBasedRecommender";
 import { genreBasedRecommender } from "../../../logic/genreBasedRecommender";
+import style from "./RecommendationGridView.module.css"
 // It's own fetching logic.
 
 
@@ -105,7 +106,9 @@ export function RecommendationGridView() {
             <div>
                 <Navbar />
 
-                <MovieGrid movieArray={movieArray}></MovieGrid>
+                <div className={style.GridContainer}>
+                    <MovieGrid movieArray={movieArray}></MovieGrid>
+                </div>
             </div>
         )
     }

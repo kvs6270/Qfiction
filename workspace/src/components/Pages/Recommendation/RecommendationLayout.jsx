@@ -129,19 +129,19 @@ export function RecommendationLayout() {
 
     const movieObj = [...films2026];
     const error = false;
-    const loading = false
+    const loading = true;
 
     const genreBasedMovies = {...genreFilms};
     const error2 = false;
-    const loading2 = false;
+    const loading2 = true;
 
     const castBasedMovies = {...castFilms};
     const error3 = false;
-    const loading3 = false;
+    const loading3 = true;
 
     const directorBasedMovies = {...directorFilms};
     const error4 = false;
-    const loading4 = false;
+    const loading4 = true;
 
 
         

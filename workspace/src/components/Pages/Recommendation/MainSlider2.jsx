@@ -1,6 +1,5 @@
-
 import style from "./MainSlider2.module.css"
-
+import { Loading } from "../../Cogs/Loading";
 import { useState, useEffect, useRef } from 'react';
  
 function useInterval(callback, delay, reset) {
@@ -73,7 +72,17 @@ export function MainSlider2({recommendedMoviesOf2026, error, loading}) {
     }
 
     else if(loading) {
-        return <Loading></Loading>
+        return (
+                    <div className={style.SliderContainer}>
+                        <button className={style.Button} disabled>&lt;</button>
+        
+                        <div className={style.TileContainer}>
+                            <Loading />
+                        </div>
+        
+                        <button className={style.Button} disabled>&gt;</button>
+                    </div>
+                )
     }
 
     else {
