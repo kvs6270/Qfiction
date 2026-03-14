@@ -1,11 +1,19 @@
 
 
 import {useNavigate} from 'react-router'
-
-
 import style from "../CogCSS/tile.module.css"
 
-export function Tile({movieObj}) {
+export function Tile({movieObj, children}) {
+
+    if (movieObj == null) {
+
+        console.log("yeh dekh")
+        return (
+            <div className= {style.tile} >
+            {children}
+        </div>
+        )
+    }
 
     
 
