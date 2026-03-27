@@ -1,9 +1,10 @@
 import { Navbar } from "../../Cogs/Navbar"
-import { Loading } from "../../Cogs/Loading"
+
 import style from "./Welcome.module.css"
-import { Navigate, useNavigate } from "react-router-dom"
+
+
 import eyeIcon from "./resource/icons8-eye-50.png"
-import { useRef, useEffect, useContext, useState } from "react"
+
 
 import { OfferButtons } from "./OfferButtons"
 import { Tutorial } from "./Tutorial"
@@ -39,13 +40,14 @@ export function Welcome() {
 
                     <div className={style.buttonContainer}>
 
-
                         <OfferButtons iconPath={eyeIcon} text={"Browse through the Top Rated stuff"} clickDestination={"/"} />
                         <OfferButtons iconPath={eyeIcon} text={"Add movies to your Watched List"} clickDestination={"/"} />
                         <OfferButtons iconPath={eyeIcon} text={"Get recommendations based on your preffered Genre"} clickDestination={"/"} />
                         <OfferButtons iconPath={eyeIcon} text={"Get recommendations based on your Cast and Directors"} clickDestination={"/"} />
                         <OfferButtons iconPath={eyeIcon} text={"Create your own Watch-List"} clickDestination={"/"} />
                         <OfferButtons iconPath={eyeIcon} text={"Get to-the-point recommendations based on your interests"} clickDestination={"/"} />
+
+
                         
 
                     </div>
@@ -55,7 +57,8 @@ export function Welcome() {
 
                 <div className={style.TutorialContainer}>
 
-                                            <Tutorial navigation={"/Home"} identifier={"Home"} backDropImg={backDropImg} image={HomeImage} text={"Visit the Home Page to browse the TopRated flicks of this year, trending Genres, Actors, Directors and much more!"} />
+
+                <Tutorial navigation={"/Home"} identifier={"Home"} backDropImg={backDropImg} image={HomeImage} text={"Visit the Home Page to browse the TopRated flicks of this year, trending Genres, Actors, Directors and much more!"} />
 
 
 
@@ -67,6 +70,8 @@ export function Welcome() {
 
                 <Tutorial navigation={"/ToWatch"} identifier={"ToWatch"} backDropImg={backDropImg} image={ToWatchImage} text={"Find All the movies saved by you to watch later."} />
 
+
+                                           
 
                 </div>
 
