@@ -1,0 +1,171 @@
+.TutorialBackDrop{
+    position: relative;
+    width: 90%;
+    /* border: 2px solid white; */
+    aspect-ratio: 16/9;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 20px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.TutorialBackDrop::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    
+    opacity: 0.75;
+    z-index: 0;
+}
+
+
+
+.Tutorial{
+    /* border: 2px solid white; */
+    position: relative;
+    width: 60%;
+    aspect-ratio: 511/227;
+    
+    z-index: 2;
+    transition: 0.3s;
+    margin-right: 30px;
+}
+
+.TutorialImage{
+    grid-area: 1/1/2/5;
+    transform: translateX(-100%);
+    opacity: 0;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out ;
+    transition-delay: 0.2s;
+
+}
+
+.TutorialImage.show{
+    transform: translateX(0);
+    opacity: 1;
+    
+}
+
+.TutorialCurvatureContainer{
+    
+    grid-area: 2/3/3/5;
+    position: relative;
+    top: -15px;
+}
+.TutorialCurvatureContainer svg{
+    transform-origin: top;
+    transform: scaleY(1.5);
+}
+
+.TutorialCurvature{
+    /* border: 2px solid blue; */
+  fill: none;
+  stroke: white;
+  stroke-width: 3;
+
+  stroke-dasharray: 1000;   /* total length */
+  stroke-dashoffset: 1000;  /* fully hidden */
+
+
+  
+
+}
+
+.TutorialCurvature.show{
+    animation: draw 1s ease 0.7s forwards;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+
+.TutorialText{
+    /* border: 2px solid brown; */
+    grid-area: 2/5/5/7;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+}
+
+.typingText {
+    overflow: hidden;
+    white-space: normal;
+    border-right: 3px solid white;
+    white-space: normal;
+    width: 0;
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+}
+
+.TutorialText.show .typingText {
+    display: inline-block;
+    opacity: 1;
+    animation: reveal 0.7s steps(40, end) 0.5s forwards;
+    width: 100%;
+}
+
+
+@keyframes reveal {
+    to {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+.defaultContent{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.507);
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 15px;
+    grid-template-columns: repeat(6, 1fr);
+    padding: 15px;
+    opacity: 1;
+    transition: 0.3s;
+}
+
+.HoveredContainer{
+    transition: 0.3s;
+    opacity: 0;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.712);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Navigator{
+    width: 50%;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.Navigator:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.Tutorial.Hovered{
+    transform: scale(0.8);
+    transition: 0.3s;
+}
+
+.Tutorial.Hovered .defaultContent{
+    opacity: 0;
+}
+.Tutorial.Hovered .HoveredContainer{
+    opacity: 1;
+}
