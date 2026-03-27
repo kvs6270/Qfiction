@@ -1,0 +1,78 @@
+*{
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+}
+
+.welcomePage{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    background-color: black;
+    color: white;
+}
+
+.introSection{
+    padding-top: 60px;
+    width: 100%;
+    height: 80vh;
+    background-image: url("./resource/FC.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative; 
+}
+
+.introSection::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.2);
+    
+}
+
+.introText{
+    text-align: center;
+   font-size: 2rem;
+   z-index: 1;
+    margin-bottom: 20px;
+}
+
+.introSection p{
+    margin: 0px;
+    
+}
+
+.whatWeOffer{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    width: min(90vw,1000px);
+    margin: 20px;
+}
+
+.OfferTitle{
+    flex-basis: 100%;
+}
+
+.buttonContainer{
+    flex-basis: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    
+    
+}
+
+
+
+
