@@ -1,0 +1,43 @@
+.OfferTitle{
+    flex-basis: 100%;
+}
+
+.buttonContainer{
+    flex-basis: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    
+    
+}
+
+.offerButton{
+    /* border: 2px solid red; */
+    height: 100px;
+    flex-basis: 30%; /* Media Queries here... */  /* 30 --> 50% --> 100% */
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    background-color: rgb(255, 255, 255);
+    color: black;
+    padding: 6px;
+    transition: all 0.25s ease-in-out;
+}
+
+.offerButton:hover{
+    background-color: aquamarine;
+}
+
+.OfferIcon{
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.OfferText{
+    display: flex;
+    text-align: left;
+    align-items: center;
+}
