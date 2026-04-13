@@ -2,8 +2,9 @@
     border: 2px solid red;
     flex: 0 0 auto;
     width: clamp(300px, 23.5vw, 500px);
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 2/3;
     transition: transform 0.5s;
+    background-size: contain;
 }
 
 .tile:hover{
