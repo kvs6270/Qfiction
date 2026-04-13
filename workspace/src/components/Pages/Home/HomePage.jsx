@@ -1,7 +1,7 @@
 import { Slider } from "../../Cogs/slider";
 import { topRated } from "../../../logic/TopRated";
 import { useState, useEffect, useRef, useMemo } from "react";
-import { useOutletContext } from "react-router";
+import { useNavigate, useOutletContext } from "react-router";
 import { Navbar } from "../../Cogs/Navbar";
 import { Loading } from "../../Cogs/Loading";
 import style from "./HomePage.module.css"
@@ -21,9 +21,13 @@ export function HomePage() {
 
     const { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4 } = useOutletContext();
 
+
+
     const topRatedMovieObj = useMemo(() => {
-        return topRated(movieObj, 1000);
+        return topRated(movieObj, 100);
     }, [movieObj])
+
+
 
 
 
@@ -33,11 +37,14 @@ export function HomePage() {
 
         for (const genre in genreBasedMovies) {
 
-            genreBasedTopRatedMoviesObjProto[genre] = topRated(genreBasedMovies[genre], 1000);
+            genreBasedTopRatedMoviesObjProto[genre] = topRated(genreBasedMovies[genre]    , 100);
         }
 
+        
         return genreBasedTopRatedMoviesObjProto;
     }, [genreBasedMovies])
+
+
 
 
     const castBasedTopRatedMoviesObj = useMemo(() => {
@@ -46,7 +53,7 @@ export function HomePage() {
 
         for (const cast in castBasedMovies) {
 
-            castBasedTopRatedMoviesObjProto[cast] = topRated(castBasedMovies[cast], 1000);
+            castBasedTopRatedMoviesObjProto[cast] = topRated(castBasedMovies[cast], 100);
         }
 
         return castBasedTopRatedMoviesObjProto;
@@ -59,7 +66,7 @@ export function HomePage() {
 
         for (const director in directorBasedMovies) {
 
-            directorBasedTopRatedMoviesObjProto[director] = topRated(directorBasedMovies[director], 1000);
+            directorBasedTopRatedMoviesObjProto[director] = topRated(directorBasedMovies[director], 100);
         }
 
         return directorBasedTopRatedMoviesObjProto;
@@ -81,9 +88,11 @@ export function HomePage() {
                     <MainSlider2 topRatedMoviesOf2026={topRatedMovieObj} error={error} loading={loading}></MainSlider2>
                 </>
 
-                <MegaSlider mainParam="genre" paramBasedTopRatedMoviesObj={genreBasedTopRatedMoviesObj} error={error2} loading={loading2} ></MegaSlider>
-                <MegaSlider mainParam="cast" paramBasedTopRatedMoviesObj={castBasedTopRatedMoviesObj} error={error3} loading={loading3} ></MegaSlider>
-                <MegaSlider mainParam="director" paramBasedTopRatedMoviesObj={directorBasedTopRatedMoviesObj} error={error4} loading={loading4} ></MegaSlider>
+                <MegaSlider mainParam="Genre" paramBasedTopRatedMoviesObj={genreBasedTopRatedMoviesObj} error={error2} loading={loading2} ></MegaSlider>
+                <MegaSlider mainParam="Cast" paramBasedTopRatedMoviesObj={castBasedTopRatedMoviesObj} error={error3} loading={loading3} ></MegaSlider>
+
+                
+                <MegaSlider mainParam="Director" paramBasedTopRatedMoviesObj={directorBasedTopRatedMoviesObj} error={error4} loading={loading4} ></MegaSlider>
                 <Loading></Loading>
 
             </div>
@@ -121,8 +130,17 @@ function useInterval(callback, delay, reset) {
 }
 
 function SliderTile({ movieObj }) {
+
+    let navigate = useNavigate();
+
+    let bgImg = movieObj.backdrop;
+
+    console.log("BackGround Image of main Slider:\t" + bgImg)
+
+
     return (
-        <div className={style2.Tile}>
+        <div style={{backgroundImage: `URL(${bgImg})`}} className={style2.Tile} onClick={() => {
+            navigate(`/Movie/${movieObj.id}`)}}>
             <h1>{movieObj.title}</h1>
         </div>
     )
@@ -144,6 +162,7 @@ function MainSlider2({ topRatedMoviesOf2026, error, loading }) {
 
 
     for (const movieObj of iteratorArray) {
+        console.log(movieObj)
         slider.push(<SliderTile movieObj={movieObj} key={movieObj.title} />);
     }
 
@@ -207,13 +226,17 @@ function MainSlider2({ topRatedMoviesOf2026, error, loading }) {
 
 function MegaSlider({ mainParam, paramBasedTopRatedMoviesObj, error, loading }) {
 
+        
+
     function sliderTitle(paramValue) {
+
+
         let heading;
-        if (mainParam == "genre") {
+        if (mainParam == "Genre") {
             heading = `Top Rated ${paramValue} movies`
         }
 
-        else if (mainParam == "cast") {
+        else if (mainParam == "Cast") {
 
             heading = `Top Rated movies with ${paramValue}`
         }
@@ -231,6 +254,7 @@ function MegaSlider({ mainParam, paramBasedTopRatedMoviesObj, error, loading }) 
 
     
     
+    //Here, since paramBasedTopRa... is empty, no slider is getting created, hence no loading skeleton.
     
         let arrayOfSLiders = []
         for (const param in paramBasedTopRatedMoviesObj) {
@@ -239,7 +263,7 @@ function MegaSlider({ mainParam, paramBasedTopRatedMoviesObj, error, loading }) 
             arrayOfSLiders.push(
                 <>
                     <h3 key={text}>{text}</h3>
-                    <Slider suggestionType={"TopRated"} movieArray={paramBasedTopRatedMoviesObj[param]} key={param} identifier={param} error={error} loading = {loading}></Slider>
+                    <Slider identifierType = {mainParam} suggestionType={"TopRated"} movieArray={paramBasedTopRatedMoviesObj[param]} key={param} identifier={param} error={error} loading = {loading}></Slider>
                 </>
 
             )
@@ -251,12 +275,9 @@ function MegaSlider({ mainParam, paramBasedTopRatedMoviesObj, error, loading }) 
             </div>
         );
     }
+    
 
 
 
-function Error() {
-
-
-}
 
 
