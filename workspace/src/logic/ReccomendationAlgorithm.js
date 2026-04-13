@@ -5,7 +5,7 @@
 
 export function movieOrganizer(inputDB, outputDB = [], topGenreNum = 3, topDirectorNum = 3, topCastNum = 3) {
 
-    console.log(inputDB)
+    
 
     if (inputDB.length == 0) {
         console.log("Watch something Nigger!!");
@@ -21,7 +21,7 @@ export function movieOrganizer(inputDB, outputDB = [], topGenreNum = 3, topDirec
 
     let castReccStrength = {}
 
-    let reccList = [];
+    
 
 
 
@@ -39,16 +39,7 @@ export function movieOrganizer(inputDB, outputDB = [], topGenreNum = 3, topDirec
 
     })
 
-    let genreReccStrengthArray = [];
-
-    for (let genre in genreReccStrength) {
-        genreReccStrengthArray.push({ "genre": genre, "score": genreReccStrength[genre] });
-    }
-
-    genreReccStrengthArray = genreReccStrengthArray.sort((a, b) => {
-        return -(a.score - b.score);
-    }).slice(0, topGenreNum)
-
+    
 
 
 
@@ -67,16 +58,7 @@ export function movieOrganizer(inputDB, outputDB = [], topGenreNum = 3, topDirec
 
     })
 
-    let directorReccStrengthArray = [];
-
-    for (let director in directorReccStrength) {
-        directorReccStrengthArray.push({ "director": director, "score": directorReccStrength[director] });
-    }
-
-    directorReccStrengthArray =directorReccStrengthArray.sort((a, b) => {
-        return -(a.score - b.score);
-    }).slice(0, topDirectorNum)
-
+    
 
 
 
@@ -93,19 +75,10 @@ export function movieOrganizer(inputDB, outputDB = [], topGenreNum = 3, topDirec
         })
     })
 
-    let castReccStrengthArray = [];
-
-    for (let cast in castReccStrength) {
-        castReccStrengthArray.push({ "cast": cast, "score": castReccStrength[cast] });
-    }
-
-    castReccStrengthArray = castReccStrengthArray.sort((a, b) => {
-        return -(a.score - b.score);
-    }).slice(0, topCastNum)
 
 
 
-
+    let reccList = [];
 
 
     outputDB.forEach((item, index) => {
@@ -136,7 +109,7 @@ export function movieOrganizer(inputDB, outputDB = [], topGenreNum = 3, topDirec
     let finalReccList = reccList.map(item => item.movie);
 
 
-    return { finalReccList, genreReccStrengthArray, castReccStrengthArray, directorReccStrengthArray };
+    return { finalReccList };
 
 
 }
