@@ -7,13 +7,13 @@ import style from "../../CogCSS/Watched.module.css"
 
 export function WatchedList () {
 
-    const {moviesWatched} = useContext(WatchContext)
+    const {moviesWatched, removeFromWatched} = useContext(WatchContext)
 
     let movieElementArray = moviesWatched.map(element => {
 
         return (
         
-        <LibraryTile movieObj={element} />
+        <LibraryTile movieObj={element} position={"Watched"} removerFunc={removeFromWatched} adderFunc={null}/>
         )
     });
         

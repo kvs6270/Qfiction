@@ -6,13 +6,13 @@ import style from "../../CogCSS/Watchlist.module.css"
 
 export function WatchList() {
 
-    const {moviesToWatch} = useContext(WatchContext)
+    const {moviesToWatch, removeFromWatch, addToWatched} = useContext(WatchContext)
     console.log(moviesToWatch)
 
     let movieElementArray = moviesToWatch.map(element => {
         return (
         
-        <LibraryTile movieObj={element} />
+        <LibraryTile movieObj={element} position={"ToWatch"} removerFunc={removeFromWatch} adderFunc={addToWatched}/>
     )
     });
         

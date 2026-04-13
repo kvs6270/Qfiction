@@ -2,8 +2,14 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    justify-content: center;
+    align-items: center;
 }
 
 .MovieElementArray{
     margin-top: 80px;
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    gap: 30px;
 }
