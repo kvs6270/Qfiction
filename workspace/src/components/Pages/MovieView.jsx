@@ -9,35 +9,38 @@ import { Navbar } from "../Cogs/Navbar.jsx";
 import { castFilms } from "../../logic/castBasedMovies.js";
 import style from "./MovieView.module.css"
 import { directorFilms } from "../../logic/directorBasedMovies.js";
-function temporaryIterator(id) {
-    for (let movie of films2026) {
-        if(movie.id == id) {
-            return movie;
-        }
-    }
+import { Loading } from "../Cogs/Loading.jsx";
 
-    for(let genre in genreFilms) {
-        for (let movie of genreFilms[genre]) {
-        if(movie.id == id) {
-            return movie;
-        }
-    }
-    }
-    for(let cast in castFilms) {
-        for (let movie of castFilms[cast]) {
-        if(movie.id == id) {
-            return movie;
-        }
-    }
-    }
-    for(let director in directorFilms) {
-        for (let movie of directorFilms[director]) {
-        if(movie.id == id) {
-            return movie;
-        }
-    }
-    }
-}
+
+// function temporaryIterator(id) {
+//     for (let movie of films2026) {
+//         if(movie.id == id) {
+//             return movie;
+//         }
+//     }
+
+//     for(let genre in genreFilms) {
+//         for (let movie of genreFilms[genre]) {
+//         if(movie.id == id) {
+//             return movie;
+//         }
+//     }
+//     }
+//     for(let cast in castFilms) {
+//         for (let movie of castFilms[cast]) {
+//         if(movie.id == id) {
+//             return movie;
+//         }
+//     }
+//     }
+//     for(let director in directorFilms) {
+//         for (let movie of directorFilms[director]) {
+//         if(movie.id == id) {
+//             return movie;
+//         }
+//     }
+//     }
+// }
 
 
 
@@ -89,11 +92,14 @@ export function MovieView() {
     
     const { id } = useParams();
 
-    // const { movieObj, error, loading } = useMovieDetailsFetcher(id);
+    
 
-    let movieObj = temporaryIterator(id);
-    let error = false
-    let loading = false
+
+    const { movieObj, error, loading } = useMovieDetailsFetcher(id);
+
+    // let movieObj = temporaryIterator(id);
+    // let error = false
+    // let loading = false
 
     
 
