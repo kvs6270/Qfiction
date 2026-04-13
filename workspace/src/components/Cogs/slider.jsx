@@ -3,18 +3,21 @@ import { useNavigate } from 'react-router'
 import style from "../CogCSS/slider.module.css"
 import { Loading } from "./Loading.jsx";
 
-export function Slider({sliderTitle, suggestionType, movieArray, identifier, error, loading}) {
+export function Slider({ identifierType, sliderTitle, suggestionType, movieArray, identifier, error, loading }) {
+
+
 
     const navigate = useNavigate();
 
     let slideShow = [];
 
-    if(error) {
+    if (error) {
+        return;
 
     }
 
     else if (loading) {
-        for(let i = 0; i < 100; i++) {
+        for (let i = 0; i < 100; i++) {
             let id = crypto.randomUUID();
             slideShow.push(<Tile movieObj={null} key={id}>
                 <Loading></Loading>
@@ -22,26 +25,34 @@ export function Slider({sliderTitle, suggestionType, movieArray, identifier, err
         }
     }
 
-    else {
+    else /* if (false) */ {
 
-    slideShow = movieArray.map(item => {
-        return (
-            <Tile movieObj={item} key={item.id}></Tile>
-        )
-    })
-}
+
+        slideShow = (movieArray || []).map(item => {
+            return (
+                <Tile movieObj={item} key={item.id}></Tile>
+            )
+        })
+
+
+    }
+
+
+
     return (
+
+
 
         <div className={style.sliderContainer}>
 
             {/* <div className={style.sliderTitle}>{sliderTitle}</div> */}
-            <div className = {style.viewAll} onClick={ () => {
+            <div className={style.viewAll} onClick={() => {
 
-                if(loading) {
-                    
+                if (loading) {
+
                 }
                 else {
-                    navigate(`${suggestionType}/${identifier}`);
+                    navigate(`${suggestionType}/${identifierType}/${identifier}`);
                 }
             }}>
 
