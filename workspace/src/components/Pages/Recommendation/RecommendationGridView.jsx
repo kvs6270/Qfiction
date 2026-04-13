@@ -11,13 +11,17 @@ import { WatchContext } from "../../../App";
 import { yearBasedRecommender } from "../../../logic/yearBasedRecommender";
 import { genreBasedRecommender } from "../../../logic/genreBasedRecommender";
 import style from "./RecommendationGridView.module.css"
+import { fetchFunc } from "../../../logic/fetchFunc";
+import { castbasedRecommender } from "../../../logic/castBasedRecommender";
+import { directorBasedRecommender } from "../../../logic/directorBasedRecommender";
+import { Loading } from "../../Cogs/Loading";
 // It's own fetching logic.
 
 
 
-function useMovieDetailsFetcher(identifier) {
+function useMovieDetailsFetcher(identifier, identifierType, page) {
 
-    const [movieArray, setMovieArray] = useState({});
+    const [movieArray, setMovieArray] = useState([]);
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
 
@@ -32,10 +36,14 @@ function useMovieDetailsFetcher(identifier) {
         async function dataFetching() {
 
             try {
-                const movie = await fetchMovieArray(identifier);
+                const movie = await fetchFunc(identifier, page, identifierType);
+
+                console.log("See:\t" + movie)
                 if (isMounted) setMovieArray(movie);
             } catch (error) {
                 if (isMounted) setError(true)
+
+                console.log("This Error Occured: ")
                 console.log(error)
 
             } finally {
@@ -49,50 +57,37 @@ function useMovieDetailsFetcher(identifier) {
         return () => {
             isMounted = false
         }
-    }, [identifier])
+    }, [identifier, identifierType])
 
 
     return { movieArray, error, loading }
 }
 
-    function temporaryMovieArrayProvider(identifier, moviesWatched) {
-        if (identifier == "2026") {
-            return yearBasedRecommender(moviesWatched, films2026);
-        }
 
-        else {
-            return genreBasedRecommender(moviesWatched, genreFilms[identifier])
-        }
-    }
 
 
 
 export function RecommendationGridView() {
 
     const { moviesWatched } = useContext(WatchContext)
-    const { identifier } = useParams();
+    const { identifierType, identifier } = useParams();
 
-    // let { movieArray, error, loading } = useMovieDetailsFetcher(identifier)
-    
-    // if(identifier == "2026") {
-    //     movieArray = yearBasedRecommender(movieArray, moviesWatched)
-    // }
-    // else {
-    //     movieArray = genreBasedRecommender(movieArray, moviesWatched)
-    // }
-
-
-
+    let { movieArray, error, loading } = useMovieDetailsFetcher(identifier, identifierType, 1)
 
     
 
-    const movieArray = temporaryMovieArrayProvider(identifier, moviesWatched);
-    const error = false;
-    const loading = false;
+
+
+
+
+
+
+
 
 
     if (error) {
-        return <Error />
+        console.log(error)
+        console.log("I see red")
     }
 
     else if (loading) {
@@ -101,13 +96,29 @@ export function RecommendationGridView() {
 
     else {
 
+        let recommendedMovies = movieArray;
+
+
+        if (identifierType == "year") {
+            recommendedMovies = yearBasedRecommender(moviesWatched, movieArray)
+        }
+        else if (identifierType == "genre") {
+            recommendedMovies = genreBasedRecommender(moviesWatched, movieArray)
+        }
+        else if (identifierType == "cast") {
+            recommendedMovies = castbasedRecommender(moviesWatched, movieArray)
+        }
+        else if (identifierType == "director") {
+            recommendedMovies = directorBasedRecommender(moviesWatched, movieArray)
+        }
+
 
         return (
             <div>
                 <Navbar />
 
                 <div className={style.GridContainer}>
-                    <MovieGrid movieArray={movieArray}></MovieGrid>
+                    <MovieGrid movieArray={recommendedMovies}></MovieGrid>
                 </div>
             </div>
         )

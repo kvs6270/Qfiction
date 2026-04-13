@@ -1,6 +1,7 @@
 import style from "./MainSlider2.module.css"
 import { Loading } from "../../Cogs/Loading";
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from "react-router-dom";
  
 function useInterval(callback, delay, reset) {
   const savedCallback = useRef();
@@ -25,8 +26,14 @@ function useInterval(callback, delay, reset) {
 }
 
 function SliderTile({movieObj}) {
+
+  let navigate = useNavigate();
+
+  const bgImg = movieObj.backdrop;
   return (
-    <div className={style.Tile}>
+    <div style={{backgroundImage: `URL(${bgImg})`}} className={style.Tile} onClick={() => {
+            console.log("Clicked")
+            navigate(`/Movie/${movieObj.id}`)}}>
       <h1>{movieObj.title}</h1>
     </div>
   )
