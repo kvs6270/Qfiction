@@ -24,7 +24,7 @@ const router = createBrowserRouter([
     element: <HomeLayout />,
     children: [
       { index: true, element: <HomePage /> },
-      {path: "TopRated/:identifier", element: <HomeGridView />}
+      {path: "TopRated/:identifierType/:identifier", element: <HomeGridView />}
       
     ],
   },
@@ -50,7 +50,7 @@ const router = createBrowserRouter([
     element: <RecommendationLayout />,
     children: [
       { index: true, element: <RecommendationPage /> },
-      {path: "Recommended/:identifier", element: <RecommendationGridView />}
+      {path: "Recommended/:identifierType/:identifier", element: <RecommendationGridView />}
       
     ],
   }
