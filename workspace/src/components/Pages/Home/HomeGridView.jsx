@@ -8,11 +8,15 @@ import { films2026} from "../../../logic/movies2026";
 import { genreFilms } from "../../../logic/genreBasedMovies";
 import { topRated } from "../../../logic/TopRated";
 import style from "./HomeGridView.module.css"
+import { fetchFunc } from "../../../logic/fetchFunc";
+import { Loading } from "../../Cogs/Loading";
+
+
 // It's own fetching logic.
 
 
 
-function useMovieDetailsFetcher(identifier) {
+function useMovieDetailsFetcher(identifier, identifierType, page) {
 
     const [movieArray, setMovieArray] = useState({});
     const [error, setError] = useState(false);
@@ -29,7 +33,7 @@ function useMovieDetailsFetcher(identifier) {
         async function dataFetching() {
 
             try {
-                const movie = await fetchMovieArray(identifier);
+                const movie = await fetchFunc(identifier, page, identifierType);
                 if (isMounted) setMovieArray(movie);
             } catch (error) {
                 if (isMounted) setError(true)
@@ -52,27 +56,17 @@ function useMovieDetailsFetcher(identifier) {
     return { movieArray, error, loading }
 }
 
-function temporaryMovieArrayProvider(identifier) {
-    if (identifier == 2026) {
-        return topRated(films2026, 1000);
-    }
 
-    else {
-        return topRated(genreFilms[identifier], 1000)
-    }
-}
 
 
 export function HomeGridView() {
 
 
-    const { identifier } = useParams();
+    const { identifier, identifierType } = useParams();
 
-    // const { movieArray, error, loading } = useMovieDetailsFetcher(identifier)
+    const { movieArray, error, loading } = useMovieDetailsFetcher(identifier, identifierType, 1)
 
-    const movieArray = temporaryMovieArrayProvider(identifier);
-    const error = false;
-    const loading = false;
+    
     
 
     if(error) {
@@ -91,7 +85,7 @@ export function HomeGridView() {
                 <Navbar />
 
                 <div className={style.GridContainer}>
-                    <MovieGrid movieArray={movieArray}></MovieGrid>
+                    <MovieGrid movieArray={topRated(movieArray, 100)}></MovieGrid>
                 </div>
             </div>
         )
