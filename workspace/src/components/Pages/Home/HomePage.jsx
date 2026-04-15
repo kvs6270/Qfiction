@@ -1,6 +1,6 @@
 import { Slider } from "../../Cogs/slider";
 import { topRated } from "../../../logic/TopRated";
-import { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate, useOutletContext } from "react-router";
 import { Navbar } from "../../Cogs/Navbar";
 import { Loading } from "../../Cogs/Loading";
@@ -24,6 +24,7 @@ export function HomePage() {
 
 
     const topRatedMovieObj = useMemo(() => {
+        if(movieObj.length === 0) return []
         return topRated(movieObj, 100);
     }, [movieObj])
 
@@ -33,14 +34,16 @@ export function HomePage() {
 
     const genreBasedTopRatedMoviesObj = useMemo(() => {
 
+        if(Object.keys(genreBasedMovies).length === 0) return {}
+
         const genreBasedTopRatedMoviesObjProto = {};
 
         for (const genre in genreBasedMovies) {
 
-            genreBasedTopRatedMoviesObjProto[genre] = topRated(genreBasedMovies[genre]    , 100);
+            genreBasedTopRatedMoviesObjProto[genre] = topRated(genreBasedMovies[genre], 100);
         }
 
-        
+
         return genreBasedTopRatedMoviesObjProto;
     }, [genreBasedMovies])
 
@@ -48,6 +51,7 @@ export function HomePage() {
 
 
     const castBasedTopRatedMoviesObj = useMemo(() => {
+         if(Object.keys(castBasedMovies).length === 0) return {}
 
         const castBasedTopRatedMoviesObjProto = {};
 
@@ -61,6 +65,7 @@ export function HomePage() {
 
 
     const directorBasedTopRatedMoviesObj = useMemo(() => {
+         if(Object.keys(directorBasedMovies).length === 0) return {}
 
         const directorBasedTopRatedMoviesObjProto = {};
 
@@ -91,14 +96,14 @@ export function HomePage() {
                 <MegaSlider mainParam="Genre" paramBasedTopRatedMoviesObj={genreBasedTopRatedMoviesObj} error={error2} loading={loading2} ></MegaSlider>
                 <MegaSlider mainParam="Cast" paramBasedTopRatedMoviesObj={castBasedTopRatedMoviesObj} error={error3} loading={loading3} ></MegaSlider>
 
-                
+
                 <MegaSlider mainParam="Director" paramBasedTopRatedMoviesObj={directorBasedTopRatedMoviesObj} error={error4} loading={loading4} ></MegaSlider>
                 <Loading></Loading>
 
             </div>
         </div>
 
-        
+
 
     )
 
@@ -139,8 +144,9 @@ function SliderTile({ movieObj }) {
 
 
     return (
-        <div style={{backgroundImage: `URL(${bgImg})`}} className={style2.Tile} onClick={() => {
-            navigate(`/Movie/${movieObj.id}`)}}>
+        <div style={{ backgroundImage: `URL(${bgImg})` }} className={style2.Tile} onClick={() => {
+            navigate(`/Movie/${movieObj.id}`)
+        }}>
             <h1>{movieObj.title}</h1>
         </div>
     )
@@ -226,7 +232,7 @@ function MainSlider2({ topRatedMoviesOf2026, error, loading }) {
 
 function MegaSlider({ mainParam, paramBasedTopRatedMoviesObj, error, loading }) {
 
-        
+
 
     function sliderTitle(paramValue) {
 
@@ -252,30 +258,66 @@ function MegaSlider({ mainParam, paramBasedTopRatedMoviesObj, error, loading }) 
 
 
 
-    
-    
+
+
     //Here, since paramBasedTopRa... is empty, no slider is getting created, hence no loading skeleton.
+
+    let arrayOfSLiders = [];
     
-        let arrayOfSLiders = []
-        for (const param in paramBasedTopRatedMoviesObj) {
 
-            let text = sliderTitle(param);
-            arrayOfSLiders.push(
-                <>
-                    <h3 key={text}>{text}</h3>
-                    <Slider identifierType = {mainParam} suggestionType={"TopRated"} movieArray={paramBasedTopRatedMoviesObj[param]} key={param} identifier={param} error={error} loading = {loading}></Slider>
-                </>
+    if(/* loading && */ Object.keys(paramBasedTopRatedMoviesObj).length === 0) {
 
-            )
-        }
+        
 
-        return (
-            <div className={style.SliderContainer}>
-                {arrayOfSLiders}
-            </div>
+        
+        for (let i = 0; i < 5; i++) {
+        arrayOfSLiders.push(
+            <React.Fragment key={`Loader-${i+1}`}>
+                <h3>Loading</h3>
+                <Slider
+                    identifierType={mainParam}
+                    suggestionType="TopRated"
+                    movieArray={[]}
+                    loading={true}
+                    error={false}
+                />
+            </React.Fragment>
         );
     }
+
+    }
+
+    else{
+
+        console.log("I shouldn't be here")
+        for (const param in paramBasedTopRatedMoviesObj) {
+           
+
+
+     
+            let text = sliderTitle(param);
+        arrayOfSLiders.push(
+            <React.Fragment key={param}>
+                <h3>{text}</h3>
+                <Slider identifierType={mainParam} suggestionType={"TopRated"} movieArray={paramBasedTopRatedMoviesObj[param]} identifier={param} error={error} loading={loading}></Slider>
+            </React.Fragment>
+
+        )
+        
+    }
+    }
+
+
+
     
+
+    return (
+        <div className={style.SliderContainer}>
+            {arrayOfSLiders}
+        </div>
+    );
+}
+
 
 
 
