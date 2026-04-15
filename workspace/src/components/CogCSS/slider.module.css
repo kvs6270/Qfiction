@@ -1,11 +1,12 @@
 .sliderContainer {
     width: 100%;
     display: grid;
-    grid-template-rows: 1fr 8fr;     
+    grid-template-rows: 1fr 8fr; 
+      
 }
 
 .viewAll {
-    border: 2px solid blue;
+    
 
 }
 
