@@ -32,7 +32,7 @@ export function Tile({movieObj, children}) {
         
         <div style={{backgroundImage: `URL(${bgImg})`}} className= {style.tile} onClick={() => {
             navigate(`/Movie/${movieObj.id}`)}}>
-            {movieObj.title}
+            
         </div>
     )
 }
