@@ -26,15 +26,6 @@ export function RecommendationPage() {
     const { moviesWatched, moviesToWatch } = useContext(WatchContext);
 
 
-
-
-
-    if (!moviesWatched) {
-        return (<div>
-            <h1>Please Watch Something First!</h1>
-        </div>)
-    }
-
     const reccStrengthObj = useMemo(() => {
         return ReccStrengthProvider(moviesWatched)
     }, [moviesWatched])
@@ -178,12 +169,7 @@ function MainSlider({ recommendedMoviesOf2026, error, loading }) {
 
 function MegaSlider({ param, paramReccStrengthArray, paramBasedRecommendedMoviesObj, error, loading }) {
 
-        console.log(param)
-        console.log("Details:")
-        console.log(paramBasedRecommendedMoviesObj)
-        console.log(error)
-        console.log(loading)
-        console.log("Details End/")
+        
 
 
         function sliderTitle(paramValue) {

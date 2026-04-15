@@ -1,0 +1,27 @@
+body {
+    
+}
+
+.EmptyPageContainer {
+    display: flex;
+    width: 80vw;
+    margin: auto;
+    flex-direction: column;
+    height: 99vh;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.icon{
+    height: 240px;
+    width: 240px;
+
+
+}
+
+.text{
+    text-align: center;
+    font-size: 1.5rem;
+
+}
