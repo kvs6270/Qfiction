@@ -21,7 +21,7 @@ import { Loading } from "../../Cogs/Loading";
 export function RecommendationPage() {
 
 
-    const { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4 } = useOutletContext();
+    const { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4, genreNameArray, castNameArray, directorNameArray, nameError, nameLoading } = useOutletContext();
 
     const { moviesWatched, moviesToWatch } = useContext(WatchContext);
 
@@ -135,9 +135,9 @@ export function RecommendationPage() {
                     <MainSlider2 recommendedMoviesOf2026={recommendedMovieObj} error={error} loading={loading}></MainSlider2>
                 </>
 
-                <MegaSlider param={"genre"} paramReccStrengthArray={reccStrengthObj.genreReccStrengthArray} paramBasedRecommendedMoviesObj={genreBasedRecommendedMoviesObj} error={error2} loading={loading2} ></MegaSlider>
-                <MegaSlider param={"cast"} paramReccStrengthArray={reccStrengthObj.castReccStrengthArray} paramBasedRecommendedMoviesObj={castBasedRecommendedMoviesObj} error={error3} loading={loading3} ></MegaSlider>
-                <MegaSlider param={"director"} paramReccStrengthArray={reccStrengthObj.directorReccStrengthArray} paramBasedRecommendedMoviesObj={directorBasedRecommendedMoviesObj} error={error4} loading={loading4} ></MegaSlider>
+                <MegaSlider nameLoading={nameLoading} paramNameArray={genreNameArray} param={"genre"} paramReccStrengthArray={reccStrengthObj.genreReccStrengthArray} paramBasedRecommendedMoviesObj={genreBasedRecommendedMoviesObj} error={error2} loading={loading2} ></MegaSlider>
+                <MegaSlider nameLoading={nameLoading} paramNameArray={castNameArray} param={"cast"} paramReccStrengthArray={reccStrengthObj.castReccStrengthArray} paramBasedRecommendedMoviesObj={castBasedRecommendedMoviesObj} error={error3} loading={loading3} ></MegaSlider>
+                <MegaSlider nameLoading={nameLoading} paramNameArray={directorNameArray} param={"director"} paramReccStrengthArray={reccStrengthObj.directorReccStrengthArray} paramBasedRecommendedMoviesObj={directorBasedRecommendedMoviesObj} error={error4} loading={loading4} ></MegaSlider>
             </div>
 
 
@@ -167,8 +167,10 @@ function MainSlider({ recommendedMoviesOf2026, error, loading }) {
 }
 
 
-function MegaSlider({ param, paramReccStrengthArray, paramBasedRecommendedMoviesObj, error, loading }) {
+function MegaSlider({ param, paramReccStrengthArray, paramBasedRecommendedMoviesObj, error, loading, paramNameArray, nameLoading }) {
 
+    console.log("paramNameArray")
+    console.log(paramNameArray)
         
 
 
@@ -180,7 +182,7 @@ function MegaSlider({ param, paramReccStrengthArray, paramBasedRecommendedMovies
 
         else if (param == "cast") {
 
-            heading = `recommended movies with ${paramValue}`
+            heading = `Recommended movies with ${paramValue}`
         }
 
         else {
@@ -200,9 +202,26 @@ function MegaSlider({ param, paramReccStrengthArray, paramBasedRecommendedMovies
 
 
     for (const obj of paramReccStrengthArray) {
+        
+        let text;
 
+        if(!nameLoading) {
+            let identifier = paramNameArray.find(item => {
 
-        let text = sliderTitle(obj[param]);
+                
+            
+            return item.id == obj[param]
+        })
+
+        console.log("identifier")
+        console.log(identifier)
+
+            text = sliderTitle(identifier.name);
+        }
+
+        else{
+            text = "";
+        }
 
 
 
@@ -211,8 +230,8 @@ function MegaSlider({ param, paramReccStrengthArray, paramBasedRecommendedMovies
 
 
 
-            <div key={obj[param]}>
-                <h3 key={text}>{text}</h3>
+            <div style={{marginTop: "50px"}} key={obj[param]}>
+                <h3 style={{textAlign: "center", fontSize: "1.5rem"}} key={text}>{text}</h3>
                 <Slider suggestionType={"Recommended"} movieArray={paramBasedRecommendedMoviesObj[obj[param]]}  identifierType={param} identifier={obj[param]} error={error} loading={loading}></Slider>
             </div>
 

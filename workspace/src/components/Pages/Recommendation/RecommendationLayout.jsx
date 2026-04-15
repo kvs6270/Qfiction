@@ -16,10 +16,11 @@ import { useRef } from "react";
 
 
 let genreMap = null;
+const API_KEY = "fdbaf2c187e091a33939c1663cbf099c"
 
 async function loadGenres() {
     if (!genreMap) {
-        const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=YOUR_API_KEY`);
+        const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`);
         const data = await res.json();
 
         genreMap = {};
@@ -31,7 +32,9 @@ async function loadGenres() {
 
 async function genreNameArrayFecther(genreIdArray) {
     await loadGenres();
-    return genreIdArray.map(id => genreMap[id]).filter(Boolean);
+    return genreIdArray.map((id, index) => {
+        return {id,name: genreMap[id]}
+    }).filter(Boolean);
 }
 
 
@@ -39,13 +42,13 @@ async function getPersonNames(idArray) {
     const results = await Promise.all(
         idArray.map(async (id) => {
             const res = await fetch(
-                `https://api.themoviedb.org/3/person/${id}?api_key=YOUR_API_KEY`
+                `https://api.themoviedb.org/3/person/${id}?api_key=${API_KEY}`
             );
 
             if (!res.ok) return null;
 
             const data = await res.json();
-            return data.name;
+            return {id, name:data.name};
         })
     );
 
@@ -410,6 +413,10 @@ export function RecommendationLayout() {
         [reccStrengthObj]
     );
 
+    const {genreNameArray, castNameArray, directorNameArray, error: nameError, loading: nameLoading} = useNameArrayFetcher(genreIdArray, castIdArray, directorIdArray)
+
+    
+
     
 
 
@@ -417,7 +424,6 @@ export function RecommendationLayout() {
 
 
     const { movieObj, error, loading } = useSingleFetch(2026, 1, "Year");
-
 
 
 
@@ -460,7 +466,7 @@ export function RecommendationLayout() {
     return (
 
         <Outlet context={
-            { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4 }
+            { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4, genreNameArray, castNameArray, directorNameArray, nameLoading }
         } />
 
 
