@@ -151,7 +151,6 @@ body {
     background-size: cover;
 }
 
-.poster:hover {}
 
 .data {
     /* border: 2px solid white; */
@@ -198,7 +197,7 @@ body {
 
 }
 
-.title span {}
+
 
 .misc {
     /* border: 2px solid white; */
@@ -276,21 +275,3 @@ body {
 
 
 
-
-
-
-.RemoveFromWatchButton {
-    /* border: 2px solid white; */
-}
-
-.addToWatchButton {
-    /* border: 2px solid white; */
-}
-
-.RemoveFromWatchedButton {
-    /* border: 2px solid white; */
-}
-
-.addToWatchedButton {
-    /* border: 2px solid white; */
-}

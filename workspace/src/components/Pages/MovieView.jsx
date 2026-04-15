@@ -109,9 +109,6 @@ export function MovieView() {
        
     }   
     
-    else if (loading) {
-        return <Loading/>
-            }
 
     else {
         return (
@@ -120,7 +117,7 @@ export function MovieView() {
 
 
                 <div className={style.MoviePageContainer}>
-                    <MoviePage movieObj={movieObj} />
+                    <MoviePage movieObj={movieObj||[]} loading={loading}/>
                 </div>
             </div>
 
