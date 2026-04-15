@@ -6,8 +6,25 @@
 }
 
 .viewAll {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 30px;
+    
+    font-size: 1.25rem;
     
 
+}
+
+.viewAll span{
+   width: 8ch;
+}
+
+.viewAll span:hover{
+    transition: 0.25s all;
+    font-size:1.5rem ;
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 .tileContainer {

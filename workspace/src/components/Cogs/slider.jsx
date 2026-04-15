@@ -56,7 +56,9 @@ export function Slider({ identifierType, sliderTitle, suggestionType, movieArray
                 }
             }}>
 
-                View All</div>
+                <span>View All</span>
+                
+                </div>
 
             <div className={style.tileContainer}>{slideShow}</div>
 
