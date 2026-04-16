@@ -20,14 +20,15 @@
     flex-basis: 30%; /* Media Queries here... */  /* 30 --> 50% --> 100% */
     display: grid;
     grid-template-columns: 100px 1fr;
-    background-color: rgb(255, 255, 255);
+    background-color: grey;
     color: black;
     padding: 6px;
     transition: all 0.25s ease-in-out;
 }
 
 .offerButton:hover{
-    background-color: aquamarine;
+    background-color: rgb(255, 255, 255);
+    color: black;
 }
 
 .OfferIcon{

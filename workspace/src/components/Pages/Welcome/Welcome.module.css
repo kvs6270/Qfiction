@@ -2,6 +2,7 @@
     box-sizing: border-box;
     margin: 0px;
     padding: 0px;
+    
 }
 
 .welcomePage{
@@ -11,13 +12,15 @@
     align-items: center;
     background-color: black;
     color: white;
+    
+    
 }
 
 .introSection{
     padding-top: 60px;
     width: 100%;
-    height: 80vh;
-    background-image: url("./resource/FC.jpg");
+    aspect-ratio: 18/9;
+    background-image: url("./resource/FC.png");
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -27,6 +30,7 @@
     align-items: center;
     justify-content: flex-end;
     position: relative; 
+    padding-bottom: 50px;
 }
 
 .introSection::before{
@@ -41,6 +45,7 @@
     text-align: center;
    font-size: 2rem;
    z-index: 1;
+   font-weight: bold;
     margin-bottom: 20px;
 }
 
@@ -55,13 +60,17 @@
     flex-direction: column;
     width: min(90vw,1000px);
     margin: 20px;
+    
+    
 }
 
 .OfferTitle{
     flex-basis: 100%;
+    
 }
 
 .buttonContainer{
+    
     flex-basis: 100%;
     display: flex;
     flex-direction: row;
@@ -71,6 +80,13 @@
     padding: 10px;
     
     
+    
+}
+
+.TutorialContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
 }
 
 

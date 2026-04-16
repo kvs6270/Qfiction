@@ -15,7 +15,11 @@ import RecommendationImage from "./resource/RecommendationTutorialImage.png"
 import WatchedImage from "./resource/WatchedTutorialImage.png"
 import ToWatchImage from "./resource/ToWatchTutorialImage.png"
 
-import backDropImg from "./resource/backdrop.png"
+
+import ReccImgBackdrop from "./resource/Recc.png"
+import HomeImgBackdrop from "./resource/Home.png"
+import WatchedImgBackdrop from "./resource/Watched.png"
+import ToWatchImgBackdrop from "./resource/ToWatch.png"
 
 
 
@@ -58,17 +62,17 @@ export function Welcome() {
                 <div className={style.TutorialContainer}>
 
 
-                <Tutorial navigation={"/Home"} identifier={"Home"} backDropImg={backDropImg} image={HomeImage} text={"Visit the Home Page to browse the TopRated flicks of this year, trending Genres, Actors, Directors and much more!"} />
+                <Tutorial navigation={"/Home"} identifier={"Home"} backDropImg={HomeImgBackdrop} image={HomeImage} text={"Visit the Home Page to browse the TopRated flicks of this year, trending Genres, Actors, Directors and much more!"} />
 
 
 
-                <Tutorial navigation={"/Recommendation"} identifier={"Recommendation"} backDropImg={backDropImg} image={RecommendationImage} text={"Visit the Recommendation Page to browse the Recommended flicks of this year based on your favoruite Genres, Actors and Directors"} />
+                <Tutorial navigation={"/Recommendation"} identifier={"Recommendation"} backDropImg={ReccImgBackdrop} image={RecommendationImage} text={"Visit the Recommendation Page to browse the Recommended flicks of this year based on your favoruite Genres, Actors and Directors"} />
 
 
-                <Tutorial navigation={"/Watched"} identifier={"Watched"} backDropImg={backDropImg} image={WatchedImage} text={"Find All the stuff you have watched here!"} />
+                <Tutorial navigation={"/Watched"} identifier={"Watched"} backDropImg={WatchedImgBackdrop} image={WatchedImage} text={"Find All the stuff you have watched here!"} />
 
 
-                <Tutorial navigation={"/ToWatch"} identifier={"ToWatch"} backDropImg={backDropImg} image={ToWatchImage} text={"Find All the movies saved by you to watch later."} />
+                <Tutorial navigation={"/ToWatch"} identifier={"ToWatch"} backDropImg={ToWatchImgBackdrop} image={ToWatchImage} text={"Find All the movies saved by you to watch later."} />
 
 
                                            
