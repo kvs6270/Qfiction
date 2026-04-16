@@ -146,9 +146,52 @@ body {
 
 .poster {
     /* border: 2px solid white; */
+    position: relative;
     width: 25%;
     aspect-ratio: 2/3;
     background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    overflow: hidden;
+    
+}
+
+.poster::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(245, 245, 245, 0); /* transparent initially */
+    transition: 0.3s;
+}
+
+.poster:hover::before {
+    background: rgba(245, 245, 245, 0.9); /* overlay instead of removing bg */
+}
+
+
+.poster div{
+    width: 30%;
+    gap: 10px;
+    opacity: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+     transition: 0.3s all;
+    
+}
+
+
+
+
+.poster:hover div{
+    transition: 0.5s all;
+
+   
+    opacity: 1;
 }
 
 

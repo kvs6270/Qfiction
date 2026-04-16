@@ -57,6 +57,7 @@ function creditCleaner(movie) {
             releaseDate: movie.release_date,
             imdbRating: movie.vote_average,
             votes: movie.vote_count,
+            popularity: movie.popularity,
 
             poster: IMG + movie.poster_path,
             backdrop: movie.backdrop_path
@@ -73,6 +74,7 @@ function creditCleaner(movie) {
             studio: movie.production_companies.map((obj) => obj.name),
             budget: movie.budget,
             castArray: movie.credits.cast.map((obj) => ({name: obj.name, character: obj.character, profile: IMG + obj.profile_path}))
+
 
 
             
