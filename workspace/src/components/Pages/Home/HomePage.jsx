@@ -273,7 +273,7 @@ function MegaSlider({ mainParam, paramBasedTopRatedMoviesObj, error, loading }) 
         for (let i = 0; i < 5; i++) {
         arrayOfSLiders.push(
             <React.Fragment key={`Loader-${i+1}`}>
-                <h3>Loading</h3>
+                <h3 style={{textAlign: "center", fontSize: "1.5rem"}}>Loading...</h3>
                 <Slider
                     identifierType={mainParam}
                     suggestionType="TopRated"
@@ -297,10 +297,10 @@ function MegaSlider({ mainParam, paramBasedTopRatedMoviesObj, error, loading }) 
      
             let text = sliderTitle(param);
         arrayOfSLiders.push(
-            <React.Fragment key={param}>
-                <h3>{text}</h3>
+            <div style={{marginTop: "60px"}} key={param}>
+                <h3 style={{textAlign: "center", fontSize: "1.5rem"}}>{text}</h3>
                 <Slider identifierType={mainParam} suggestionType={"TopRated"} movieArray={paramBasedTopRatedMoviesObj[param]} identifier={param} error={error} loading={loading}></Slider>
-            </React.Fragment>
+            </div>
 
         )
         
