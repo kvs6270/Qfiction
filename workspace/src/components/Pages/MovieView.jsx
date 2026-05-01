@@ -10,6 +10,7 @@ import { castFilms } from "../../logic/castBasedMovies.js";
 import style from "./MovieView.module.css"
 import { directorFilms } from "../../logic/directorBasedMovies.js";
 import { Loading } from "../Cogs/Loading.jsx";
+import { SearchMovies } from "../Cogs/SearchMovies.jsx";
 
 
 // function temporaryIterator(id) {
@@ -51,6 +52,9 @@ function useMovieDetailsFetcher(id) {
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
 
+    
+
+
     useEffect(() => {
 
         let isMounted = true;
@@ -86,6 +90,14 @@ function useMovieDetailsFetcher(id) {
 
 
 export function MovieView() {
+    
+
+    const [search, setSearch] = useState(false)
+    const [focused, setFocused] = useState(false)
+    const [searchText, setSearchText] = useState("")
+
+
+
 
     
 
@@ -113,12 +125,68 @@ export function MovieView() {
     else {
         return (
             <div>
-                <Navbar />
+                <Navbar search={search} searchSetter={() => {
+                setSearch(!search)
+                setFocused(false)
+                setSearchText("")
+            }}></Navbar>
 
 
-                <div className={style.MoviePageContainer}>
-                    <MoviePage movieObj={movieObj||[]} loading={loading}/>
-                </div>
+            <div className={search ? `${style.searchInput} ${style.Engaged}` : `${style.searchInput}`}>
+            
+                            <input
+            
+                                onFocus={() => {
+                                    setFocused(true)
+                                }}
+            
+            
+                                value={searchText}
+            
+                                onChange={(e) => setSearchText(e.target.value)}
+                                type="text"
+                                placeholder="Search..." />
+            
+            
+                        </div>
+            
+            
+                        {focused
+            
+                            ?
+            
+                            <div className={style.searchFields}>
+            
+                                <SearchMovies searchString={searchText} />
+            
+                            </div>
+            
+                            :
+            
+                            <div className={[
+                                style.MoviePageContainer,
+                                search && style.Searcher,
+                                focused && style.Focused
+                            ]
+                                .filter(Boolean)
+                                .join(" ")}>
+            
+            
+            
+            
+            
+            
+            
+                                 <MoviePage movieObj={movieObj||[]} loading={loading}/>
+            
+                            </div>
+            
+            
+            
+                        }
+
+
+
             </div>
 
     
