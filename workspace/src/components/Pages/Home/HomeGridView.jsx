@@ -10,6 +10,7 @@ import { topRated } from "../../../logic/TopRated";
 import style from "./HomeGridView.module.css"
 import { fetchFunc } from "../../../logic/fetchFunc";
 import { Loading } from "../../Cogs/Loading";
+import { SearchMovies } from "../../Cogs/SearchMovies";
 
 
 // It's own fetching logic.
@@ -66,6 +67,10 @@ export function HomeGridView() {
 
     const { movieArray, error, loading } = useMovieDetailsFetcher(identifier, identifierType, 1)
 
+    const [search, setSearch] = useState(false)
+        const [focused, setFocused] = useState(false)
+        const [searchText, setSearchText] = useState("")
+
     
     
 
@@ -82,11 +87,72 @@ export function HomeGridView() {
 
         return (
             <div>
-                <Navbar />
+                <Navbar search={search} searchSetter={() => {
+                               setSearch(!search)
+                               setFocused(false)
+                               setSearchText("")
+                           }}></Navbar>
 
-                <div className={style.GridContainer}>
-                    <MovieGrid movieArray={topRated(movieArray, 100)}></MovieGrid>
-                </div>
+
+
+
+
+
+                            <div className={search ? `${style.searchInput} ${style.Engaged}` : `${style.searchInput}`}>
+                           
+                                           <input
+                           
+                                               onFocus={() => {
+                                                   setFocused(true)
+                                               }}
+                           
+                           
+                                               value={searchText}
+                                               
+                                               onChange={(e) => setSearchText(e.target.value)}
+                                               type="text"
+                                               placeholder="Search..." />
+                           
+                           
+                                       </div>
+                           
+                           
+                                       {focused
+                           
+                                           ?
+                           
+                                           <div className={style.searchFields}>
+                           
+                                               <SearchMovies searchString={searchText} />
+                           
+                                           </div>
+                           
+                                           :
+                           
+                                           <div className={[
+                                               style.GridContainer,
+                                               search && style.Searcher,
+                                               focused && style.Focused
+                                           ]
+                                               .filter(Boolean)
+                                               .join(" ")}>
+                           
+                           
+                           
+                           
+                           
+                           
+                           
+                                               <MovieGrid movieArray={topRated(movieArray, 100)}></MovieGrid>
+                                               
+                           
+                                           </div>
+                           
+                           
+                           
+                                       }
+
+               
             </div>
         )
     }

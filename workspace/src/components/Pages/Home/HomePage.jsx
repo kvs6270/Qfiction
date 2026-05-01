@@ -7,6 +7,9 @@ import { Loading } from "../../Cogs/Loading";
 import style from "./HomePage.module.css"
 
 import style2 from "./MainSlider2.module.css"
+import { SearchMovies } from "../../Cogs/SearchMovies";
+
+
 
 
 
@@ -16,6 +19,10 @@ import style2 from "./MainSlider2.module.css"
 
 export function HomePage() {
 
+    const [search, setSearch] = useState(false)
+    const [focused, setFocused] = useState(false)
+    const [searchText, setSearchText] = useState("")
+
     // const {topRatedMovieObj, error, loading} = useSingleFetch(/* Insert URL */);
     // const {genreBasedTopRatedMoviesObj, error: error2, loading: loading2} = useMultiFetch(/* genres array*/);
 
@@ -24,7 +31,7 @@ export function HomePage() {
 
 
     const topRatedMovieObj = useMemo(() => {
-        if(movieObj.length === 0) return []
+        if (movieObj.length === 0) return []
         return topRated(movieObj, 100);
     }, [movieObj])
 
@@ -34,7 +41,7 @@ export function HomePage() {
 
     const genreBasedTopRatedMoviesObj = useMemo(() => {
 
-        if(Object.keys(genreBasedMovies).length === 0) return {}
+        if (Object.keys(genreBasedMovies).length === 0) return {}
 
         const genreBasedTopRatedMoviesObjProto = {};
 
@@ -51,7 +58,7 @@ export function HomePage() {
 
 
     const castBasedTopRatedMoviesObj = useMemo(() => {
-         if(Object.keys(castBasedMovies).length === 0) return {}
+        if (Object.keys(castBasedMovies).length === 0) return {}
 
         const castBasedTopRatedMoviesObjProto = {};
 
@@ -65,7 +72,7 @@ export function HomePage() {
 
 
     const directorBasedTopRatedMoviesObj = useMemo(() => {
-         if(Object.keys(directorBasedMovies).length === 0) return {}
+        if (Object.keys(directorBasedMovies).length === 0) return {}
 
         const directorBasedTopRatedMoviesObjProto = {};
 
@@ -80,27 +87,77 @@ export function HomePage() {
 
     return (
 
-        <div>
-            <Navbar></Navbar>
+        <div className={style.bodyProto}>
+            <Navbar search={search} searchSetter={() => {
+                setSearch(!search)
+                setFocused(false)
+                setSearchText("")
+            }}></Navbar>
 
 
+            <div className={search ? `${style.searchInput} ${style.Engaged}` : `${style.searchInput}`}>
 
-            <div className={style.HomePage}>
+                <input
 
-
-                < >
-                    <h3>Top Movies of 2026</h3>
-                    <MainSlider2 topRatedMoviesOf2026={topRatedMovieObj} error={error} loading={loading}></MainSlider2>
-                </>
-
-                <MegaSlider mainParam="Genre" paramBasedTopRatedMoviesObj={genreBasedTopRatedMoviesObj} error={error2} loading={loading2} ></MegaSlider>
-                <MegaSlider mainParam="Cast" paramBasedTopRatedMoviesObj={castBasedTopRatedMoviesObj} error={error3} loading={loading3} ></MegaSlider>
+                    onFocus={() => {
+                        setFocused(true)
+                    }}
 
 
-                <MegaSlider mainParam="Director" paramBasedTopRatedMoviesObj={directorBasedTopRatedMoviesObj} error={error4} loading={loading4} ></MegaSlider>
-                <Loading></Loading>
+                    value={searchText}
+                    
+                    onChange={(e) => setSearchText(e.target.value)}
+                    type="text"
+                    placeholder="Search..." />
+
 
             </div>
+
+
+            {focused
+
+                ?
+
+                <div className={style.searchFields}>
+
+                    <SearchMovies searchString={searchText} />
+
+                </div>
+
+                :
+
+                <div className={[
+                    style.HomePage,
+                    search && style.Searcher,
+                    focused && style.Focused
+                ]
+                    .filter(Boolean)
+                    .join(" ")}>
+
+
+
+
+
+
+
+                    < >
+                        <h3>Top Movies of 2026</h3>
+                        <MainSlider2 topRatedMoviesOf2026={topRatedMovieObj} error={error} loading={loading}></MainSlider2>
+                    </>
+
+                    <MegaSlider mainParam="Genre" paramBasedTopRatedMoviesObj={genreBasedTopRatedMoviesObj} error={error2} loading={loading2} ></MegaSlider>
+                    <MegaSlider mainParam="Cast" paramBasedTopRatedMoviesObj={castBasedTopRatedMoviesObj} error={error3} loading={loading3} ></MegaSlider>
+
+
+                    <MegaSlider mainParam="Director" paramBasedTopRatedMoviesObj={directorBasedTopRatedMoviesObj} error={error4} loading={loading4} ></MegaSlider>
+
+                    
+
+                </div>
+
+
+
+            }
         </div>
 
 
@@ -263,53 +320,53 @@ function MegaSlider({ mainParam, paramBasedTopRatedMoviesObj, error, loading }) 
     //Here, since paramBasedTopRa... is empty, no slider is getting created, hence no loading skeleton.
 
     let arrayOfSLiders = [];
-    
 
-    if(/* loading && */ Object.keys(paramBasedTopRatedMoviesObj).length === 0) {
 
-        
+    if (/* loading && */ Object.keys(paramBasedTopRatedMoviesObj).length === 0) {
 
-        
+
+
+
         for (let i = 0; i < 5; i++) {
-        arrayOfSLiders.push(
-            <React.Fragment key={`Loader-${i+1}`}>
-                <h3 style={{textAlign: "center", fontSize: "1.5rem"}}>Loading...</h3>
-                <Slider
-                    identifierType={mainParam}
-                    suggestionType="TopRated"
-                    movieArray={[]}
-                    loading={true}
-                    error={false}
-                />
-            </React.Fragment>
-        );
-    }
+            arrayOfSLiders.push(
+                <React.Fragment key={`Loader-${i + 1}`}>
+                    <h3 style={{ textAlign: "center", fontSize: "1.5rem" }}>Loading...</h3>
+                    <Slider
+                        identifierType={mainParam}
+                        suggestionType="TopRated"
+                        movieArray={[]}
+                        loading={true}
+                        error={false}
+                    />
+                </React.Fragment>
+            );
+        }
 
     }
 
-    else{
+    else {
 
         console.log("I shouldn't be here")
         for (const param in paramBasedTopRatedMoviesObj) {
-           
 
 
-     
+
+
             let text = sliderTitle(param);
-        arrayOfSLiders.push(
-            <div style={{marginTop: "60px"}} key={param}>
-                <h3 style={{textAlign: "center", fontSize: "1.5rem"}}>{text}</h3>
-                <Slider identifierType={mainParam} suggestionType={"TopRated"} movieArray={paramBasedTopRatedMoviesObj[param]} identifier={param} error={error} loading={loading}></Slider>
-            </div>
+            arrayOfSLiders.push(
+                <div style={{ marginTop: "60px" }} key={param}>
+                    <h3 style={{ textAlign: "center", fontSize: "1.5rem" }}>{text}</h3>
+                    <Slider identifierType={mainParam} suggestionType={"TopRated"} movieArray={paramBasedTopRatedMoviesObj[param]} identifier={param} error={error} loading={loading}></Slider>
+                </div>
 
-        )
-        
+            )
+
+        }
     }
-    }
 
 
 
-    
+
 
     return (
         <div className={style.SliderContainer}>
@@ -317,6 +374,8 @@ function MegaSlider({ mainParam, paramBasedTopRatedMoviesObj, error, loading }) 
         </div>
     );
 }
+
+
 
 
 
