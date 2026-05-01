@@ -1,0 +1,55 @@
+.searchContainer{
+    display: flex;
+    flex-direction: column;
+    font-size: 1.5rem;
+    background-color: white;
+    color: rgb(0, 0, 0);
+    width: 50%;
+    position: relative;
+    top: 160px;
+    left: 15px;
+
+}
+
+
+.searchTile{
+    border: 2px solid gray;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.image{
+    width: 30%;
+    aspect-ratio: 128/72;
+    background-size: contain;
+}
+
+.Details{
+    width: 50%;
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.rating{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 20%;
+}
+
+.rating span{
+    position: relative;
+    right: 30px;
+}
+
+.svg{
+    transform: scale(0.3);
+    display: inline;
+    
+}
