@@ -6,7 +6,7 @@ import { useState } from "react";
 
 
 
-export function SearchMovies({ searchString }) {
+export function SearchMovies({ searchString, clickFunc }) {
     let navigate = useNavigate();
 
 
@@ -33,7 +33,7 @@ export function SearchMovies({ searchString }) {
 
         return (
             <div className={style.searchTile} onClick={() => {
-                navigate(`/Movie/${item.id}`)
+                clickFunc?clickFunc(item.id):navigate(`/Movie/${item.id}`)
             }} key={item.id}>
 
 
