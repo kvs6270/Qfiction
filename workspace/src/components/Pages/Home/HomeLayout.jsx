@@ -1,18 +1,96 @@
 import { Outlet } from "react-router";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { fetchFunc } from "../../../logic/fetchFunc.js";
+import { WatchContext } from "../../../App.jsx";
+import { useContext } from "react";
 
 import { genreFilms } from "../../../logic/genreBasedMovies.js";
 import { films2026 } from "../../../logic/movies2026.js";
 
 import { castFilms } from "../../../logic/castBasedMovies.js";
 import { directorFilms } from "../../../logic/directorBasedMovies.js";
+import { ReccStrengthProvider } from "../../../logic/ReccStrengthProvider.js";
+
+import { Navbar } from "../../Cogs/Navbar.jsx";
+import { useRef } from "react";
+import { searchMovies } from "../../../logic/searchMovies.js";
+import { useNavigate } from "react-router";
+import { SearchMovies } from "../../Cogs/SearchMovies.jsx";
 
 
 
-const genre = ["Action", "Comedy", "Thriller", "Romance", "Science Fiction"]
-const casts = ["Leonardo DiCaprio","Scarlett Johansson","Robert Downey Jr.","Emma Stone","Tom Cruise","Jennifer Lawrence","Denzel Washington","Margot Robbie","Chris Hemsworth","Zendaya"]
-const directors = ["Christopher Nolan", "Martin Scorsese", "Quentin Tarantino", "Ridley Scott", "Alfred Hitchcock", "Steven Spielberg"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+let genreMap = null;
+const API_KEY = "fdbaf2c187e091a33939c1663cbf099c"
+
+async function loadGenres() {
+    if (!genreMap) {
+        const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`);
+        const data = await res.json();
+
+        genreMap = {};
+        data.genres.forEach(g => {
+            genreMap[g.id] = g.name;
+        });
+    }
+}
+
+async function genreNameArrayFecther(genreIdArray) {
+    await loadGenres();
+    return genreIdArray.map((id, index) => {
+        return { id, name: genreMap[id] }
+    }).filter(Boolean);
+}
+
+
+async function getPersonNames(idArray) {
+    const results = await Promise.all(
+        idArray.map(async (id) => {
+            const res = await fetch(
+                `https://api.themoviedb.org/3/person/${id}?api_key=${API_KEY}`
+            );
+
+            if (!res.ok) return null;
+
+            const data = await res.json();
+            return { id, name: data.name };
+        })
+    );
+
+    return results.filter(Boolean);
+}
+
+
+const castNameArrayFecther = (castIdArray) => getPersonNames(castIdArray)
+const directorNameArrayFecther = (directorIdArray) => getPersonNames(directorIdArray)
+
+
+
+
+
+
 
 
 
@@ -38,6 +116,10 @@ async function fetchGenreIdArray(genre) {
 }
 
 
+
+
+
+
 async function fetchCastIdArray(cast) {
     const API_KEY = "fdbaf2c187e091a33939c1663cbf099c";
 
@@ -56,6 +138,7 @@ async function fetchCastIdArray(cast) {
     const castBasedIdArray = await Promise.allSettled(castFetchPromiseArray);
 
     let castIdArray = castBasedIdArray.map(obj => obj.value)
+
 
     return castIdArray;
 
@@ -80,14 +163,14 @@ async function fetchDirectorIdArray(director) {
 
     let directorIdArray = directorBasedIdArray.map(obj => obj.value)
 
-    
+
     return directorIdArray;
 
 }
 
 
 
-function useFetchIds() {
+function useFetchIds(genre = [], casts, directors) {
     const [genreIdArray, setGenreIdArray] = useState([]);
     const [castIdArray, setCastIdArray] = useState([]);
     const [directorIdArray, setDirectorIdArray] = useState([]);
@@ -133,9 +216,6 @@ function useFetchIds() {
 
 
 
-
-
-
 function useSingleFetch(year, page, paramType) {
 
     const [movieObj, setMovieObj] = useState([]);
@@ -144,7 +224,7 @@ function useSingleFetch(year, page, paramType) {
 
     useEffect(() => {
 
-        let isMounted = true;
+
 
         setError(false);
         setLoading(true);
@@ -153,27 +233,22 @@ function useSingleFetch(year, page, paramType) {
 
             try {
                 const movieObjArray = await fetchFunc(year, page, paramType);
-                if (isMounted) setMovieObj(movieObjArray);
+
+
+                setMovieObj(movieObjArray);
             } catch (error) {
-                if (isMounted) setError(true)
+                setError(true)
                 console.log(error)
 
             } finally {
-                if (isMounted) setLoading(false)
+                setLoading(false)
             }
         }
 
         dataFetching();
 
+    }, [year, page, paramType])
 
-        return () => {
-            isMounted = false
-        }
-    }, [year, page])
-
-
-   
-    
 
 
 
@@ -182,10 +257,14 @@ function useSingleFetch(year, page, paramType) {
 
 function useMultiFetch(params, paramType, page,) {
 
+
+
+    console.log("Find Me")
     console.log(paramType)
     console.log(params)
 
-   
+
+
     const [paramBasedMovies, setParamBasedMovies] = useState({});
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -194,8 +273,7 @@ function useMultiFetch(params, paramType, page,) {
 
 
     useEffect(() => {
-
-        
+        if (!params || params.length === 0) return
 
         let isMounted = true;
 
@@ -204,13 +282,21 @@ function useMultiFetch(params, paramType, page,) {
 
         async function dataFetching() {
 
+
+
+
             try {
+
                 const paramBasedFetchPromises = params.map(param =>
                     fetchFunc(param, page, paramType)
 
                 );
 
+
+
                 const paramBasedMovieArrays = await Promise.allSettled(paramBasedFetchPromises);
+
+
 
 
                 const paramBasedMovieObj = {};
@@ -237,40 +323,255 @@ function useMultiFetch(params, paramType, page,) {
             isMounted = false
         }
 
-    }, [params, page])
+    }, [params, page, paramType])
 
 
+    console.log("Look Here")
+    console.log(paramBasedMovies)
 
-    
     return { paramBasedMovies, error, loading }
 
+}
+
+function useNameArrayFetcher(genreIdArray, castIdArray, directorIdArray) {
+    const [genreNameArray, setGenreNameArray] = useState([]);
+    const [castNameArray, setCastNameArray] = useState([]);
+    const [directorNameArray, setDirectorNameArray] = useState([]);
+    const [error, setError] = useState(false)
+    const [loading, setLoading] = useState(true)
+
+
+    useEffect(() => {
+        let isMounted = true
+        setError(false)
+        setLoading(true)
+
+
+        const fetcherFunc = async () => {
+
+            try {
+                const [genres, casts, directors] = await Promise.all([
+                    genreNameArrayFecther(genreIdArray),
+                    castNameArrayFecther(castIdArray),
+                    directorNameArrayFecther(directorIdArray),
+                ]);
+
+                if (!isMounted) return;
+                setGenreNameArray(genres)
+
+                setCastNameArray(casts)
+
+                setDirectorNameArray(directors)
+
+                console.log("UPDATED REF VALUES:");
+                console.log("genres:", genres);
+                console.log("casts:", casts);
+                console.log("directors:", directors);
+            }
+
+            catch (error) {
+                if (isMounted) setError(true)
+                console.log(error)
+            }
+
+            finally {
+                if (isMounted) setLoading(false)
+
+            }
+        };
+
+        fetcherFunc();
+
+
+
+        return () => {
+            isMounted = false;
+        };
+    }, [genreIdArray, castIdArray, directorIdArray]);
+
+
+    return { genreNameArray, castNameArray, directorNameArray, error, loading }
 }
 
 
 
 
 export function HomeLayout() {
+    const [search, setSearch] = useState(false)
+    const [focused, setFocused] = useState(false)
+    const [searchText, setSearchText] = useState("")
 
-    const {genreIdArray, castIdArray, directorIdArray} = useFetchIds();
+
+    const { moviesWatched, moviesToWatch } = useContext(WatchContext)
+
+    if (moviesWatched.length === 0 || !moviesWatched) {
+        return (
+            <React.Fragment>
+                <Navbar search={search} searchSetter={() => {
+                    setSearch(!search)
+                    setFocused(false)
+                    setSearchText("")
+                }}></Navbar>
+
+
+                <div className={search ? `${style.searchInput} ${style.Engaged}` : `${style.searchInput}`}>
+
+                    <input
+
+                        onFocus={() => {
+                            setFocused(true)
+                        }}
+
+
+                        value={searchText}
+
+                        onChange={(e) => setSearchText(e.target.value)}
+                        type="text"
+                        placeholder="Search..." />
+
+
+                </div>
+
+
+                {focused
+
+                    ?
+
+                    <div className={style.searchFields}>
+
+                        <SearchMovies searchString={searchText} />
+
+                    </div>
+
+                    :
+
+                    <div className={[
+                        style.EmptyPageContainer,
+                        search && style.Searcher,
+                        focused && style.Focused
+                    ]
+                        .filter(Boolean)
+                        .join(" ")}>
+
+
+
+
+
+
+
+                        <div className={style.icon}>
+                            <svg fill="#ffffff" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>box</title> <path d="M1.735 17.832l12.054 6.081 2.152-6.081-12.053-5.758-2.153 5.758zM16.211 17.832l2.045 6.027 12.484-6.081-2.422-5.704-12.107 5.758zM-0.247 7.212l4.144 4.843 12.053-6.134-3.928-5.005-12.269 6.296zM32.247 7.319l-12.001-6.403-4.090 5.005 12.162 6.134 3.929-4.736zM3.175 19.353l-0.041 5.839 12.713 5.893v-10.98l-1.816 4.736-10.856-5.488zM16.291 20.105v10.979l12.674-5.893v-5.799l-10.99 5.46-1.684-4.747z"></path> </g></svg>
+                        </div>
+
+                        <div className={style.text}>
+                            <div>Your Library seems to be Empty</div>
+                            <div>Please watch something first</div>
+                        </div>
+
+                    </div>
+
+
+
+                }
+
+
+
+
+
+            </React.Fragment>
+        )
+    }
+
+    const reccStrengthObj = useMemo(() => {
+        return ReccStrengthProvider(moviesWatched)
+    }, [moviesWatched])
+
+    console.log("reccStrengthObj")
+    console.log(reccStrengthObj)
+    console.log("reccStrengthObj")
+
+
+    // const castArray = useMemo(
+    //     () => reccStrengthObj.castReccStrengthArray.map(item => item.cast),
+    //     [reccStrengthObj]
+    // );
+
+    // const directorArray = useMemo(
+    //     () => reccStrengthObj.directorReccStrengthArray.map(item => item.director),
+    //     [reccStrengthObj]
+    // );
+
+    // console.log(castArray)
+    // console.log(directorArray)
+
+
+
+    // const { castIdArray, directorIdArray } = useFetchIds(castArray, directorArray);
+
+
+
+    const genreIdArray = useMemo(
+        () => reccStrengthObj.genreReccStrengthArray.map((item => +(item.genre))),
+        [reccStrengthObj]
+    );
+
+
+    const castIdArray = useMemo(
+        () => reccStrengthObj.castReccStrengthArray.map((item => +(item.cast))),
+        [reccStrengthObj]
+    );
+
+
+
+    const directorIdArray = useMemo(
+        () => reccStrengthObj.directorReccStrengthArray.map((item => +(item.director))),
+        [reccStrengthObj]
+    );
+
+    const { genreNameArray, castNameArray, directorNameArray, error: nameError, loading: nameLoading } = useNameArrayFetcher(genreIdArray, castIdArray, directorIdArray)
+
+
+
+
+
+
+
+
 
     const { movieObj, error, loading } = useSingleFetch(2026, 1, "Year");
 
+
+
     const { paramBasedMovies: genreBasedMovies, error: error2, loading: loading2 } = useMultiFetch(genreIdArray, "Genre", 1);
 
-    
+
 
     const { paramBasedMovies: castBasedMovies, error: error3, loading: loading3 } = useMultiFetch(castIdArray, "Cast", 1);
 
-
-
     const { paramBasedMovies: directorBasedMovies, error: error4, loading: loading4 } = useMultiFetch(directorIdArray, "Director", 1);
+
+
+
+    
+    console.log("genreBasedMovies from Layout:")
+    console.log(genreBasedMovies)
+    console.log("castBasedMovies from Layout:")
+    console.log(castBasedMovies)
+    console.log("directorBasedMovies from Layout:")
+    console.log(directorBasedMovies)
+
+
+
+    // const { directorBasedMovies, error: error4, loading: loading4 } = useMultiFetch(/* drector array*/);
 
     // const movieObj = [...films2026];
     // const error = false;
     // const loading =  false; /* shift */ 
-    // const genreBasedMovies = {...genreFilms};
+
+
+    // const genreBasedMovies = { ...genreFilms };
     // const error2 = false;
-    // const loading2 =  false; /* shift */
+    // const loading2 = false; /* shift */
 
     // const castBasedMovies = { ...castFilms };
     // const error3 = false;
@@ -282,24 +583,30 @@ export function HomeLayout() {
 
 
 
-    console.log("genreBasedMovies from Layout:")
-    console.log(genreBasedMovies)
-    console.log("castBasedMovies from Layout:")
-    console.log(castBasedMovies)
-    console.log("directorBasedMovies from Layout:")
-    console.log(directorBasedMovies)
+
 
 
 
 
     return (
+
         <Outlet context={
-            { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4 }
+            { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4, genreNameArray, castNameArray, directorNameArray, nameLoading }
         } />
+
+       
+
+
+
 
     )
 
 
 
 }
+
+
+
+
+
 
