@@ -17,10 +17,14 @@ export const WatchContext = createContext({
   removeFromWatched: () => { },
 });
 
+
+
 function App({children}) {
 
   const [watchMovies, setWatchMovies] = useState([]);
   const [watchedMovies, setWatchedMovies] = useState([]);
+
+  const [firstEntry, setFirstEntry] = useState(true);
 
   const moviesToWatch = watchMovies;
   const moviesWatched = watchedMovies;
@@ -51,12 +55,16 @@ function App({children}) {
     setWatchedMovies(newWatchedMovies);
   }
 
+  function entrySetter (arg) {
+    setFirstEntry(arg)
+  }
+
 
 
 
   return (
     
-    <WatchContext value={{ moviesToWatch, moviesWatched, addToWatch, addToWatched, removeFromWatch, removeFromWatched }}>
+    <WatchContext value={{ moviesToWatch, moviesWatched, addToWatch, addToWatched, removeFromWatch, removeFromWatched, firstEntry, entrySetter }}>
 
     {children}
 
