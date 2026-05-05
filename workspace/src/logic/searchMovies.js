@@ -34,6 +34,3 @@ export async function searchMovies(string) {
 
 
 }
-
-let data = await searchMovies("Inception")
-console.log(data)

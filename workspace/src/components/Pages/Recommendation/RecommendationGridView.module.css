@@ -87,7 +87,7 @@
     
 }
 
-.searchContainer{
+.ExternalSearchContainer{
     display: flex;
     flex-direction: column;
     font-size: 1.5rem;
@@ -97,6 +97,9 @@
     position: relative;
     top: 160px;
     left: 15px;
+     max-height: 60vh;
+
+    overflow-y: auto;
 
 }
 

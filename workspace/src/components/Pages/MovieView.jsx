@@ -52,7 +52,7 @@ function useMovieDetailsFetcher(id) {
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    
+
 
 
     useEffect(() => {
@@ -90,7 +90,7 @@ function useMovieDetailsFetcher(id) {
 
 
 export function MovieView() {
-    
+
 
     const [search, setSearch] = useState(false)
     const [focused, setFocused] = useState(false)
@@ -99,12 +99,12 @@ export function MovieView() {
 
 
 
-    
 
-    
+
+
     const { id } = useParams();
 
-    
+
 
 
     const { movieObj, error, loading } = useMovieDetailsFetcher(id);
@@ -113,89 +113,91 @@ export function MovieView() {
     // let error = false
     // let loading = false
 
-    
 
 
-    if(error) {
+
+    if (error) {
         return <Error />
-       
-    }   
-    
+
+    }
+
 
     else {
         return (
             <div>
                 <Navbar search={search} searchSetter={() => {
-                setSearch(!search)
-                setFocused(false)
-                setSearchText("")
-            }}></Navbar>
+                    setSearch(!search)
+                    setFocused(false)
+                    setSearchText("")
+                }}></Navbar>
 
 
-            <div className={search ? `${style.searchInput} ${style.Engaged}` : `${style.searchInput}`}>
-            
-                            <input
-            
-                                onFocus={() => {
-                                    setFocused(true)
-                                }}
-            
-            
-                                value={searchText}
-            
-                                onChange={(e) => setSearchText(e.target.value)}
-                                type="text"
-                                placeholder="Search..." />
-            
-            
+                <div className={search ? `${style.searchInput} ${style.Engaged}` : `${style.searchInput}`}>
+
+                    <input
+
+                        onFocus={() => {
+                            setFocused(true)
+                        }}
+
+
+                        value={searchText}
+
+                        onChange={(e) => setSearchText(e.target.value)}
+                        type="text"
+                        placeholder="Search..." />
+
+
+                </div>
+
+
+                {focused
+
+                    ?
+
+                    <div className={style.searchFields}>
+
+                        <div className={style.ExternalSearchContainer}>
+                            <SearchMovies searchString={searchText} />
                         </div>
-            
-            
-                        {focused
-            
-                            ?
-            
-                            <div className={style.searchFields}>
-            
-                                <SearchMovies searchString={searchText} />
-            
-                            </div>
-            
-                            :
-            
-                            <div className={[
-                                style.MoviePageContainer,
-                                search && style.Searcher,
-                                focused && style.Focused
-                            ]
-                                .filter(Boolean)
-                                .join(" ")}>
-            
-            
-            
-            
-            
-            
-            
-                                 <MoviePage movieObj={movieObj||[]} loading={loading}/>
-            
-                            </div>
-            
-            
-            
-                        }
+
+                    </div>
+
+                    :
+
+                    <div className={[
+                        style.MoviePageContainer,
+                        search && style.Searcher,
+                        focused && style.Focused
+                    ]
+                        .filter(Boolean)
+                        .join(" ")}>
+
+
+
+
+
+
+
+                        <MoviePage movieObj={movieObj || []} loading={loading} />
+
+                    </div>
+
+
+
+                }
 
 
 
             </div>
 
-    
-)
+
+        )
 
     }
 
 
 
-    
+
 
 }
