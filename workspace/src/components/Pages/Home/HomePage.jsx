@@ -33,17 +33,18 @@ export function HomePage() {
     const [searchText, setSearchText] = useState("")
 
 
-    const { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4, genreNameArray, castNameArray, directorNameArray, nameError, nameLoading } = useOutletContext();
+    const { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4, genreNameArray, castNameArray, directorNameArray, nameError, nameLoading, skipped } = useOutletContext();
 
     const { moviesWatched, moviesToWatch } = useContext(WatchContext);
 
 
-    const reccStrengthObj = useMemo(() => {
-        return ReccStrengthProvider(moviesWatched)
-    }, [moviesWatched])
+        const reccStrengthObj = useMemo(() => {
+            return ReccStrengthProvider(moviesWatched)
+        }, [moviesWatched])
 
-    console.log("reccStrengthObj")
-    console.log(reccStrengthObj)
+        console.log("reccStrengthObj")
+        console.log(reccStrengthObj)
+
 
 
 
@@ -71,7 +72,7 @@ export function HomePage() {
 
     const genreBasedTopRatedMoviesObj = useMemo(() => {
 
-       
+
         if (loading2) return {}
 
         const genreBasedTopRatedMoviesObjProto = {};
@@ -79,16 +80,16 @@ export function HomePage() {
 
         for (const genre in genreBasedMovies) {
 
-            console.log("genreBasedMovies[genre]" )
-            console.log(genreBasedMovies[genre] )
-            console.log("genreBasedMovies[genre]" )
+            console.log("genreBasedMovies[genre]")
+            console.log(genreBasedMovies[genre])
+            console.log("genreBasedMovies[genre]")
 
-           
+
 
             genreBasedTopRatedMoviesObjProto[genre] = topRated(genreBasedMovies[genre], 100);
         }
 
-        
+
 
         return genreBasedTopRatedMoviesObjProto;
 
@@ -210,9 +211,9 @@ export function HomePage() {
                         <MainSlider2 recommendedMoviesOf2026={recommendedMovieObj} error={error} loading={loading}></MainSlider2>
                     </>
 
-                    <MegaSlider nameLoading={nameLoading} paramNameArray={genreNameArray} param={"genre"} paramReccStrengthArray={reccStrengthObj.genreReccStrengthArray} paramBasedRecommendedMoviesObj={genreBasedTopRatedMoviesObj} error={error2} loading={loading2} ></MegaSlider>
-                    <MegaSlider nameLoading={nameLoading} paramNameArray={castNameArray} param={"cast"} paramReccStrengthArray={reccStrengthObj.castReccStrengthArray} paramBasedRecommendedMoviesObj={castBasedTopRatedMoviesObj} error={error3} loading={loading3} ></MegaSlider>
-                    <MegaSlider nameLoading={nameLoading} paramNameArray={directorNameArray} param={"director"} paramReccStrengthArray={reccStrengthObj.directorReccStrengthArray} paramBasedRecommendedMoviesObj={directorBasedTopRatedMoviesObj} error={error4} loading={loading4} ></MegaSlider>
+                    <MegaSlider skipped={skipped} nameLoading={nameLoading} paramNameArray={genreNameArray} param={"genre"} paramReccStrengthArray={reccStrengthObj.genreReccStrengthArray} paramBasedRecommendedMoviesObj={genreBasedTopRatedMoviesObj} error={error2} loading={loading2} ></MegaSlider>
+                    <MegaSlider skipped={skipped} nameLoading={nameLoading} paramNameArray={castNameArray} param={"cast"} paramReccStrengthArray={reccStrengthObj.castReccStrengthArray} paramBasedRecommendedMoviesObj={castBasedTopRatedMoviesObj} error={error3} loading={loading3} ></MegaSlider>
+                    <MegaSlider skipped={skipped} nameLoading={nameLoading} paramNameArray={directorNameArray} param={"director"} paramReccStrengthArray={reccStrengthObj.directorReccStrengthArray} paramBasedRecommendedMoviesObj={directorBasedTopRatedMoviesObj} error={error4} loading={loading4} ></MegaSlider>
 
                 </div>
 
@@ -259,10 +260,13 @@ function MainSlider({ recommendedMoviesOf2026, error, loading }) {
 }
 
 
-function MegaSlider({ param, paramReccStrengthArray, paramBasedRecommendedMoviesObj, error, loading, paramNameArray, nameLoading }) {
+function MegaSlider({ param, paramReccStrengthArray, paramBasedRecommendedMoviesObj, error, loading, paramNameArray, nameLoading, skipped }) {
 
     console.log("paramNameArray")
     console.log(paramNameArray)
+
+    console.log("paramBasedRecommendedMoviesObj")
+    console.log(paramBasedRecommendedMoviesObj)
 
 
 
@@ -290,45 +294,87 @@ function MegaSlider({ param, paramReccStrengthArray, paramBasedRecommendedMovies
 
     let arrayOfSLiders = []
 
+    let counter = 0;
+
+
+    if (skipped) {
+
+        
+
+        paramNameArray.forEach(obj => {
+            let movieArray;
+
+            const text = sliderTitle(obj.name);
+
+            if( !paramBasedRecommendedMoviesObj || Object.keys(paramBasedRecommendedMoviesObj).length === 0) {
+                movieArray = [];
+            }
+
+            else {
+
+                    movieArray = paramBasedRecommendedMoviesObj[obj.id];
+            }
+
+            
 
 
 
-    for (const obj of paramReccStrengthArray) {
-
-        let text;
-
-        if (!nameLoading) {
-            let identifier = paramNameArray.find(item => {
+            arrayOfSLiders.push(
 
 
 
-                return item.id == obj[param]
-            })
+                <div style={{ marginTop: "50px" }} key={obj.id}>
+                    <h3 style={{ textAlign: "center", fontSize: "1.5rem" }} key={text}>{text}</h3>
+                    <Slider suggestionType={"TopRated"} movieArray={movieArray} identifierType={param} identifier={obj.id} error={error} loading={loading}></Slider>
+                </div>
 
-            console.log("identifier")
-            console.log(identifier)
+            )
 
-            text = sliderTitle(identifier.name);
-        }
-
-        else {
-            text = "";
-        }
-
-
-
-
-        arrayOfSLiders.push(
-
-
-
-            <div style={{ marginTop: "50px" }} key={obj[param]}>
-                <h3 style={{ textAlign: "center", fontSize: "1.5rem" }} key={text}>{text}</h3>
-                <Slider suggestionType={"Recommended"} movieArray={paramBasedRecommendedMoviesObj[obj[param]]} identifierType={param} identifier={obj[param]} error={error} loading={loading}></Slider>
-            </div>
-
-        )
+            counter++
+        });
+    
+    
     }
+    else {
+        for (const obj of paramReccStrengthArray) {
+
+            let text;
+
+            if (!nameLoading) {
+                let identifier = paramNameArray.find(item => {
+
+
+
+                    return item.id == obj[param]
+                })
+
+                console.log("identifier")
+                console.log(identifier)
+
+                text = sliderTitle(identifier.name);
+            }
+
+            else {
+                text = "";
+            }
+
+
+
+
+            arrayOfSLiders.push(
+
+
+
+                <div style={{ marginTop: "50px" }} key={obj[param]}>
+                    <h3 style={{ textAlign: "center", fontSize: "1.5rem" }} key={text}>{text}</h3>
+                    <Slider suggestionType={"Recommended"} movieArray={paramBasedRecommendedMoviesObj[obj[param]]} identifierType={param} identifier={obj[param]} error={error} loading={loading}></Slider>
+                </div>
+
+            )
+        }
+    }
+
+
 
     return (
         <div className="SliderContainer">

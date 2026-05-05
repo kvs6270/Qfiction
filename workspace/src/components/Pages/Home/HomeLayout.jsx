@@ -18,7 +18,12 @@ import { useNavigate } from "react-router";
 import { SearchMovies } from "../../Cogs/SearchMovies.jsx";
 
 
+const genreFallbackArray = ["Action", "Comedy", "Thriller"]
 
+
+const castFallbackArray = ["Leonardo DiCaprio", "Scarlett Johansson", "Robert Downey Jr."]
+
+const directorFallbackArray = ["Christopher Nolan", "Martin Scorsese", "Quentin Tarantino"]
 
 
 
@@ -106,7 +111,7 @@ async function fetchGenreIdArray(genre) {
     let genreIdArray = data.genres.filter(obj => {
         return genre.includes(obj.name)
     }).map((obj) => {
-        return obj.id
+        return { name: obj.name, id: obj.id }
     });
 
 
@@ -130,7 +135,7 @@ async function fetchCastIdArray(cast) {
         );
         const data = await res.json();
 
-        return data.results[0]?.id || null;
+        return { name: name, id: data.results[0]?.id || null };
     }
 
     const castFetchPromiseArray = cast.map(actor => fetchActorIdByName(actor, "fdbaf2c187e091a33939c1663cbf099c"));
@@ -154,7 +159,7 @@ async function fetchDirectorIdArray(director) {
         );
         const data = await res.json();
 
-        return data.results[0]?.id || null;
+        return { name: name, id: data.results[0]?.id || null };
     }
 
     const directorFetchPromiseArray = director.map(director => fetchDirectorIdByName(director, "fdbaf2c187e091a33939c1663cbf099c"));
@@ -170,7 +175,7 @@ async function fetchDirectorIdArray(director) {
 
 
 
-function useFetchIds(genre = [], casts, directors) {
+function useFetchIds(genre, casts, directors) {
     const [genreIdArray, setGenreIdArray] = useState([]);
     const [castIdArray, setCastIdArray] = useState([]);
     const [directorIdArray, setDirectorIdArray] = useState([]);
@@ -405,130 +410,90 @@ export function HomeLayout() {
     const { moviesWatched, moviesToWatch } = useContext(WatchContext)
 
     if (moviesWatched.length === 0 || !moviesWatched) {
+
+        const { genreIdArray, castIdArray, directorIdArray } = useFetchIds(genreFallbackArray, castFallbackArray, directorFallbackArray);
+
+        const genreIds = useMemo(
+            () => genreIdArray?.map(item => item.id) || [],
+            [genreIdArray]
+        );
+
+        const castIds = useMemo(
+            () => castIdArray?.map(item => item.id) || [],
+            [castIdArray]
+        );
+
+        const directorIds = useMemo(
+            () => directorIdArray?.map(item => item.id) || [],
+            [directorIdArray]
+        );
+
+
+        const { movieObj, error, loading } = useSingleFetch(2026, 1, "Year");
+
+        const { paramBasedMovies: genreBasedMovies, error: error2, loading: loading2 } = useMultiFetch(genreIds, "Genre", 1);
+
+
+
+        const { paramBasedMovies: castBasedMovies, error: error3, loading: loading3 } = useMultiFetch(castIds, "Cast", 1);
+
+
+
+        const { paramBasedMovies: directorBasedMovies, error: error4, loading: loading4 } = useMultiFetch(directorIds, "Director", 1);
+
+
+        console.log("genreFallbackArray")
+        console.log(genreFallbackArray)
+        console.log("genreFallbackArray")
+        console.log("castFallbackArray")
+        console.log(castFallbackArray)
+        console.log("castFallbackArray")
+        console.log("directorFallbackArray")
+        console.log(directorFallbackArray)
+        console.log("directorFallbackArray")
+
+
         return (
-            <React.Fragment>
-                <Navbar search={search} searchSetter={() => {
-                    setSearch(!search)
-                    setFocused(false)
-                    setSearchText("")
-                }}></Navbar>
-
-
-                <div className={search ? `${style.searchInput} ${style.Engaged}` : `${style.searchInput}`}>
-
-                    <input
-
-                        onFocus={() => {
-                            setFocused(true)
-                        }}
-
-
-                        value={searchText}
-
-                        onChange={(e) => setSearchText(e.target.value)}
-                        type="text"
-                        placeholder="Search..." />
-
-
-                </div>
-
-
-                {focused
-
-                    ?
-
-                    <div className={style.searchFields}>
-
-                        <SearchMovies searchString={searchText} />
-
-                    </div>
-
-                    :
-
-                    <div className={[
-                        style.EmptyPageContainer,
-                        search && style.Searcher,
-                        focused && style.Focused
-                    ]
-                        .filter(Boolean)
-                        .join(" ")}>
-
-
-
-
-
-
-
-                        <div className={style.icon}>
-                            <svg fill="#ffffff" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>box</title> <path d="M1.735 17.832l12.054 6.081 2.152-6.081-12.053-5.758-2.153 5.758zM16.211 17.832l2.045 6.027 12.484-6.081-2.422-5.704-12.107 5.758zM-0.247 7.212l4.144 4.843 12.053-6.134-3.928-5.005-12.269 6.296zM32.247 7.319l-12.001-6.403-4.090 5.005 12.162 6.134 3.929-4.736zM3.175 19.353l-0.041 5.839 12.713 5.893v-10.98l-1.816 4.736-10.856-5.488zM16.291 20.105v10.979l12.674-5.893v-5.799l-10.99 5.46-1.684-4.747z"></path> </g></svg>
-                        </div>
-
-                        <div className={style.text}>
-                            <div>Your Library seems to be Empty</div>
-                            <div>Please watch something first</div>
-                        </div>
-
-                    </div>
-
-
-
-                }
-
-
-
-
-
-            </React.Fragment>
+            <Outlet context={
+                { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4, genreNameArray: genreIdArray, castNameArray: castIdArray, directorNameArray: directorIdArray, nameLoading: false, skipped: true }} />
         )
+
+
     }
 
-    const reccStrengthObj = useMemo(() => {
-        return ReccStrengthProvider(moviesWatched)
-    }, [moviesWatched])
+    else {
+        const reccStrengthObj = useMemo(() => {
+            return ReccStrengthProvider(moviesWatched)
+        }, [moviesWatched])
 
-    console.log("reccStrengthObj")
-    console.log(reccStrengthObj)
-    console.log("reccStrengthObj")
-
-
-    // const castArray = useMemo(
-    //     () => reccStrengthObj.castReccStrengthArray.map(item => item.cast),
-    //     [reccStrengthObj]
-    // );
-
-    // const directorArray = useMemo(
-    //     () => reccStrengthObj.directorReccStrengthArray.map(item => item.director),
-    //     [reccStrengthObj]
-    // );
-
-    // console.log(castArray)
-    // console.log(directorArray)
+        console.log("reccStrengthObj")
+        console.log(reccStrengthObj)
+        console.log("reccStrengthObj")
 
 
 
-    // const { castIdArray, directorIdArray } = useFetchIds(castArray, directorArray);
 
 
 
-    const genreIdArray = useMemo(
-        () => reccStrengthObj.genreReccStrengthArray.map((item => +(item.genre))),
-        [reccStrengthObj]
-    );
+        const genreIdArray = useMemo(
+            () => reccStrengthObj.genreReccStrengthArray.map((item => +(item.genre))),
+            [reccStrengthObj]
+        );
 
 
-    const castIdArray = useMemo(
-        () => reccStrengthObj.castReccStrengthArray.map((item => +(item.cast))),
-        [reccStrengthObj]
-    );
+        const castIdArray = useMemo(
+            () => reccStrengthObj.castReccStrengthArray.map((item => +(item.cast))),
+            [reccStrengthObj]
+        );
 
 
 
-    const directorIdArray = useMemo(
-        () => reccStrengthObj.directorReccStrengthArray.map((item => +(item.director))),
-        [reccStrengthObj]
-    );
+        const directorIdArray = useMemo(
+            () => reccStrengthObj.directorReccStrengthArray.map((item => +(item.director))),
+            [reccStrengthObj]
+        );
 
-    const { genreNameArray, castNameArray, directorNameArray, error: nameError, loading: nameLoading } = useNameArrayFetcher(genreIdArray, castIdArray, directorIdArray)
+        const { genreNameArray, castNameArray, directorNameArray, error: nameError, loading: nameLoading } = useNameArrayFetcher(genreIdArray, castIdArray, directorIdArray)
 
 
 
@@ -538,48 +503,17 @@ export function HomeLayout() {
 
 
 
-    const { movieObj, error, loading } = useSingleFetch(2026, 1, "Year");
+        const { movieObj, error, loading } = useSingleFetch(2026, 1, "Year");
 
 
 
-    const { paramBasedMovies: genreBasedMovies, error: error2, loading: loading2 } = useMultiFetch(genreIdArray, "Genre", 1);
+        const { paramBasedMovies: genreBasedMovies, error: error2, loading: loading2 } = useMultiFetch(genreIdArray, "Genre", 1);
 
 
 
-    const { paramBasedMovies: castBasedMovies, error: error3, loading: loading3 } = useMultiFetch(castIdArray, "Cast", 1);
+        const { paramBasedMovies: castBasedMovies, error: error3, loading: loading3 } = useMultiFetch(castIdArray, "Cast", 1);
 
-    const { paramBasedMovies: directorBasedMovies, error: error4, loading: loading4 } = useMultiFetch(directorIdArray, "Director", 1);
-
-
-
-    
-    console.log("genreBasedMovies from Layout:")
-    console.log(genreBasedMovies)
-    console.log("castBasedMovies from Layout:")
-    console.log(castBasedMovies)
-    console.log("directorBasedMovies from Layout:")
-    console.log(directorBasedMovies)
-
-
-
-    // const { directorBasedMovies, error: error4, loading: loading4 } = useMultiFetch(/* drector array*/);
-
-    // const movieObj = [...films2026];
-    // const error = false;
-    // const loading =  false; /* shift */ 
-
-
-    // const genreBasedMovies = { ...genreFilms };
-    // const error2 = false;
-    // const loading2 = false; /* shift */
-
-    // const castBasedMovies = { ...castFilms };
-    // const error3 = false;
-    // const loading3 = false; /* shift */
-
-    // const directorBasedMovies = { ...directorFilms };
-    // const error4 = false;
-    // const loading4 = false; /* shift */
+        const { paramBasedMovies: directorBasedMovies, error: error4, loading: loading4 } = useMultiFetch(directorIdArray, "Director", 1);
 
 
 
@@ -588,18 +522,19 @@ export function HomeLayout() {
 
 
 
-    return (
+        return (
 
-        <Outlet context={
-            { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4, genreNameArray, castNameArray, directorNameArray, nameLoading }
-        } />
-
-       
+            <Outlet context={
+                { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4, genreNameArray, castNameArray, directorNameArray, nameLoading, skipped: false }
+            } />
 
 
 
 
-    )
+
+
+        )
+    }
 
 
 
