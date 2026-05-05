@@ -7,6 +7,9 @@ import { useState } from "react";
 
 
 export function SearchMovies({ searchString, clickFunc }) {
+    if(searchString == "") {
+        return;
+    }
     let navigate = useNavigate();
 
 
