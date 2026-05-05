@@ -74,8 +74,10 @@ input{
 }
 
 .ButtonFooter{
+    display: flex;
+    justify-content: space-between;
    justify-self:center;
-   width: 100px;
+   width: 70%;
    height: 55px;
    border-radius: 40px;
    
@@ -83,8 +85,8 @@ input{
 
 }
 
-.ButtonFooter button {
-    width: 100%;
+.ButtonFooter .DoneButton {
+    width: 100px;
     height: 100%;
     transition: 0.5s all;
     background-color: green;
@@ -92,13 +94,22 @@ input{
     font-size: 1.3rem;
     
 }
-.ButtonFooter button:hover {
+.ButtonFooter .SkipButton {
+    width: 80px;
+    height: 90%;
+    transition: 0.5s all;
+    background-color: rgb(159, 212, 231);
+    border-radius: 20px;
+    font-size: 1.3rem;
+    
+}
+.ButtonFooter .DoneButton:hover {
    transform: scale(1.5);
     transition: 0.5s all;
 }
 
 
-.ButtonFooter button:disabled {
+.ButtonFooter .DoneButton:disabled {
     transform: scale(0.75);
      transition: 0.5s all;
      background-color: gray;

@@ -29,28 +29,28 @@ import { WatchContext } from "../../../App"
 
 export function Welcome() {
 
-    const {moviesWatched, addToWatched, removeFromWatched, firstEntry, entrySetter} =  useContext(WatchContext)
+    const { moviesWatched, addToWatched, removeFromWatched, firstEntry, entrySetter } = useContext(WatchContext)
 
 
 
 
     return (
-        <div  style={{overflowY: firstEntry?"hidden":"auto"}} className={style.pageContainer}>
+        <div style={{ overflowY: firstEntry ? "hidden" : "auto" }} className={style.pageContainer}>
 
 
             {
 
-                firstEntry?<Add10Please adderFunc = {addToWatched} removerFunc = {removeFromWatched} watched = {moviesWatched} entrySetter = {entrySetter}/>:""
+                firstEntry ? <Add10Please adderFunc={addToWatched} removerFunc={removeFromWatched} watched={moviesWatched} entrySetter={entrySetter} /> : ""
 
             }
 
 
-            < Navbar />
+            < Navbar active = {!firstEntry} welcome = {true}/>
 
 
-            <div style={{opacity: firstEntry?"0.5":"1"}} className={style.welcomePage}>
+            <div style={{ opacity: firstEntry ? "0.5" : "1" }} className={style.welcomePage}>
 
-               
+
 
 
 
@@ -124,15 +124,16 @@ export function Welcome() {
     )
 }
 
-function adderFunc (movieId) {
+function adderFunc(movieId) {
 
-    const {movieObj, error, loading} = useMovieDetailsFetcher(movieId);
+    const { movieObj, error, loading } = useMovieDetailsFetcher(movieId);
 
-    if(!loading && !error) {
-        addToWatched(movieObj);    }
+    if (!loading && !error) {
+        addToWatched(movieObj);
+    }
 
 
-    
+
 }
 
 
@@ -142,7 +143,7 @@ function useMovieDetailsFetcher(id) {
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    
+
 
 
     useEffect(() => {
@@ -183,7 +184,7 @@ function useMovieDetailsFetcher(id) {
 
 
 
-function Add10Please({adderFunc, removerFunc, watched, entrySetter}) {
+function Add10Please({ adderFunc, removerFunc, watched, entrySetter }) {
 
 
     const [searchText, setSearchText] = useState("")
@@ -192,10 +193,10 @@ function Add10Please({adderFunc, removerFunc, watched, entrySetter}) {
 
 
 
-    const {movieObj, error, loading} =  useMovieDetailsFetcher(selectedId);
+    const { movieObj, error, loading } = useMovieDetailsFetcher(selectedId);
 
     useEffect(() => {
-        if(!error && !loading && movieObj) {
+        if (!error && !loading && movieObj) {
             adderFunc(movieObj)
         }
     }, [movieObj, error, loading])
@@ -204,8 +205,8 @@ function Add10Please({adderFunc, removerFunc, watched, entrySetter}) {
 
     let arrayOfMovies = [...watched];
 
-    
-   
+
+
 
 
     return (
@@ -227,34 +228,39 @@ function Add10Please({adderFunc, removerFunc, watched, entrySetter}) {
 
             <div className={style2.SearchScreen}>
 
-                <SearchMovies  searchString={searchText} clickFunc={(movieId) => {
+                <SearchMovies searchString={searchText} clickFunc={(movieId) => {
                     setSelectedId(movieId)
                 }} />
 
             </div>
 
             <div className={style2.SummaryGrid}>
-                
-                <SummaryGrid movieArray = {arrayOfMovies} removerFunc = {removerFunc} clearSelectedId={() => {
+
+                <SummaryGrid movieArray={arrayOfMovies} removerFunc={removerFunc} clearSelectedId={() => {
                     setSelectedId("")
-                }}/>
+                }} />
 
             </div>
 
             <div className={style2.ButtonFooter}>
 
-
-
                 <button
-
-                onClick={() => entrySetter(false)}
-
-               disabled = {watched.length < 10}
-                
+                    className={style2.SkipButton}
+                    onClick={() => entrySetter(false)}
                 >
-                    
+                    Skip
+                </button>
+
+                <button className={style2.DoneButton}
+
+                    onClick={() => entrySetter(false)}
+
+                    disabled={watched.length < 10}
+
+                >
+
                     Done
-                
+
                 </button>
 
 
@@ -265,12 +271,12 @@ function Add10Please({adderFunc, removerFunc, watched, entrySetter}) {
 }
 
 
-function SummaryGrid({movieArray, removerFunc, clearSelectedId}) {
+function SummaryGrid({ movieArray, removerFunc, clearSelectedId }) {
 
 
 
     let collectionOfTiles = movieArray.map(item => (
-    
+
         <div className={style2.SummaryTile}>
             {item.title}
 
@@ -280,13 +286,13 @@ function SummaryGrid({movieArray, removerFunc, clearSelectedId}) {
             }}>x</button>
 
         </div>
-        
+
     ))
 
 
     return (
         <>
-        {collectionOfTiles}
+            {collectionOfTiles}
         </>
     )
 }
