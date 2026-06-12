@@ -24,6 +24,7 @@ import ToWatchImgBackdrop from "./resource/ToWatch.png"
 import { useContext, useState } from "react"
 import { SearchMovies } from "../../Cogs/SearchMovies"
 import { WatchContext } from "../../../App"
+import { RadialMenu } from "./RadialMenu"
 
 
 
@@ -45,7 +46,7 @@ export function Welcome() {
             }
 
 
-            < Navbar active = {!firstEntry} welcome = {true}/>
+            < Navbar active={!firstEntry} welcome={true} />
 
 
             <div style={{ opacity: firstEntry ? "0.5" : "1" }} className={style.welcomePage}>
@@ -57,35 +58,30 @@ export function Welcome() {
 
 
 
-                <div className={style.introSection}>
-                    <div className={style.introText}>
-                        <p>Create your own Library</p>
-                        <p>Browse through Top Rated flicks</p>
-                        <p>Indulge in comprehensive Recommendations</p>
+                <div className={style.dummyContainer}>
+                    <div className={style.mainContainer}>
+                        <div className={style.wheelContainer}>
+                            <div className={style.radialContainer}>
+                               
+                            </div>
+                        </div>
+                        <div className={style.introSection}>
+                    
+                            <div className={style.imageContainer}>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className={style.whatWeOffer}>
-
-                    <div className={style.OfferTitle}>
-                        <h2>What we Offer at Qflicks:</h2>
-                    </div>
 
 
-                    <div className={style.buttonContainer}>
+                <div className={style.RadialContainer}>
 
-                        <OfferButtons iconPath={eyeIcon} text={"Browse through the Top Rated stuff"} clickDestination={"/"} />
-                        <OfferButtons iconPath={eyeIcon} text={"Add movies to your Watched List"} clickDestination={"/"} />
-                        <OfferButtons iconPath={eyeIcon} text={"Get recommendations based on your preffered Genre"} clickDestination={"/"} />
-                        <OfferButtons iconPath={eyeIcon} text={"Get recommendations based on your Cast and Directors"} clickDestination={"/"} />
-                        <OfferButtons iconPath={eyeIcon} text={"Create your own Watch-List"} clickDestination={"/"} />
-                        <OfferButtons iconPath={eyeIcon} text={"Get to-the-point recommendations based on your interests"} clickDestination={"/"} />
+                    {/* <RadialMenu /> */}
 
-
-
-
-                    </div>
 
                 </div>
+
+
 
 
                 <div className={style.TutorialContainer}>

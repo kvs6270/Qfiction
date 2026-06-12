@@ -19,34 +19,148 @@
     align-items: center;
     background-color: black;
     color: white;
+    position: absolute;
     
     
 }
+
+.dummyContainer{
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.mainContainer{
+
+
+  width: 100%;
+  aspect-ratio: 1920/1080;
+  position: relative;
+  left: 0px;
+
+
+}
+
+.imageContainer {
+  width: 100%;
+  height: 100%;
+  background-image: url("./resource/Light.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  /* soft light reveal instead of hard edge */
+  mask-image: linear-gradient(
+    to right,
+    black 0%,
+    rgba(0,0,0,0.8) 20%,
+    rgba(0,0,0,0.4) 40%,
+    rgba(0,0,0,0) 60%
+  );
+
+  mask-size: 200% 100%;
+  mask-position: left;
+
+  animation: 
+    revealLight 0.4s ease-in forwards,
+    flicker 4s steps(2) infinite;
+}
+
+
+
+@keyframes flicker {
+
+  /* ===== MOSTLY STABLE (normal flicker 96–100%) ===== */
+  0%, 18%, 40%, 62%, 80%, 100% {
+    opacity: 1;
+  }
+
+  5% { opacity: 0.98; }
+  10% { opacity: 0.96; }
+  15% { opacity: 0.99; }
+
+  25% { opacity: 0.97; }
+  30% { opacity: 0.95; }
+  35% { opacity: 0.98; }
+
+  45% { opacity: 0.96; }
+  50% { opacity: 0.99; }
+  55% { opacity: 0.97; }
+
+  65% { opacity: 0.96; }
+  70% { opacity: 0.98; }
+  75% { opacity: 0.97; }
+
+  85% { opacity: 0.99; }
+  90% { opacity: 0.96; }
+  95% { opacity: 0.98; }
+
+  /* ===== VERY BRIEF DRAMATIC DROPS ===== */
+  22% { opacity: 0.3; }
+  22.5% { opacity: 1; }
+
+  /* 48% { opacity: 0.05; }
+  48.3% { opacity: 1; } */
+
+  73% { opacity: 0.4; }
+  73.4% { opacity: 1; }
+
+  /* 88% { opacity: 0; }
+  88.2% { opacity: 1; } */
+}
+
+@keyframes revealLight {
+  0% {
+    mask-position: right;
+  }
+  100% {
+    mask-position: left;
+  }
+
+}
+
+
+.menuContainer{
+  width: 50%;
+  aspect-ratio: 1/1;
+  position: absolute;
+  top: 3%;
+  left: 45%;
+}
+.wheelContainer{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+  background-image: url("resource/SpinWheel.png");
+  background-size: contain;
+   background-repeat: no-repeat;
+}
+
+
+
 
 .introSection{
-    padding-top: 60px;
-    width: 100%;
-    aspect-ratio: 18/9;
-    background-image: url("./resource/FC.png");
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    z-index: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    position: relative; 
-    padding-bottom: 50px;
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding-top: 60px;
+  background-image: url("./resource/Background\ \(2\).png");
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  display: flex;
+  position: relative; 
+
 }
 
-.introSection::before{
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.2);
-    
-}
+
+
+
+
+
+
 
 .introText{
     text-align: center;
@@ -61,33 +175,10 @@
     
 }
 
-.whatWeOffer{
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    width: min(90vw,1000px);
-    margin: 20px;
-    
-    
-}
-
-.OfferTitle{
-    flex-basis: 100%;
-    
-}
-
-.buttonContainer{
-    
-    flex-basis: 100%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    padding: 10px;
-    
-    
-    
+.RadialContainer{
+  width: 100%;
+  position: relative;
+  top: -180px;
 }
 
 .TutorialContainer{
@@ -95,7 +186,3 @@
     flex-direction: column;
     gap: 50px;
 }
-
-
-
-
