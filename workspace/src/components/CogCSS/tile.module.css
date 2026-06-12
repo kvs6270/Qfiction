@@ -1,6 +1,6 @@
 .tile{
     flex: 0 0 auto;
-    width: clamp(300px, 23.5vw, 500px);
+    width: clamp(200px, 23.5vw, 500px);
     aspect-ratio: 2/3;
     transition: transform 0.5s;
     background-size: contain;

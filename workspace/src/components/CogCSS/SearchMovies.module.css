@@ -1,7 +1,7 @@
 .searchContainer{
     display: flex;
     flex-direction: column;
-    font-size: 1.5rem;
+    font-size: clamp(0.75rem, 2vw, 2.5rem);
     background-color: white;
     color: rgb(0, 0, 0);
     position: relative;
@@ -32,7 +32,7 @@
 
 .Details{
     width: 50%;
-    font-size: 1.5rem;
+    font-size: inherit;
     font-weight: 600;
     display: flex;
     justify-content: center;
@@ -42,18 +42,18 @@
 
 .rating{
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     width: 20%;
+    gap: 5%;
 }
 
 .rating span{
-    position: relative;
-    right: 30px;
+
 }
 
 .svg{
-    transform: scale(0.3);
     display: inline;
+    flex-basis: 20%;
     
 }
