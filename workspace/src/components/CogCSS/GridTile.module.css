@@ -1,0 +1,14 @@
+.tile{
+    flex: 0 0 auto;
+    width: auto;
+    aspect-ratio: 2/3;
+    transition: transform 0.5s;
+    background-size: contain;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.tile:hover{
+    transform: scale(1.1);
+    
+}
