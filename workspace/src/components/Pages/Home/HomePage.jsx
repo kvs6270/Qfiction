@@ -326,7 +326,7 @@ function MegaSlider({ param, paramReccStrengthArray, paramBasedRecommendedMovies
 
 
                 <div style={{ marginTop: "50px" }} key={obj.id}>
-                    <h3 style={{ textAlign: "center", fontSize: "1.5rem" }} key={text}>{text}</h3>
+                    <h3 style={{ textAlign: "center", fontSize: "clamp(1rem, 2.5vw, 2.5rem)" }} key={text}>{text}</h3>
                     <Slider suggestionType={"TopRated"} movieArray={movieArray} identifierType={param} identifier={obj.id} error={error} loading={loading}></Slider>
                 </div>
 
