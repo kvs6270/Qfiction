@@ -40,6 +40,7 @@
 .TutorialImage{
     grid-area: 1/1/2/5;
     transform: translateX(-100%);
+    aspect-ratio: 5.211;
     opacity: 0;
     background-position: center;
     background-size: contain;
@@ -94,9 +95,9 @@
 .TutorialText{
     /* border: 2px solid brown; */
     grid-area: 2/5/5/7;
-    font-size: 1.3rem;
     display: flex;
     align-items: center;
+    container-type: inline-size;
 }
 
 .typingText {
@@ -107,6 +108,7 @@
     width: 0;
     opacity: 0;
     clip-path: inset(0 100% 0 0);
+    font-size: max(3px, 1.8vw);
 }
 
 .TutorialText.show .typingText {
@@ -129,9 +131,9 @@
     background-color: rgba(0, 0, 0, 0.6);
     display: grid;
     grid-template-rows: repeat(3, 1fr);
-    gap: 15px;
+    gap: clamp(5px,2vw,15px);
     grid-template-columns: repeat(6, 1fr);
-    padding: 15px;
+    padding: clamp(5px,2vw,15px);
     opacity: 1;
     transition: 0.3s;
 }
