@@ -4,7 +4,8 @@
 
 .GridContainer{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 23vw));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    justify-content: space-evenly;
     grid-auto-rows: auto;
     grid-auto-flow: row;
     gap: 1rem;
