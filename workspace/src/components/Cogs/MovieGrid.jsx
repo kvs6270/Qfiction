@@ -1,4 +1,4 @@
-import { Tile } from "./tile"
+import { Tile } from "./GridTile"
 import style from "../CogCSS/MovieGrid.module.css"
 
 export function MovieGrid({movieArray}) {
