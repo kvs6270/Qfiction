@@ -154,7 +154,7 @@ export function MoviePage({ movieObj, loading }) {
                     <div className={style.data}>
                         <div className={style.title}>
 
-                            <div style={{ fontSize: "3rem", color: "white" }}>
+                            <div style={{ fontSize: "clamp(1.5rem, 3vw, 4rem)", color: "white" }}>
                                 <span>
                                     {title}
 
@@ -163,7 +163,7 @@ export function MoviePage({ movieObj, loading }) {
 
 
 
-                            <div style={{ fontSize: "1rem", paddingLeft: "5px", color: "grey" }}>
+                            <div style={{ fontSize: "clamp(0.75rem, 1.5vw, 1.5rem)", paddingLeft: "5px", color: "grey" }}>
 
 
                                 <span>
