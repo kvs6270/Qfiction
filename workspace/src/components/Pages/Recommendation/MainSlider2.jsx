@@ -95,13 +95,13 @@ export function MainSlider2({recommendedMoviesOf2026, error, loading}) {
     else {
 
         return <div  className={style.SliderContainer}>
-                  <button className={style.Button} onClick={MoveBack} > &lt; </button>
+                  <button className={style.Button} onClick={MoveBack} > ❮ </button>
 
                   <div style={{transform: `translateX(-${counter*100}%)`}} className={style.TileContainer}>
                     {slider}
                   </div>
 
-                  <button className={style.Button} onClick={MoveFurther} > &gt; </button>
+                  <button className={style.Button} onClick={MoveFurther} > ❯ </button>
                 </div>
 
     }

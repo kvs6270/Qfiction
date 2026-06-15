@@ -194,7 +194,7 @@ export function RecommendationPage() {
 
 
                     <>
-                        <h3>Top Movies of 2026</h3>
+                        <h3 style={{fontSize: "clamp(1rem, 2.5vw, 2.5rem)"}}>Recommended Movies of 2026</h3>
                         <MainSlider2 recommendedMoviesOf2026={recommendedMovieObj} error={error} loading={loading}></MainSlider2>
                     </>
 
