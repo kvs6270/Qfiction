@@ -11,7 +11,11 @@ import { Welcome } from "./components/Pages/Welcome/Welcome.jsx";
 import { RecommendationGridView } from "./components/Pages/Recommendation/RecommendationGridView.jsx";
 import { RecommendationLayout } from "./components/Pages/Recommendation/RecommendationLayout.jsx";
 import { RecommendationPage } from "./components/Pages/Recommendation/RecommendationPage.jsx";
+import { NotFound } from "./components/Pages/NotFound/NotFound.jsx";
+
 import App from './App.jsx'
+
+
 
 const router = createBrowserRouter([
   {
@@ -53,6 +57,11 @@ const router = createBrowserRouter([
       {path: "Recommended/:identifierType/:identifier", element: <RecommendationGridView />}
       
     ],
+  },
+
+  {
+    path: "*",
+    element: <NotFound />,
   }
 
 

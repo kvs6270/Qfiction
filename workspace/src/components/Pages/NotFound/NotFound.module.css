@@ -1,0 +1,24 @@
+.OuterContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+}
+
+.Image{
+    background-image: url("./FC.png");
+    width: 50%;
+    aspect-ratio: 1454/705;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.5;
+
+}
+
+.Text{
+    color: white;
+    font-size: clamp(1rem, 2.7vw, 3.5rem);
+    position: absolute;
+}
