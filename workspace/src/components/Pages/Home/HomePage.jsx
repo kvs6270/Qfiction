@@ -209,7 +209,7 @@ export function HomePage() {
 
 
                     <>
-                        <h3>Top Movies of 2026</h3>
+                        <h3 style={{fontSize: "clamp(1rem, 2.5vw, 2.5rem)"}}>Top Movies of 2026</h3>
                         <MainSlider2 recommendedMoviesOf2026={recommendedMovieObj} error={error} loading={loading}></MainSlider2>
                     </>
 
@@ -275,12 +275,12 @@ function MegaSlider({ param, paramReccStrengthArray, paramBasedRecommendedMovies
     function sliderTitle(paramValue) {
         let heading;
         if (param == "genre") {
-            heading = `Recommended ${paramValue} movies`
+            heading = `Top-Rated ${paramValue} movies`
         }
 
         else if (param == "cast") {
 
-            heading = `Recommended movies with ${paramValue}`
+            heading = `Top-Rated movies with ${paramValue}`
         }
 
         else {
