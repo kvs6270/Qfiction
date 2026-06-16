@@ -75,7 +75,11 @@ export function MainSlider2({recommendedMoviesOf2026, error, loading}) {
     useInterval(MoveFurther, delay, resetTick)
 
     if(error) {
-        return <Error></Error>
+        // return <Error></Error>
+
+        return (
+          <div>Sum Ting-Wong</div>
+        )
     }
 
     else if(loading) {

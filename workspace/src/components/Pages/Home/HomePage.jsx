@@ -33,7 +33,24 @@ export function HomePage() {
     const [searchText, setSearchText] = useState("")
 
 
-    const { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4, genreNameArray, castNameArray, directorNameArray, nameError, nameLoading, skipped } = useOutletContext();
+    const { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4, genreNameArray, castNameArray, directorNameArray, nameError, nameLoading, skipped , fetchError} = useOutletContext();
+
+
+    console.log("error")
+    console.log(error)
+    console.log("error")
+    console.log("error2")
+    console.log(error2)
+    console.log("error2")
+    console.log("error3")
+    console.log(error3)
+    console.log("error3")
+    console.log("error4")
+    console.log(error4)
+    console.log("error4")
+    console.log("fetchError")
+    console.log(fetchError)
+    console.log("fetchError")
 
     const { moviesWatched, moviesToWatch } = useContext(WatchContext);
 

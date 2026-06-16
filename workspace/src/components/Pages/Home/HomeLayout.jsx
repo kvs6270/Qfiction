@@ -53,38 +53,60 @@ const API_KEY = "fdbaf2c187e091a33939c1663cbf099c"
 async function loadGenres() {
     if (!genreMap) {
         const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`);
+
+        if (!res.ok) {
+            throw new Error(
+                `Failed to fetch genres: ${res.status}`
+            );
+        }
         const data = await res.json();
 
-        genreMap = {};
+        if (!Array.isArray(data.genres)) {
+            throw new Error("TMDB genres response malformed");
+        }
+
+        const tempMap = {};
+
         data.genres.forEach(g => {
-            genreMap[g.id] = g.name;
+            tempMap[g.id] = g.name;
         });
+
+        genreMap = tempMap;
     }
 }
 
 async function genreNameArrayFecther(genreIdArray) {
-    await loadGenres();
+    try {
+        await loadGenres();
+    }
+    catch (err) {
+        throw new Error("Failed to fetch Genre manual")
+    }
     return genreIdArray.map((id, index) => {
         return { id, name: genreMap[id] }
-    }).filter(Boolean);
+    }).filter(item => item.name);
 }
 
 
 async function getPersonNames(idArray) {
-    const results = await Promise.all(
+    const results = await Promise.allSettled(
         idArray.map(async (id) => {
             const res = await fetch(
                 `https://api.themoviedb.org/3/person/${id}?api_key=${API_KEY}`
             );
 
-            if (!res.ok) return null;
+            if (!res.ok) {
+                throw new Error("Failed to fetch Actor")
+
+            };
 
             const data = await res.json();
             return { id, name: data.name };
         })
     );
 
-    return results.filter(Boolean);
+    return results.filter(r => r.status === "fulfilled")
+        .map(r => r.value);
 }
 
 
@@ -106,7 +128,20 @@ async function fetchGenreIdArray(genre) {
     const res = await fetch(
         `https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`
     );
+
+    if (!res.ok) {
+        throw new Error(
+            `Failed to fetch genres: ${res.status}`
+        );
+    }
+
     const data = await res.json();
+
+    if (!Array.isArray(data.genres)) {
+        throw new Error("TMDB genres response malformed");
+    }
+
+
 
     let genreIdArray = data.genres.filter(obj => {
         return genre.includes(obj.name)
@@ -133,16 +168,24 @@ async function fetchCastIdArray(cast) {
         const res = await fetch(
             `https://api.themoviedb.org/3/search/person?api_key=${API_KEY}&query=${encodeURIComponent(name)}`
         );
+
+        if (!res.ok) {
+            throw new Error("Failed to fetch ID for" + name)
+        }
+
         const data = await res.json();
 
         return { name: name, id: data.results[0]?.id || null };
     }
 
+
     const castFetchPromiseArray = cast.map(actor => fetchActorIdByName(actor, "fdbaf2c187e091a33939c1663cbf099c"));
 
     const castBasedIdArray = await Promise.allSettled(castFetchPromiseArray);
 
-    let castIdArray = castBasedIdArray.map(obj => obj.value)
+    let castIdArray = castBasedIdArray
+        .filter(r => r.status === "fulfilled")
+        .map(obj => obj.value)
 
 
     return castIdArray;
@@ -157,6 +200,11 @@ async function fetchDirectorIdArray(director) {
         const res = await fetch(
             `https://api.themoviedb.org/3/search/person?api_key=${API_KEY}&query=${encodeURIComponent(name)}`
         );
+
+        if (!res.ok) {
+            throw new Error("Failed to fetch ID for" + name)
+        }
+
         const data = await res.json();
 
         return { name: name, id: data.results[0]?.id || null };
@@ -166,7 +214,9 @@ async function fetchDirectorIdArray(director) {
 
     const directorBasedIdArray = await Promise.allSettled(directorFetchPromiseArray);
 
-    let directorIdArray = directorBasedIdArray.map(obj => obj.value)
+    let directorIdArray = directorBasedIdArray
+        .filter(r => r.status === "fulfilled")
+        .map(obj => obj.value)
 
 
     return directorIdArray;
@@ -180,25 +230,38 @@ function useFetchIds(genre, casts, directors) {
     const [castIdArray, setCastIdArray] = useState([]);
     const [directorIdArray, setDirectorIdArray] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false)
 
     useEffect(() => {
         let isMounted = true;
 
         async function fetchAll() {
             try {
-                const [g, c, d] = await Promise.all([
+                const [g, c, d] = await Promise.allSettled([
                     fetchGenreIdArray(genre),
                     fetchCastIdArray(casts),
                     fetchDirectorIdArray(directors)
                 ]);
 
                 if (isMounted) {
-                    setGenreIdArray(g);
-                    setCastIdArray(c);
-                    setDirectorIdArray(d);
+                    if (g.status === "fulfilled")
+                        setGenreIdArray(g.value);
+                    if (c.status === "fulfilled")
+                        setCastIdArray(c.value);
+                    if (d.status === "fulfilled")
+                        setDirectorIdArray(d.value);
+
+                    const errors = [g, c, d]
+                        .filter(r => r.status === "rejected")
+                        .map(r => r.reason);
+
+                    if (errors.length) {
+                        setError(errors);
+                    }
                 }
             } catch (e) {
-                console.log(e);
+                console.log(e)
+                setError(e);
             } finally {
                 if (isMounted) setLoading(false);
             }
@@ -209,7 +272,7 @@ function useFetchIds(genre, casts, directors) {
         return () => (isMounted = false);
     }, []);
 
-    return { genreIdArray, castIdArray, directorIdArray, loading };
+    return { genreIdArray, castIdArray, directorIdArray, loading, error };
 }
 
 
@@ -242,7 +305,7 @@ function useSingleFetch(year, page, paramType) {
 
                 setMovieObj(movieObjArray);
             } catch (error) {
-                setError(true)
+                setError(error)
                 console.log(error)
 
             } finally {
@@ -304,16 +367,28 @@ function useMultiFetch(params, paramType, page,) {
 
 
 
+
+
                 const paramBasedMovieObj = {};
 
-                paramBasedMovieArrays.forEach((movies, index) => {
-                    paramBasedMovieObj[params[index]] = movies.value;
+                paramBasedMovieArrays.forEach((result, index) => {
+                    if (result.status === "fulfilled") {
+                        paramBasedMovieObj[params[index]] = result.value;
+                    }
                 });
 
                 if (isMounted) setParamBasedMovies(paramBasedMovieObj);
 
+                const failures =
+                    paramBasedMovieArrays.filter(r => r.status === "rejected");
+
+                if (failures.length) {
+                    setError("Failure!")
+                }
+
+
             } catch (error) {
-                if (isMounted) setError(true);
+                if (isMounted) setError(error);
                 console.log(error);
 
             } finally {
@@ -355,23 +430,29 @@ function useNameArrayFetcher(genreIdArray, castIdArray, directorIdArray) {
         const fetcherFunc = async () => {
 
             try {
-                const [genres, casts, directors] = await Promise.all([
+                const [genres, casts, directors] = await Promise.allSettled([
                     genreNameArrayFecther(genreIdArray),
                     castNameArrayFecther(castIdArray),
                     directorNameArrayFecther(directorIdArray),
                 ]);
 
                 if (!isMounted) return;
-                setGenreNameArray(genres)
+                if (genres.status === "fulfilled") { setGenreNameArray(genres.value) }
 
-                setCastNameArray(casts)
+                if (casts.status === "fulfilled") { setCastNameArray(casts.value) }
 
-                setDirectorNameArray(directors)
+                if (directors.status === "fulfilled") { setDirectorNameArray(directors.value) }
 
-                console.log("UPDATED REF VALUES:");
-                console.log("genres:", genres);
-                console.log("casts:", casts);
-                console.log("directors:", directors);
+
+                const errors = [genres, casts, directors]
+                    .filter(r => r.status === "rejected")
+                    .map(r => r.reason);
+
+                if (errors.length) {
+                    setError(errors);
+                }
+
+
             }
 
             catch (error) {
@@ -411,7 +492,7 @@ export function HomeLayout() {
 
     if (moviesWatched.length === 0 || !moviesWatched) {
 
-        const { genreIdArray, castIdArray, directorIdArray } = useFetchIds(genreFallbackArray, castFallbackArray, directorFallbackArray);
+        const { genreIdArray, castIdArray, directorIdArray, error: fetchError } = useFetchIds(genreFallbackArray, castFallbackArray, directorFallbackArray);
 
         const genreIds = useMemo(
             () => genreIdArray?.map(item => item.id) || [],
@@ -442,20 +523,11 @@ export function HomeLayout() {
         const { paramBasedMovies: directorBasedMovies, error: error4, loading: loading4 } = useMultiFetch(directorIds, "Director", 1);
 
 
-        console.log("genreFallbackArray")
-        console.log(genreFallbackArray)
-        console.log("genreFallbackArray")
-        console.log("castFallbackArray")
-        console.log(castFallbackArray)
-        console.log("castFallbackArray")
-        console.log("directorFallbackArray")
-        console.log(directorFallbackArray)
-        console.log("directorFallbackArray")
 
 
         return (
             <Outlet context={
-                { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4, genreNameArray: genreIdArray, castNameArray: castIdArray, directorNameArray: directorIdArray, nameLoading: false, skipped: true }} />
+                { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4, genreNameArray: genreIdArray, castNameArray: castIdArray, directorNameArray: directorIdArray, nameLoading: false, skipped: true, fetchError }} />
         )
 
 
@@ -493,7 +565,7 @@ export function HomeLayout() {
             [reccStrengthObj]
         );
 
-        const { genreNameArray, castNameArray, directorNameArray, error: nameError, loading: nameLoading } = useNameArrayFetcher(genreIdArray, castIdArray, directorIdArray)
+        const { genreNameArray, castNameArray, directorNameArray, error: fetchError, loading: nameLoading } = useNameArrayFetcher(genreIdArray, castIdArray, directorIdArray)
 
 
 
@@ -525,7 +597,7 @@ export function HomeLayout() {
         return (
 
             <Outlet context={
-                { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4, genreNameArray, castNameArray, directorNameArray, nameLoading, skipped: false }
+                { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4, genreNameArray, castNameArray, directorNameArray, nameLoading, skipped: false, fetchError }
             } />
 
 
