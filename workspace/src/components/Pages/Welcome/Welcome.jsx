@@ -62,11 +62,11 @@ export function Welcome() {
                     <div className={style.mainContainer}>
                         <div className={style.wheelContainer}>
                             <div className={style.radialContainer}>
-                               
+
                             </div>
                         </div>
                         <div className={style.introSection}>
-                    
+
                             <div className={style.imageContainer}>
                             </div>
                         </div>
@@ -271,24 +271,41 @@ function SummaryGrid({ movieArray, removerFunc, clearSelectedId }) {
 
 
 
-    let collectionOfTiles = movieArray.map(item => (
+    let collectionOfTiles = movieArray.map(item =>
 
-        <div className={style2.SummaryTile}>
-            {item.title}
+        (<SummaryTile item={item} removerFunc={removerFunc} clearSelectedId={clearSelectedId} />)
 
-            <button onClick={() => {
-                removerFunc(item)
-                clearSelectedId();
-            }}>x</button>
-
-        </div>
-
-    ))
+    )
 
 
     return (
         <>
             {collectionOfTiles}
         </>
+    )
+}
+
+
+function SummaryTile({ item, removerFunc, clearSelectedId }) {
+
+    const [hovered, setHovered] = useState(false)
+    return (
+        <div
+            onMouseEnter={() => { setHovered(true) }}
+            onMouseLeave={() => { setHovered(false) }}
+
+
+            onClick={() => {
+                removerFunc(item)
+                clearSelectedId();
+            }
+            } className={style2.SummaryTile}>
+
+            <span className={hovered ? `${style2.hidden}` : ""}>{item.title}</span>
+            <span style={{position: "absolute"}} className={hovered ? "" : `${style2.hidden}`}>Delete</span>
+
+
+
+        </div>
     )
 }

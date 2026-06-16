@@ -1,5 +1,5 @@
-.Dialog{
-    background-color: rgba(179, 179, 179, 0.832);
+.Dialog {
+    background-color: rgb(98 96 96 / 55%);
     color: white;
     display: flex;
     position: fixed;
@@ -15,31 +15,42 @@
     top: 12.5%;
 
 }
-.Input{
+
+.Dialog h2 {
+    text-align: center;
+    font-size: clamp(1rem, 2vw, 3rem);
+}
+
+
+.Input {
 
     width: 50%;
     height: 40px;
     font-size: 1.5rem;
-    border-radius:60px ;
+    border-radius: 60px;
+    border: none;
 
 }
 
-input{
+input {
     width: 100%;
     height: 100%;
     border-radius: 60px;
     padding: 10px;
+    border: none;
 }
-.SearchScreen{
+
+.SearchScreen {
     width: 80%;
     height: 60%;
     overflow: auto;
 
 
-    
+
 }
-.SummaryGrid{
-    
+
+.SummaryGrid {
+
     width: 80%;
     display: flex;
     flex-direction: row;
@@ -48,22 +59,40 @@ input{
     overflow-y: visible;
     padding: 10px;
     scrollbar-width: none;
-    
+
 }
 
-.SummaryTile{
-    min-width: 30%;
+.SummaryTile {
+    /* min-width: 30%; */
     width: max-content;
     white-space: nowrap;
     flex-shrink: 0;
     border: 2px solid gray;
-    background-color: white;
-    color: black;
-    font-size: 1rem;
-    position:relative;
+    background-color: black;
+    color: white;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-radius: 30px;
+    text-align: center;
+    padding: 10px;
+    transition: all 0.25s;
 }
 
-.SummaryTile button{
+.SummaryTile:hover {
+    cursor: default;
+    background-color: rgba(211, 1, 1, 0.743);
+    color: white;
+    transition: all 0.25s;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+.SummaryTile button {
     position: absolute;
     aspect-ratio: 1;
     width: 20px;
@@ -73,14 +102,14 @@ input{
     border-radius: 50%;
 }
 
-.ButtonFooter{
+.ButtonFooter {
     display: flex;
     justify-content: space-between;
-   justify-self:center;
-   width: 70%;
-   height: 55px;
-   border-radius: 40px;
-   
+    justify-self: center;
+    width: 70%;
+    height: 55px;
+    border-radius: 40px;
+
 
 
 }
@@ -89,36 +118,41 @@ input{
     width: 100px;
     height: 100%;
     transition: 0.5s all;
-    background-color: green;
+    background-color: black;
     border-radius: 20px;
     font-size: 1.3rem;
-    
+    border: none;
+    color: white;
+
 }
+
 .ButtonFooter .SkipButton {
     width: 80px;
     height: 90%;
     transition: 0.5s all;
-    background-color: rgb(159, 212, 231);
+    background-color: rgb(183, 221, 235);
     border-radius: 20px;
     font-size: 1.3rem;
-    
+    border: none;
+
 }
+
 .ButtonFooter .DoneButton:hover {
-   transform: scale(1.5);
+    transform: scale(1.1);
     transition: 0.5s all;
 }
 
 
 .ButtonFooter .DoneButton:disabled {
-    transform: scale(0.75);
-     transition: 0.5s all;
-     background-color: gray;
+    transform: scale(0.7);
+    transition: 0.5s all;
+    background-color: gray;
 
 }
 
 
 .ButtonFooter button:disabled:hover {
-     transition: 0.5s all;
-     transform: scale(0.75);
+    transition: 0.5s all;
+    transform: scale(0.75);
 
 }
