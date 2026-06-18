@@ -15,6 +15,7 @@ import { fetchFunc } from "../../../logic/fetchFunc";
 import { castbasedRecommender } from "../../../logic/castBasedRecommender";
 import { directorBasedRecommender } from "../../../logic/directorBasedRecommender";
 import { Loading } from "../../Cogs/Loading";
+import { SearchMovies } from "../../Cogs/SearchMovies";
 // It's own fetching logic.
 
 
@@ -72,9 +73,13 @@ export function RecommendationGridView() {
     const { moviesWatched } = useContext(WatchContext)
     const { identifierType, identifier } = useParams();
 
+    const [search, setSearch] = useState(false)
+    const [focused, setFocused] = useState(false)
+    const [searchText, setSearchText] = useState("")
+
     let { movieArray, error, loading } = useMovieDetailsFetcher(identifier, identifierType, 1)
 
-    
+
 
 
 
@@ -115,11 +120,80 @@ export function RecommendationGridView() {
 
         return (
             <div>
-                <Navbar />
+                <Navbar search={search} searchSetter={() => {
+                    setSearch(!search)
+                    setFocused(false)
+                    setSearchText("")
+                }}></Navbar>
 
-                <div className={style.GridContainer}>
-                    <MovieGrid movieArray={recommendedMovies}></MovieGrid>
+
+                <div className={search ? `${style.searchInput} ${style.Engaged}` : `${style.searchInput}`}>
+
+                    <input
+
+                        onFocus={() => {
+                            setFocused(true)
+                        }}
+
+
+                        value={searchText}
+
+                        onChange={(e) => setSearchText(e.target.value)}
+                        type="text"
+                        placeholder="Search..." />
+
+
                 </div>
+
+
+                {focused
+
+                    ?
+
+                    <div className={style.searchFields}>
+
+                        <div className={style.ExternalSearchContainer}>
+                            <SearchMovies searchString={searchText} />
+                        </div>
+
+                    </div>
+
+                    :
+
+                    <div className={[
+                        style.GridContainer,
+                        search && style.Searcher,
+                        focused && style.Focused
+                    ]
+                        .filter(Boolean)
+                        .join(" ")}>
+
+
+
+
+
+
+
+                        <MovieGrid movieArray={recommendedMovies}></MovieGrid>
+
+
+                    </div>
+
+
+
+                }
+
+
+
+
+
+
+
+
+
+
+
+
             </div>
         )
     }

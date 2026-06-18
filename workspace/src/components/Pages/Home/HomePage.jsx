@@ -1,12 +1,24 @@
 import { Slider } from "../../Cogs/slider";
 import { topRated } from "../../../logic/TopRated";
-import React, { useState, useEffect, useRef, useMemo } from "react";
-import { useNavigate, useOutletContext } from "react-router";
+import { useContext, useMemo } from "react";
+import { useOutletContext } from "react-router";
 import { Navbar } from "../../Cogs/Navbar";
-import { Loading } from "../../Cogs/Loading";
-import style from "./HomePage.module.css"
 
-import style2 from "./MainSlider2.module.css"
+
+import { movieOrganizer } from "../../../logic/ReccomendationAlgorithm";
+import { genreBasedRecommender } from "../../../logic/genreBasedRecommender";
+import { ReccStrengthProvider } from "../../../logic/ReccStrengthProvider";
+import { WatchContext } from "../../../App";
+import { directorBasedRecommender } from "../../../logic/directorBasedRecommender";
+import { castbasedRecommender } from "../../../logic/castBasedRecommender";
+import { MainSlider2 } from "./MainSlider2.jsx";
+import style from "./HomePage.module.css"
+import { Loading } from "../../Cogs/Loading";
+
+import { useState } from "react";
+import { SearchMovies } from "../../Cogs/SearchMovies";
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
 
 
@@ -16,17 +28,43 @@ import style2 from "./MainSlider2.module.css"
 
 export function HomePage() {
 
-    // const {topRatedMovieObj, error, loading} = useSingleFetch(/* Insert URL */);
-    // const {genreBasedTopRatedMoviesObj, error: error2, loading: loading2} = useMultiFetch(/* genres array*/);
-
-    const { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4 } = useOutletContext();
-
+    const [search, setSearch] = useState(false)
+    const [focused, setFocused] = useState(false)
+    const [searchText, setSearchText] = useState("")
 
 
-    const topRatedMovieObj = useMemo(() => {
-        if(movieObj.length === 0) return []
+    const { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4, genreNameArray, castNameArray, directorNameArray, nameError, nameLoading, skipped } = useOutletContext();
+
+    const { moviesWatched, moviesToWatch } = useContext(WatchContext);
+
+
+        const reccStrengthObj = useMemo(() => {
+            return ReccStrengthProvider(moviesWatched)
+        }, [moviesWatched])
+
+        console.log("reccStrengthObj")
+        console.log(reccStrengthObj)
+
+
+
+
+    // const movieOrganizerMemo = useMemo(() => {
+    //     if (loading || !movieObj) return null; // wait until data loaded
+    //     return movieOrganizer(moviesWatched, movieObj);
+    // }, [moviesWatched, movieObj, loading]);
+
+
+
+
+
+
+    const recommendedMovieObj = useMemo(() => {
+        if (!movieObj) return [];
+
+
         return topRated(movieObj, 100);
-    }, [movieObj])
+    }, [movieObj, error, loading]);
+
 
 
 
@@ -34,195 +72,164 @@ export function HomePage() {
 
     const genreBasedTopRatedMoviesObj = useMemo(() => {
 
-        if(Object.keys(genreBasedMovies).length === 0) return {}
+
+        if (loading2) return {}
 
         const genreBasedTopRatedMoviesObjProto = {};
 
+
         for (const genre in genreBasedMovies) {
+
+            console.log("genreBasedMovies[genre]")
+            console.log(genreBasedMovies[genre])
+            console.log("genreBasedMovies[genre]")
+
+
 
             genreBasedTopRatedMoviesObjProto[genre] = topRated(genreBasedMovies[genre], 100);
         }
 
 
+
         return genreBasedTopRatedMoviesObjProto;
-    }, [genreBasedMovies])
+
+
+    }, [genreBasedMovies, moviesWatched, loading2, error2])
+
 
 
 
 
     const castBasedTopRatedMoviesObj = useMemo(() => {
-         if(Object.keys(castBasedMovies).length === 0) return {}
+        if (loading3) return {}
 
         const castBasedTopRatedMoviesObjProto = {};
 
         for (const cast in castBasedMovies) {
 
+            console.log("castBasedMovies[cast]")
+            console.log(castBasedMovies[cast])
+            console.log("castBasedMovies[cast]")
+
             castBasedTopRatedMoviesObjProto[cast] = topRated(castBasedMovies[cast], 100);
         }
 
         return castBasedTopRatedMoviesObjProto;
-    }, [castBasedMovies])
+    }, [castBasedMovies, moviesWatched, loading3, error3])
+
+
+
+
 
 
     const directorBasedTopRatedMoviesObj = useMemo(() => {
-         if(Object.keys(directorBasedMovies).length === 0) return {}
+        if (loading4) return {}
 
         const directorBasedTopRatedMoviesObjProto = {};
 
         for (const director in directorBasedMovies) {
 
+            console.log("directorBasedMovies[director]")
+            console.log(directorBasedMovies[director])
+            console.log("directorBasedMovies[director]")
+
             directorBasedTopRatedMoviesObjProto[director] = topRated(directorBasedMovies[director], 100);
         }
 
         return directorBasedTopRatedMoviesObjProto;
-    }, [directorBasedMovies])
+    }, [directorBasedMovies, moviesWatched, loading4, error4])
+
+
+    console.log("genreBasedTopRatedMoviesObj")
+    console.log(genreBasedTopRatedMoviesObj)
+    console.log("castBasedTopRatedMoviesObj")
+    console.log(castBasedTopRatedMoviesObj)
+    console.log("directorBasedTopRatedMoviesObj")
+    console.log(directorBasedTopRatedMoviesObj)
+
+
 
 
     return (
 
-        <div>
-            <Navbar></Navbar>
+        <div className={style.bodyProto}>
+            <Navbar search={search} searchSetter={() => {
+                setSearch(!search)
+                setFocused(false)
+                setSearchText("")
+            }}></Navbar>
 
 
 
-            <div className={style.HomePage}>
+            <div className={search ? `${style.searchInput} ${style.Engaged}` : `${style.searchInput}`}>
+
+                <input
+
+                    onFocus={() => {
+                        setFocused(true)
+                    }}
 
 
-                < >
-                    <h3>Top Movies of 2026</h3>
-                    <MainSlider2 topRatedMoviesOf2026={topRatedMovieObj} error={error} loading={loading}></MainSlider2>
-                </>
+                    value={searchText}
 
-                <MegaSlider mainParam="Genre" paramBasedTopRatedMoviesObj={genreBasedTopRatedMoviesObj} error={error2} loading={loading2} ></MegaSlider>
-                <MegaSlider mainParam="Cast" paramBasedTopRatedMoviesObj={castBasedTopRatedMoviesObj} error={error3} loading={loading3} ></MegaSlider>
+                    onChange={(e) => setSearchText(e.target.value)}
+                    type="text"
+                    placeholder="Search..." />
 
-
-                <MegaSlider mainParam="Director" paramBasedTopRatedMoviesObj={directorBasedTopRatedMoviesObj} error={error4} loading={loading4} ></MegaSlider>
-                <Loading></Loading>
 
             </div>
-        </div>
 
 
+            {focused
 
-    )
+                ?
 
-}
+                <div className={style.searchFields}>
 
+                    <div className={style.ExternalSearchContainer}>
+                        <SearchMovies searchString={searchText} />
+                    </div>
 
-
-
-function useInterval(callback, delay, reset) {
-    const savedCallback = useRef();
-
-    // Remember the latest callback.
-    useEffect(() => {
-        savedCallback.current = callback;
-    }, [callback]);
-
-    // Set up the interval.
-    useEffect(() => {
-        function tick() {
-            savedCallback.current();
-        }
-        if (delay !== null) {
-            let id = setInterval(tick, delay);
-            return () => clearInterval(id);
-        }
-    }, [delay, reset]);
-
-
-}
-
-function SliderTile({ movieObj }) {
-
-    let navigate = useNavigate();
-
-    let bgImg = movieObj.backdrop;
-
-    console.log("BackGround Image of main Slider:\t" + bgImg)
-
-
-    return (
-        <div style={{ backgroundImage: `URL(${bgImg})` }} className={style2.Tile} onClick={() => {
-            navigate(`/Movie/${movieObj.id}`)
-        }}>
-            <h1>{movieObj.title}</h1>
-        </div>
-    )
-}
-
-
-
-function MainSlider2({ topRatedMoviesOf2026, error, loading }) {
-    let iteratorArray = [...topRatedMoviesOf2026];
-
-    let slider = [];
-
-
-    let [counter, setCounter] = useState(0)
-
-    let [delay, setDelay] = useState(4000)
-
-    let [resetTick, setResetTick] = useState(0)
-
-
-    for (const movieObj of iteratorArray) {
-        console.log(movieObj)
-        slider.push(<SliderTile movieObj={movieObj} key={movieObj.title} />);
-    }
-
-
-
-
-    function MoveFurther() {
-        setCounter(c => (c + 1) % slider.length)
-        setResetTick(resetTick + 1)
-
-    }
-
-    function MoveBack() {
-        setCounter(c => (c - 1) % slider.length)
-        setResetTick(resetTick - 1)
-    }
-
-    useInterval(MoveFurther, delay, resetTick)
-
-    if (error) {
-        return (
-
-            <Error></Error>
-
-        )
-    }
-
-    else if (loading) {
-        return (
-            <div className={style2.SliderContainer}>
-                <button className={style2.Button} disabled>&lt;</button>
-
-                <div className={style2.TileContainer}>
-                    <Loading />
                 </div>
 
-                <button className={style2.Button} disabled>&gt;</button>
-            </div>
-        )
-    }
+                :
 
-    else {
+                <div className={[
+                    style.HomePage,
+                    search && style.Searcher,
+                    focused && style.Focused
+                ]
+                    .filter(Boolean)
+                    .join(" ")}>
 
-        return <div className={style2.SliderContainer}>
-            <button className={style2.Button} onClick={MoveBack} > &lt; </button>
 
-            <div style={{ transform: `translateX(-${counter * 100}%)` }} className={style2.TileContainer}>
-                {slider}
-            </div>
 
-            <button className={style2.Button} onClick={MoveFurther} > &gt; </button>
+
+
+
+
+                    <>
+                        <h3>Top Movies of 2026</h3>
+                        <MainSlider2 recommendedMoviesOf2026={recommendedMovieObj} error={error} loading={loading}></MainSlider2>
+                    </>
+
+                    <MegaSlider skipped={skipped} nameLoading={nameLoading} paramNameArray={genreNameArray} param={"genre"} paramReccStrengthArray={reccStrengthObj.genreReccStrengthArray} paramBasedRecommendedMoviesObj={genreBasedTopRatedMoviesObj} error={error2} loading={loading2} ></MegaSlider>
+                    <MegaSlider skipped={skipped} nameLoading={nameLoading} paramNameArray={castNameArray} param={"cast"} paramReccStrengthArray={reccStrengthObj.castReccStrengthArray} paramBasedRecommendedMoviesObj={castBasedTopRatedMoviesObj} error={error3} loading={loading3} ></MegaSlider>
+                    <MegaSlider skipped={skipped} nameLoading={nameLoading} paramNameArray={directorNameArray} param={"director"} paramReccStrengthArray={reccStrengthObj.directorReccStrengthArray} paramBasedRecommendedMoviesObj={directorBasedTopRatedMoviesObj} error={error4} loading={loading4} ></MegaSlider>
+
+                </div>
+
+
+
+            }
+
+
+
+
         </div>
 
-    }
+    )
+
 }
 
 
@@ -230,21 +237,50 @@ function MainSlider2({ topRatedMoviesOf2026, error, loading }) {
 
 
 
-function MegaSlider({ mainParam, paramBasedTopRatedMoviesObj, error, loading }) {
+
+
+
+
+
+function MainSlider({ recommendedMoviesOf2026, error, loading }) {
+
+
+
+
+
+    if (error) {
+        return <Error></Error>
+    }
+    else if (loading) {
+        return <Loading></Loading>
+
+    }
+    else {
+        return <Slider suggestionType={"Recommended"} movieArray={recommendedMoviesOf2026} identifierType={"Year"} identifier={2026}></Slider>
+    }
+
+}
+
+
+function MegaSlider({ param, paramReccStrengthArray, paramBasedRecommendedMoviesObj, error, loading, paramNameArray, nameLoading, skipped }) {
+
+    console.log("paramNameArray")
+    console.log(paramNameArray)
+
+    console.log("paramBasedRecommendedMoviesObj")
+    console.log(paramBasedRecommendedMoviesObj)
 
 
 
     function sliderTitle(paramValue) {
-
-
         let heading;
-        if (mainParam == "Genre") {
-            heading = `Top Rated ${paramValue} movies`
+        if (param == "genre") {
+            heading = `Recommended ${paramValue} movies`
         }
 
-        else if (mainParam == "Cast") {
+        else if (param == "cast") {
 
-            heading = `Top Rated movies with ${paramValue}`
+            heading = `Recommended movies with ${paramValue}`
         }
 
         else {
@@ -258,66 +294,97 @@ function MegaSlider({ mainParam, paramBasedTopRatedMoviesObj, error, loading }) 
 
 
 
+    let arrayOfSLiders = []
+
+    let counter = 0;
 
 
-    //Here, since paramBasedTopRa... is empty, no slider is getting created, hence no loading skeleton.
+    if (skipped) {
 
-    let arrayOfSLiders = [];
+        
+
+        paramNameArray.forEach(obj => {
+            let movieArray;
+
+            const text = sliderTitle(obj.name);
+
+            if( !paramBasedRecommendedMoviesObj || Object.keys(paramBasedRecommendedMoviesObj).length === 0) {
+                movieArray = [];
+            }
+
+            else {
+
+                    movieArray = paramBasedRecommendedMoviesObj[obj.id];
+            }
+
+            
+
+
+
+            arrayOfSLiders.push(
+
+
+
+                <div style={{ marginTop: "50px" }} key={obj.id}>
+                    <h3 style={{ textAlign: "center", fontSize: "1.5rem" }} key={text}>{text}</h3>
+                    <Slider suggestionType={"TopRated"} movieArray={movieArray} identifierType={param} identifier={obj.id} error={error} loading={loading}></Slider>
+                </div>
+
+            )
+
+            counter++
+        });
     
-
-    if(/* loading && */ Object.keys(paramBasedTopRatedMoviesObj).length === 0) {
-
-        
-
-        
-        for (let i = 0; i < 5; i++) {
-        arrayOfSLiders.push(
-            <React.Fragment key={`Loader-${i+1}`}>
-                <h3 style={{textAlign: "center", fontSize: "1.5rem"}}>Loading...</h3>
-                <Slider
-                    identifierType={mainParam}
-                    suggestionType="TopRated"
-                    movieArray={[]}
-                    loading={true}
-                    error={false}
-                />
-            </React.Fragment>
-        );
-    }
-
-    }
-
-    else{
-
-        console.log("I shouldn't be here")
-        for (const param in paramBasedTopRatedMoviesObj) {
-           
-
-
-     
-            let text = sliderTitle(param);
-        arrayOfSLiders.push(
-            <div style={{marginTop: "60px"}} key={param}>
-                <h3 style={{textAlign: "center", fontSize: "1.5rem"}}>{text}</h3>
-                <Slider identifierType={mainParam} suggestionType={"TopRated"} movieArray={paramBasedTopRatedMoviesObj[param]} identifier={param} error={error} loading={loading}></Slider>
-            </div>
-
-        )
-        
-    }
-    }
-
-
-
     
+    }
+    else {
+        for (const obj of paramReccStrengthArray) {
+
+            let text;
+
+            if (!nameLoading) {
+                let identifier = paramNameArray.find(item => {
+
+
+
+                    return item.id == obj[param]
+                })
+
+                console.log("identifier")
+                console.log(identifier)
+
+                text = sliderTitle(identifier.name);
+            }
+
+            else {
+                text = "";
+            }
+
+
+
+
+            arrayOfSLiders.push(
+
+
+
+                <div style={{ marginTop: "50px" }} key={obj[param]}>
+                    <h3 style={{ textAlign: "center", fontSize: "1.5rem" }} key={text}>{text}</h3>
+                    <Slider suggestionType={"Recommended"} movieArray={paramBasedRecommendedMoviesObj[obj[param]]} identifierType={param} identifier={obj[param]} error={error} loading={loading}></Slider>
+                </div>
+
+            )
+        }
+    }
+
+
 
     return (
-        <div className={style.SliderContainer}>
+        <div className="SliderContainer">
+
             {arrayOfSLiders}
         </div>
     );
 }
-
 
 
 

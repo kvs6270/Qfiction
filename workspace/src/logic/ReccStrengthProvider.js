@@ -4,10 +4,7 @@ export function ReccStrengthProvider(inputDB, topGenreNum = 3, topDirectorNum = 
     console.log("ReccStrengthProvider")
     console.log(inputDB)
 
-    if (inputDB.length == 0) {
-        console.log("Watch something Nigger!!");
-        return;
-    }
+    
 
 
     let genreReccStrength = {}
@@ -17,6 +14,10 @@ export function ReccStrengthProvider(inputDB, topGenreNum = 3, topDirectorNum = 
 
 
     let castReccStrength = {}
+    
+    if (inputDB.length == 0) {
+        return {genreReccStrengthArray:[], castReccStrengthArray:[], directorReccStrengthArray:[]} ;
+    }
 
     
 

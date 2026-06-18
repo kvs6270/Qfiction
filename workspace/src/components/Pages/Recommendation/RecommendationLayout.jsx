@@ -13,6 +13,9 @@ import { ReccStrengthProvider } from "../../../logic/ReccStrengthProvider.js";
 import style from "./RecommendationLayout.module.css"
 import { Navbar } from "../../Cogs/Navbar.jsx";
 import { useRef } from "react";
+import { searchMovies } from "../../../logic/searchMovies.js";
+import { useNavigate } from "react-router";
+import { SearchMovies } from "../../Cogs/SearchMovies.jsx";
 
 
 let genreMap = null;
@@ -33,7 +36,7 @@ async function loadGenres() {
 async function genreNameArrayFecther(genreIdArray) {
     await loadGenres();
     return genreIdArray.map((id, index) => {
-        return {id,name: genreMap[id]}
+        return { id, name: genreMap[id] }
     }).filter(Boolean);
 }
 
@@ -48,7 +51,7 @@ async function getPersonNames(idArray) {
             if (!res.ok) return null;
 
             const data = await res.json();
-            return {id, name:data.name};
+            return { id, name: data.name };
         })
     );
 
@@ -296,11 +299,11 @@ function useNameArrayFetcher(genreIdArray, castIdArray, directorIdArray) {
         setError(false)
         setLoading(true)
 
-        
-            const fetcherFunc = async () => {
 
-                try{
-                    const [genres, casts, directors] = await Promise.all([
+        const fetcherFunc = async () => {
+
+            try {
+                const [genres, casts, directors] = await Promise.all([
                     genreNameArrayFecther(genreIdArray),
                     castNameArrayFecther(castIdArray),
                     directorNameArrayFecther(directorIdArray),
@@ -317,22 +320,22 @@ function useNameArrayFetcher(genreIdArray, castIdArray, directorIdArray) {
                 console.log("genres:", genres);
                 console.log("casts:", casts);
                 console.log("directors:", directors);
-                }
+            }
 
-                catch (error){
-                    if (isMounted) setError(true)
-                    console.log(error)
-                }
+            catch (error) {
+                if (isMounted) setError(true)
+                console.log(error)
+            }
 
-                finally {
-                    if (isMounted) setLoading(false)
+            finally {
+                if (isMounted) setLoading(false)
 
-                }
-            };
+            }
+        };
 
-            fetcherFunc();
+        fetcherFunc();
 
-        
+
 
         return () => {
             isMounted = false;
@@ -340,31 +343,96 @@ function useNameArrayFetcher(genreIdArray, castIdArray, directorIdArray) {
     }, [genreIdArray, castIdArray, directorIdArray]);
 
 
-    return {genreNameArray, castNameArray, directorNameArray, error, loading}
+    return { genreNameArray, castNameArray, directorNameArray, error, loading }
 }
 
 
 
 
 export function RecommendationLayout() {
+    const [search, setSearch] = useState(false)
+    const [focused, setFocused] = useState(false)
+    const [searchText, setSearchText] = useState("")
+
 
     const { moviesWatched, moviesToWatch } = useContext(WatchContext)
 
     if (moviesWatched.length === 0 || !moviesWatched) {
         return (
             <React.Fragment>
-                <Navbar />
-                <div className={style.EmptyPageContainer}>
+                <Navbar search={search} searchSetter={() => {
+                    setSearch(!search)
+                    setFocused(false)
+                    setSearchText("")
+                }}></Navbar>
 
-                    <div className={style.icon}>
-                        <svg fill="#ffffff" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>box</title> <path d="M1.735 17.832l12.054 6.081 2.152-6.081-12.053-5.758-2.153 5.758zM16.211 17.832l2.045 6.027 12.484-6.081-2.422-5.704-12.107 5.758zM-0.247 7.212l4.144 4.843 12.053-6.134-3.928-5.005-12.269 6.296zM32.247 7.319l-12.001-6.403-4.090 5.005 12.162 6.134 3.929-4.736zM3.175 19.353l-0.041 5.839 12.713 5.893v-10.98l-1.816 4.736-10.856-5.488zM16.291 20.105v10.979l12.674-5.893v-5.799l-10.99 5.46-1.684-4.747z"></path> </g></svg>
-                    </div>
 
-                    <div className={style.text}>
-                        <div>Your Library seems to be Empty</div>
-                        <div>Please watch something first</div>
-                    </div>
+                <div className={search ? `${style.searchInput} ${style.Engaged}` : `${style.searchInput}`}>
+
+                    <input
+
+                        onFocus={() => {
+                            setFocused(true)
+                        }}
+
+
+                        value={searchText}
+
+                        onChange={(e) => setSearchText(e.target.value)}
+                        type="text"
+                        placeholder="Search..." />
+
+
                 </div>
+
+
+                {focused
+
+                    ?
+
+                    <div className={style.searchFields}>
+
+                        <div className={style.ExternalSearchContainer}>
+                            <SearchMovies searchString={searchText} />
+                        </div>
+
+                    </div>
+
+                    :
+
+                    <div className={[
+                        style.EmptyPageContainer,
+                        search && style.Searcher,
+                        focused && style.Focused
+                    ]
+                        .filter(Boolean)
+                        .join(" ")}>
+
+
+
+
+
+
+
+                        <div className={style.icon}>
+                            <svg fill="#ffffff" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>box</title> <path d="M1.735 17.832l12.054 6.081 2.152-6.081-12.053-5.758-2.153 5.758zM16.211 17.832l2.045 6.027 12.484-6.081-2.422-5.704-12.107 5.758zM-0.247 7.212l4.144 4.843 12.053-6.134-3.928-5.005-12.269 6.296zM32.247 7.319l-12.001-6.403-4.090 5.005 12.162 6.134 3.929-4.736zM3.175 19.353l-0.041 5.839 12.713 5.893v-10.98l-1.816 4.736-10.856-5.488zM16.291 20.105v10.979l12.674-5.893v-5.799l-10.99 5.46-1.684-4.747z"></path> </g></svg>
+                        </div>
+
+                        <div className={style.text}>
+                            <div>Your Library seems to be Empty</div>
+                            <div>Please watch something first</div>
+                        </div>
+
+                    </div>
+
+
+
+                }
+
+
+
+
+
             </React.Fragment>
         )
     }
@@ -413,11 +481,11 @@ export function RecommendationLayout() {
         [reccStrengthObj]
     );
 
-    const {genreNameArray, castNameArray, directorNameArray, error: nameError, loading: nameLoading} = useNameArrayFetcher(genreIdArray, castIdArray, directorIdArray)
+    const { genreNameArray, castNameArray, directorNameArray, error: nameError, loading: nameLoading } = useNameArrayFetcher(genreIdArray, castIdArray, directorIdArray)
 
-    
 
-    
+
+
 
 
 

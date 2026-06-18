@@ -3,53 +3,185 @@ import { WatchContext } from "../../../App";
 import { Navbar } from "../../Cogs/Navbar";
 import { LibraryTile } from "../../Cogs/libraryTile";
 import React from "react";
+import { useState } from "react";
+
+import { SearchMovies } from "../../Cogs/SearchMovies";
+
 
 import style from "../../CogCSS/Watched.module.css"
 
-export function WatchedList () {
+export function WatchedList() {
 
-    const {moviesWatched, removeFromWatched} = useContext(WatchContext)
+    const { moviesWatched, removeFromWatched } = useContext(WatchContext)
+    const [search, setSearch] = useState(false)
+    const [focused, setFocused] = useState(false)
+    const [searchText, setSearchText] = useState("")
 
-    if(moviesWatched.length === 0) {
+
+    if (moviesWatched.length === 0) {
         return (
 
             <React.Fragment>
-                            <Navbar />
+                <Navbar search={search} searchSetter={() => {
+                    setSearch(!search)
+                    setFocused(false)
+                    setSearchText("")
+                }}></Navbar>
+
+
+                <div className={search ? `${style.searchInput} ${style.Engaged}` : `${style.searchInput}`}>
+
+                    <input
+
+                        onFocus={() => {
+                            setFocused(true)
+                        }}
+
+
+                        value={searchText}
+
+                        onChange={(e) => setSearchText(e.target.value)}
+                        type="text"
+                        placeholder="Search..." />
+
+
+                </div>
+
+
+                {focused
+
+                    ?
+
+                    <div className={style.searchFields}>
+
+                        <SearchMovies searchString={searchText} />
+
+                    </div>
+
+                    :
+
+                    <div className={[
+                        style.EmptyPageContainer,
+                        search && style.Searcher,
+                        focused && style.Focused
+                    ]
+                        .filter(Boolean)
+                        .join(" ")}>
+
+
+
+
+
+
+
                         <div className={style.EmptyPageContainer}>
-            
+
                             <div className={style.icon}>
-                               <svg viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M758.8 756.6c16.8 40 7.2 84.1-33.3 84.1H303.4c-40.5 0-50.1-44.1-33.3-84.1H150c-46.4 0-84-37.7-84-84.3v-420c0-46.6 37.4-84.3 84-84.3h728.9c46.4 0 84 37.7 84 84.3v419.9c0 46.6-37.4 84.3-84 84.3H758.8v0.1z" fill="#ffffff"></path><path d="M689.9 756.6c13.2 9.7 20.2 28 20.2 28H318.8s7-18.3 20.2-28h350.9zM122.1 252.3v419.9c0 15.7 12.5 28.3 27.9 28.3h728.9c15.5 0 27.9-12.5 27.9-28.3V252.3c0-15.7-12.5-28.3-27.9-28.3H150c-15.5 0.1-27.9 12.6-27.9 28.3z" fill="#000000"></path><path d="M150.1 307.9c0-30.8 25.1-55.8 56-55.8h616.8c30.9 0 56 25 56 55.8v308.8c0 30.8-25.1 55.8-56 55.8H206.1c-30.9 0-56-25-56-55.8V307.9z" fill="#ffffff"></path><path d="M178.1 307.9v308.8c0 15.3 12.5 27.8 27.9 27.8h616.8c15.4 0 27.9-12.5 27.9-27.8V307.9c0-15.3-12.5-27.8-27.9-27.8H206.1c-15.4 0-28 12.5-28 27.8z" fill="#000000"></path></g></svg>
+                                <svg viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M758.8 756.6c16.8 40 7.2 84.1-33.3 84.1H303.4c-40.5 0-50.1-44.1-33.3-84.1H150c-46.4 0-84-37.7-84-84.3v-420c0-46.6 37.4-84.3 84-84.3h728.9c46.4 0 84 37.7 84 84.3v419.9c0 46.6-37.4 84.3-84 84.3H758.8v0.1z" fill="#ffffff"></path><path d="M689.9 756.6c13.2 9.7 20.2 28 20.2 28H318.8s7-18.3 20.2-28h350.9zM122.1 252.3v419.9c0 15.7 12.5 28.3 27.9 28.3h728.9c15.5 0 27.9-12.5 27.9-28.3V252.3c0-15.7-12.5-28.3-27.9-28.3H150c-15.5 0.1-27.9 12.6-27.9 28.3z" fill="#000000"></path><path d="M150.1 307.9c0-30.8 25.1-55.8 56-55.8h616.8c30.9 0 56 25 56 55.8v308.8c0 30.8-25.1 55.8-56 55.8H206.1c-30.9 0-56-25-56-55.8V307.9z" fill="#ffffff"></path><path d="M178.1 307.9v308.8c0 15.3 12.5 27.8 27.9 27.8h616.8c15.4 0 27.9-12.5 27.9-27.8V307.9c0-15.3-12.5-27.8-27.9-27.8H206.1c-15.4 0-28 12.5-28 27.8z" fill="#000000"></path></g></svg>
                             </div>
-            
+
                             <div className={style.text}>
                                 <div>Haven't watched anything yet?</div>
                                 <div>Find something to Watch</div>
                             </div>
                         </div>
-                        </React.Fragment>
+
+                    </div>
+
+
+
+                }
+
+
+
+
+
+
+
+
+
+            </React.Fragment>
 
         )
-            
-        
+
+
     }
 
     let movieElementArray = moviesWatched.map(element => {
 
         return (
-        
-        <LibraryTile movieObj={element} position={"Watched"} removerFunc={removeFromWatched} adderFunc={null}/>
+
+            <LibraryTile movieObj={element} position={"Watched"} removerFunc={removeFromWatched} adderFunc={null} />
         )
     });
-        
-   
+
+
     return (
 
         <div className={style.WatchedContainer}>
-            <Navbar/>
-            <div className={style.MovieElementArray}>
-                {movieElementArray}
+            <Navbar search={search} searchSetter={() => {
+                setSearch(!search)
+                setFocused(false)
+                setSearchText("")
+            }}></Navbar>
+
+
+            <div className={search ? `${style.searchInput} ${style.Engaged}` : `${style.searchInput}`}>
+
+                <input
+
+                    onFocus={() => {
+                        setFocused(true)
+                    }}
+
+
+                    value={searchText}
+
+                    onChange={(e) => setSearchText(e.target.value)}
+                    type="text"
+                    placeholder="Search..." />
+
+
             </div>
+
+
+            {focused
+
+                ?
+
+                <div className={style.searchFields}>
+
+                    <SearchMovies searchString={searchText} />
+
+                </div>
+
+                :
+
+                <div className={[
+                    style.MovieElementArray,
+                    search && style.Searcher,
+                    focused && style.Focused
+                ]
+                    .filter(Boolean)
+                    .join(" ")}>
+
+
+
+
+
+
+
+                    {movieElementArray}
+
+                </div>
+
+
+
+            }
+
+
+
         </div>
-       
+
     )
 }

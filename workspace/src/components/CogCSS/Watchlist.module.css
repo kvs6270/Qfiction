@@ -7,6 +7,13 @@
     color: white;
 }
 
+.MovieElementArray.Searcher{
+    transition: 0.3s all;
+    opacity: 0.5;
+    pointer-events: none;
+
+}
+
 .MovieElementArray{
     margin-top: 80px;
     display: flex;
@@ -15,10 +22,25 @@
     gap: 30px;
 }
 
-
 body {
     
 }
+
+
+
+.icon{
+    height: 240px;
+    width: 240px;
+
+
+}
+
+.text{
+    text-align: center;
+    font-size: 1.5rem;
+
+}
+
 
 .EmptyPageContainer {
     display: flex;
@@ -29,7 +51,6 @@ body {
     justify-content: center;
     align-items: center;
     color: white;
-    
 }
 
 .icon{
@@ -44,3 +65,93 @@ body {
     font-size: 1.5rem;
 
 }
+
+
+body{
+    background-color: black;
+}
+
+
+.bodyProto{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+   
+}
+
+.SliderContainer{
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+}
+
+
+
+.EmptyPageContainer.Searcher{
+    transition: 0.3s all;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.MainContent{
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.MainContent.disEngaged{
+    display: none;
+}
+
+.searchInput input{
+    visibility: hidden;
+    opacity: 0;
+    position: fixed;
+    top: -100px;
+    transition: 0.3s all;
+    color: rgb(0, 0, 0);
+    background-color: white;
+    z-index: 10;
+    width: 50%;
+    height: 40px;
+    font-size: 1.5rem;
+    border-radius:60px ;
+    margin: auto;
+    padding: 25px;
+
+    left: 25%;
+
+
+
+}
+
+
+
+.searchInput.Engaged input{
+    visibility: visible;
+    transition: 0.7s all;
+    opacity: 1;
+    top: 100px;
+
+}
+
+.searchFields{
+    position: absolute;
+    inset: 0;
+    height: 98vh;
+    width: 98vw;
+    background-color: black;
+    z-index: 9;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    
+}
+
+
+.searchContainer div{
+    border: 2px solid gray;
+    cursor: pointer;
+}
+

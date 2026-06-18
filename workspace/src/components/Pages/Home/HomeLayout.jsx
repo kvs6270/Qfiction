@@ -1,18 +1,101 @@
 import { Outlet } from "react-router";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { fetchFunc } from "../../../logic/fetchFunc.js";
+import { WatchContext } from "../../../App.jsx";
+import { useContext } from "react";
 
 import { genreFilms } from "../../../logic/genreBasedMovies.js";
 import { films2026 } from "../../../logic/movies2026.js";
 
 import { castFilms } from "../../../logic/castBasedMovies.js";
 import { directorFilms } from "../../../logic/directorBasedMovies.js";
+import { ReccStrengthProvider } from "../../../logic/ReccStrengthProvider.js";
+
+import { Navbar } from "../../Cogs/Navbar.jsx";
+import { useRef } from "react";
+import { searchMovies } from "../../../logic/searchMovies.js";
+import { useNavigate } from "react-router";
+import { SearchMovies } from "../../Cogs/SearchMovies.jsx";
+
+
+const genreFallbackArray = ["Action", "Comedy", "Thriller"]
+
+
+const castFallbackArray = ["Leonardo DiCaprio", "Scarlett Johansson", "Robert Downey Jr."]
+
+const directorFallbackArray = ["Christopher Nolan", "Martin Scorsese", "Quentin Tarantino"]
 
 
 
-const genre = ["Action", "Comedy", "Thriller", "Romance", "Science Fiction"]
-const casts = ["Leonardo DiCaprio","Scarlett Johansson","Robert Downey Jr.","Emma Stone","Tom Cruise","Jennifer Lawrence","Denzel Washington","Margot Robbie","Chris Hemsworth","Zendaya"]
-const directors = ["Christopher Nolan", "Martin Scorsese", "Quentin Tarantino", "Ridley Scott", "Alfred Hitchcock", "Steven Spielberg"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+let genreMap = null;
+const API_KEY = "fdbaf2c187e091a33939c1663cbf099c"
+
+async function loadGenres() {
+    if (!genreMap) {
+        const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`);
+        const data = await res.json();
+
+        genreMap = {};
+        data.genres.forEach(g => {
+            genreMap[g.id] = g.name;
+        });
+    }
+}
+
+async function genreNameArrayFecther(genreIdArray) {
+    await loadGenres();
+    return genreIdArray.map((id, index) => {
+        return { id, name: genreMap[id] }
+    }).filter(Boolean);
+}
+
+
+async function getPersonNames(idArray) {
+    const results = await Promise.all(
+        idArray.map(async (id) => {
+            const res = await fetch(
+                `https://api.themoviedb.org/3/person/${id}?api_key=${API_KEY}`
+            );
+
+            if (!res.ok) return null;
+
+            const data = await res.json();
+            return { id, name: data.name };
+        })
+    );
+
+    return results.filter(Boolean);
+}
+
+
+const castNameArrayFecther = (castIdArray) => getPersonNames(castIdArray)
+const directorNameArrayFecther = (directorIdArray) => getPersonNames(directorIdArray)
+
+
+
+
+
+
 
 
 
@@ -28,7 +111,7 @@ async function fetchGenreIdArray(genre) {
     let genreIdArray = data.genres.filter(obj => {
         return genre.includes(obj.name)
     }).map((obj) => {
-        return obj.id
+        return { name: obj.name, id: obj.id }
     });
 
 
@@ -36,6 +119,10 @@ async function fetchGenreIdArray(genre) {
     return genreIdArray;
 
 }
+
+
+
+
 
 
 async function fetchCastIdArray(cast) {
@@ -48,7 +135,7 @@ async function fetchCastIdArray(cast) {
         );
         const data = await res.json();
 
-        return data.results[0]?.id || null;
+        return { name: name, id: data.results[0]?.id || null };
     }
 
     const castFetchPromiseArray = cast.map(actor => fetchActorIdByName(actor, "fdbaf2c187e091a33939c1663cbf099c"));
@@ -56,6 +143,7 @@ async function fetchCastIdArray(cast) {
     const castBasedIdArray = await Promise.allSettled(castFetchPromiseArray);
 
     let castIdArray = castBasedIdArray.map(obj => obj.value)
+
 
     return castIdArray;
 
@@ -71,7 +159,7 @@ async function fetchDirectorIdArray(director) {
         );
         const data = await res.json();
 
-        return data.results[0]?.id || null;
+        return { name: name, id: data.results[0]?.id || null };
     }
 
     const directorFetchPromiseArray = director.map(director => fetchDirectorIdByName(director, "fdbaf2c187e091a33939c1663cbf099c"));
@@ -80,14 +168,14 @@ async function fetchDirectorIdArray(director) {
 
     let directorIdArray = directorBasedIdArray.map(obj => obj.value)
 
-    
+
     return directorIdArray;
 
 }
 
 
 
-function useFetchIds() {
+function useFetchIds(genre, casts, directors) {
     const [genreIdArray, setGenreIdArray] = useState([]);
     const [castIdArray, setCastIdArray] = useState([]);
     const [directorIdArray, setDirectorIdArray] = useState([]);
@@ -133,9 +221,6 @@ function useFetchIds() {
 
 
 
-
-
-
 function useSingleFetch(year, page, paramType) {
 
     const [movieObj, setMovieObj] = useState([]);
@@ -144,7 +229,7 @@ function useSingleFetch(year, page, paramType) {
 
     useEffect(() => {
 
-        let isMounted = true;
+
 
         setError(false);
         setLoading(true);
@@ -153,27 +238,22 @@ function useSingleFetch(year, page, paramType) {
 
             try {
                 const movieObjArray = await fetchFunc(year, page, paramType);
-                if (isMounted) setMovieObj(movieObjArray);
+
+
+                setMovieObj(movieObjArray);
             } catch (error) {
-                if (isMounted) setError(true)
+                setError(true)
                 console.log(error)
 
             } finally {
-                if (isMounted) setLoading(false)
+                setLoading(false)
             }
         }
 
         dataFetching();
 
+    }, [year, page, paramType])
 
-        return () => {
-            isMounted = false
-        }
-    }, [year, page])
-
-
-   
-    
 
 
 
@@ -182,10 +262,14 @@ function useSingleFetch(year, page, paramType) {
 
 function useMultiFetch(params, paramType, page,) {
 
+
+
+    console.log("Find Me")
     console.log(paramType)
     console.log(params)
 
-   
+
+
     const [paramBasedMovies, setParamBasedMovies] = useState({});
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -194,8 +278,7 @@ function useMultiFetch(params, paramType, page,) {
 
 
     useEffect(() => {
-
-        
+        if (!params || params.length === 0) return
 
         let isMounted = true;
 
@@ -204,13 +287,21 @@ function useMultiFetch(params, paramType, page,) {
 
         async function dataFetching() {
 
+
+
+
             try {
+
                 const paramBasedFetchPromises = params.map(param =>
                     fetchFunc(param, page, paramType)
 
                 );
 
+
+
                 const paramBasedMovieArrays = await Promise.allSettled(paramBasedFetchPromises);
+
+
 
 
                 const paramBasedMovieObj = {};
@@ -237,69 +328,220 @@ function useMultiFetch(params, paramType, page,) {
             isMounted = false
         }
 
-    }, [params, page])
+    }, [params, page, paramType])
 
 
+    console.log("Look Here")
+    console.log(paramBasedMovies)
 
-    
     return { paramBasedMovies, error, loading }
 
+}
+
+function useNameArrayFetcher(genreIdArray, castIdArray, directorIdArray) {
+    const [genreNameArray, setGenreNameArray] = useState([]);
+    const [castNameArray, setCastNameArray] = useState([]);
+    const [directorNameArray, setDirectorNameArray] = useState([]);
+    const [error, setError] = useState(false)
+    const [loading, setLoading] = useState(true)
+
+
+    useEffect(() => {
+        let isMounted = true
+        setError(false)
+        setLoading(true)
+
+
+        const fetcherFunc = async () => {
+
+            try {
+                const [genres, casts, directors] = await Promise.all([
+                    genreNameArrayFecther(genreIdArray),
+                    castNameArrayFecther(castIdArray),
+                    directorNameArrayFecther(directorIdArray),
+                ]);
+
+                if (!isMounted) return;
+                setGenreNameArray(genres)
+
+                setCastNameArray(casts)
+
+                setDirectorNameArray(directors)
+
+                console.log("UPDATED REF VALUES:");
+                console.log("genres:", genres);
+                console.log("casts:", casts);
+                console.log("directors:", directors);
+            }
+
+            catch (error) {
+                if (isMounted) setError(true)
+                console.log(error)
+            }
+
+            finally {
+                if (isMounted) setLoading(false)
+
+            }
+        };
+
+        fetcherFunc();
+
+
+
+        return () => {
+            isMounted = false;
+        };
+    }, [genreIdArray, castIdArray, directorIdArray]);
+
+
+    return { genreNameArray, castNameArray, directorNameArray, error, loading }
 }
 
 
 
 
 export function HomeLayout() {
-
-    const {genreIdArray, castIdArray, directorIdArray} = useFetchIds();
-
-    const { movieObj, error, loading } = useSingleFetch(2026, 1, "Year");
-
-    const { paramBasedMovies: genreBasedMovies, error: error2, loading: loading2 } = useMultiFetch(genreIdArray, "Genre", 1);
-
-    
-
-    const { paramBasedMovies: castBasedMovies, error: error3, loading: loading3 } = useMultiFetch(castIdArray, "Cast", 1);
+    const [search, setSearch] = useState(false)
+    const [focused, setFocused] = useState(false)
+    const [searchText, setSearchText] = useState("")
 
 
+    const { moviesWatched, moviesToWatch } = useContext(WatchContext)
 
-    const { paramBasedMovies: directorBasedMovies, error: error4, loading: loading4 } = useMultiFetch(directorIdArray, "Director", 1);
+    if (moviesWatched.length === 0 || !moviesWatched) {
 
-    // const movieObj = [...films2026];
-    // const error = false;
-    // const loading =  false; /* shift */ 
-    // const genreBasedMovies = {...genreFilms};
-    // const error2 = false;
-    // const loading2 =  false; /* shift */
+        const { genreIdArray, castIdArray, directorIdArray } = useFetchIds(genreFallbackArray, castFallbackArray, directorFallbackArray);
 
-    // const castBasedMovies = { ...castFilms };
-    // const error3 = false;
-    // const loading3 = false; /* shift */
+        const genreIds = useMemo(
+            () => genreIdArray?.map(item => item.id) || [],
+            [genreIdArray]
+        );
 
-    // const directorBasedMovies = { ...directorFilms };
-    // const error4 = false;
-    // const loading4 = false; /* shift */
+        const castIds = useMemo(
+            () => castIdArray?.map(item => item.id) || [],
+            [castIdArray]
+        );
+
+        const directorIds = useMemo(
+            () => directorIdArray?.map(item => item.id) || [],
+            [directorIdArray]
+        );
 
 
+        const { movieObj, error, loading } = useSingleFetch(2026, 1, "Year");
 
-    console.log("genreBasedMovies from Layout:")
-    console.log(genreBasedMovies)
-    console.log("castBasedMovies from Layout:")
-    console.log(castBasedMovies)
-    console.log("directorBasedMovies from Layout:")
-    console.log(directorBasedMovies)
+        const { paramBasedMovies: genreBasedMovies, error: error2, loading: loading2 } = useMultiFetch(genreIds, "Genre", 1);
 
 
 
+        const { paramBasedMovies: castBasedMovies, error: error3, loading: loading3 } = useMultiFetch(castIds, "Cast", 1);
 
-    return (
-        <Outlet context={
-            { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4 }
-        } />
 
-    )
+
+        const { paramBasedMovies: directorBasedMovies, error: error4, loading: loading4 } = useMultiFetch(directorIds, "Director", 1);
+
+
+        console.log("genreFallbackArray")
+        console.log(genreFallbackArray)
+        console.log("genreFallbackArray")
+        console.log("castFallbackArray")
+        console.log(castFallbackArray)
+        console.log("castFallbackArray")
+        console.log("directorFallbackArray")
+        console.log(directorFallbackArray)
+        console.log("directorFallbackArray")
+
+
+        return (
+            <Outlet context={
+                { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4, genreNameArray: genreIdArray, castNameArray: castIdArray, directorNameArray: directorIdArray, nameLoading: false, skipped: true }} />
+        )
+
+
+    }
+
+    else {
+        const reccStrengthObj = useMemo(() => {
+            return ReccStrengthProvider(moviesWatched)
+        }, [moviesWatched])
+
+        console.log("reccStrengthObj")
+        console.log(reccStrengthObj)
+        console.log("reccStrengthObj")
+
+
+
+
+
+
+        const genreIdArray = useMemo(
+            () => reccStrengthObj.genreReccStrengthArray.map((item => +(item.genre))),
+            [reccStrengthObj]
+        );
+
+
+        const castIdArray = useMemo(
+            () => reccStrengthObj.castReccStrengthArray.map((item => +(item.cast))),
+            [reccStrengthObj]
+        );
+
+
+
+        const directorIdArray = useMemo(
+            () => reccStrengthObj.directorReccStrengthArray.map((item => +(item.director))),
+            [reccStrengthObj]
+        );
+
+        const { genreNameArray, castNameArray, directorNameArray, error: nameError, loading: nameLoading } = useNameArrayFetcher(genreIdArray, castIdArray, directorIdArray)
+
+
+
+
+
+
+
+
+
+        const { movieObj, error, loading } = useSingleFetch(2026, 1, "Year");
+
+
+
+        const { paramBasedMovies: genreBasedMovies, error: error2, loading: loading2 } = useMultiFetch(genreIdArray, "Genre", 1);
+
+
+
+        const { paramBasedMovies: castBasedMovies, error: error3, loading: loading3 } = useMultiFetch(castIdArray, "Cast", 1);
+
+        const { paramBasedMovies: directorBasedMovies, error: error4, loading: loading4 } = useMultiFetch(directorIdArray, "Director", 1);
+
+
+
+
+
+
+
+
+        return (
+
+            <Outlet context={
+                { movieObj, error, loading, genreBasedMovies, error2, loading2, castBasedMovies, error3, loading3, directorBasedMovies, error4, loading4, genreNameArray, castNameArray, directorNameArray, nameLoading, skipped: false }
+            } />
+
+
+
+
+
+
+        )
+    }
 
 
 
 }
+
+
+
+
+
 
