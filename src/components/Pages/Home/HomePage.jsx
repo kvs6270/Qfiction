@@ -1,22 +1,22 @@
-import { Slider } from "../../Cogs/slider";
-import { topRated } from "../../../logic/TopRated";
+import { Slider } from "../../Cogs/slider.jsx";
+import { topRated } from "../../../logic/TopRated.js";
 import { useContext, useMemo } from "react";
 import { useOutletContext } from "react-router";
-import { Navbar } from "../../Cogs/Navbar";
+import { Navbar } from "../../Cogs/Navbar.jsx";
 
 
-import { movieOrganizer } from "../../../logic/ReccomendationAlgorithm";
-import { genreBasedRecommender } from "../../../logic/genreBasedRecommender";
-import { ReccStrengthProvider } from "../../../logic/ReccStrengthProvider";
-import { WatchContext } from "../../../App";
-import { directorBasedRecommender } from "../../../logic/directorBasedRecommender";
-import { castbasedRecommender } from "../../../logic/castBasedRecommender";
+import { movieOrganizer } from "../../../logic/ReccomendationAlgorithm.js";
+import { genreBasedRecommender } from "../../../logic/genreBasedRecommender.js";
+import { ReccStrengthProvider } from "../../../logic/ReccStrengthProvider.js";
+import { WatchContext } from "../../../App.jsx";
+import { directorBasedRecommender } from "../../../logic/directorBasedRecommender.js";
+import { castbasedRecommender } from "../../../logic/castBasedRecommender.js";
 import { MainSlider2 } from "./MainSlider2.jsx";
 import style from "./HomePage.module.css"
-import { Loading } from "../../Cogs/Loading";
+import { Loading } from "../../Cogs/Loading.jsx";
 
 import { useState } from "react";
-import { SearchMovies } from "../../Cogs/SearchMovies";
+import { SearchMovies } from "../../Cogs/SearchMovies.jsx";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 

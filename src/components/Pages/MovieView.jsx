@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { MoviePage } from "../Cogs/MoviePage";
+import { MoviePage } from "../Cogs/MoviePage.jsx";
 import { useParams } from "react-router";
-import { fetchMovie } from "../../logic/fetchMovie";
+import { fetchMovie } from "../../logic/fetchMovie.js";
 
 import { genreFilms } from "../../logic/genreBasedMovies.js";
 import { films2026 } from "../../logic/movies2026.js";
