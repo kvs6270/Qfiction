@@ -54,7 +54,9 @@ export function WatchedList() {
 
                     <div className={style.searchFields}>
 
-                        <SearchMovies searchString={searchText} />
+                        <div className={style.ExternalSearchContainer}>
+                            <SearchMovies searchString={searchText} />
+                        </div>
 
                     </div>
 

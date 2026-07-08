@@ -12,7 +12,7 @@ import style from "../../CogCSS/Watchlist.module.css"
 
 export function WatchList() {
 
-    const {moviesToWatch, removeFromWatch, addToWatched} = useContext(WatchContext)
+    const { moviesToWatch, removeFromWatch, addToWatched } = useContext(WatchContext)
     const [search, setSearch] = useState(false)
     const [focused, setFocused] = useState(false)
     const [searchText, setSearchText] = useState("")
@@ -54,7 +54,9 @@ export function WatchList() {
 
                     <div className={style.searchFields}>
 
-                        <SearchMovies searchString={searchText} />
+                        <div className={style.ExternalSearchContainer}>
+                            <SearchMovies searchString={searchText} />
+                        </div> 
 
                     </div>
 
@@ -109,9 +111,9 @@ export function WatchList() {
 
     let movieElementArray = moviesToWatch.map(element => {
         return (
-        
-        <LibraryTile movieObj={element} position={"ToWatch"} removerFunc={removeFromWatch} adderFunc={addToWatched}/>
-    )
+
+            <LibraryTile movieObj={element} position={"ToWatch"} removerFunc={removeFromWatch} adderFunc={addToWatched} />
+        )
     });
 
 
