@@ -97,6 +97,9 @@ export function MovieView() {
     const [searchText, setSearchText] = useState("")
 
 
+    
+
+
 
 
 
@@ -104,6 +107,11 @@ export function MovieView() {
 
     const { id } = useParams();
 
+    useEffect(() => {
+        setSearch(false);
+        setFocused(false);
+        setSearchText("");
+    }, [id]);
 
 
 
