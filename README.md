@@ -1,16 +1,15 @@
-# React + Vite
+⚠️ Project Status
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Qfiction is currently under active development and should not be considered the final product.
 
-Currently, two official plugins are available:
+The application is fully functional, but several features, UI improvements, performance optimizations, and enhancements to the recommendation algorithm are still planned. As development continues, existing functionality may be refined, redesigned, or expanded.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Please note that this repository represents an ongoing project rather than its completed version.
 
-## React Compiler
+📱 Mobile Compatibility
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The application has been designed to be fully responsive and performs as expected when tested using browser Developer Tools (responsive/mobile simulation) on desktop devices.
 
-## Expanding the ESLint configuration
+However, when accessed on some physical mobile devices through the deployed Vercel application, minor layout inconsistencies or responsiveness issues may still occur. These discrepancies are currently being investigated and will be addressed in future updates.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Thank you for your understanding while the project continues to evolve.
